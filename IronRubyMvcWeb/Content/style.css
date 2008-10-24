@@ -1,0 +1,136 @@
+* {
+    padding: 0;
+    margin: 0;
+} 
+
+body {
+    background: #eee;
+    font-family: "Trebuchet MS" Verdana, Arial, sans-serif;
+    font-size: 1em;
+    color: #333333;
+    line-height: 24px;
+}
+
+a {
+    text-decoration: none;
+    color: #0171AF;
+}
+a:hover {
+    text-decoration: underline;
+    color: #111;
+}
+
+#wrap {
+    width: 800px;
+    margin: 40px auto;
+}
+
+#header {
+    height: 100px;
+    background: #eee url(images/header.gif) no-repeat;
+}
+#header h1 {
+    font-size: 34px;
+    font-weight: 100;
+    letter-spacing: -3px;
+    padding: 30px 0 0 30px;
+}
+#header h1 a {
+    text-decoration: none;
+    color: #EC8714;
+}
+
+#header h1 a:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+h2 {
+    color: #89A537;
+}
+
+#header h2 {
+    font-size: 20px;
+    font-weight: 100;
+    padding: 0 0 0 31px;
+}
+
+#menu {
+    height: 180px;
+    background: #eee url(images/menu.gif) no-repeat;
+}
+#menu ul {
+    list-style-type: none;
+    padding: 10px 0 0 40px;
+}
+#menu ul li {
+}
+
+#menu ul li a {
+    color: #E7D68D;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+#menu ul li a:hover {
+color: #333;
+text-decoration: none;
+}
+
+#content {
+background: #eee url(images/content.gif) repeat-y;
+padding: 20px;
+}
+
+.main {
+    /*border-top: 1px solid #aaa;*/
+    padding: 10px;
+}
+.main h2 {
+    color: #EC8714;
+    font-size: 18px;
+    font-weight: 100;
+    padding: 15px 0 7px 0;
+    
+}
+.main h2 a {
+    text-decoration: none;
+}
+.left h2 a:hover {
+    color: #111;
+}
+
+#bottom {
+    background: #eee url(images/bottom.gif) no-repeat;
+    padding: 10px 0;
+}
+
+#footer {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+}
+blockquote {
+    display: block;
+    margin-left: 20px;
+    border-left: dotted 1px #999;
+    background-color: #f9f9f9;
+    padding: 10px;
+}
+
+.main {
+    padding-left: 20px;
+}
+
+.main ul {
+    list-style-type: none;
+}
+
+li.product {
+    margin-bottom: 20px;
+}
+
+#product-list {
+    margin-top: 10px;
+    border-top: solid 1px #ccc;
+}

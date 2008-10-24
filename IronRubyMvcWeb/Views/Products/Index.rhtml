@@ -1,0 +1,6 @@
+﻿                <h3>Chooose a category</h3>
+                <ul>
+                    <% view_data.categories.each{|category| %>
+                        <li><%= html.ActionLink(category.category_name, "list", {:id => category.category_name}) %></li>
+                    <% } %>
+                </ul>

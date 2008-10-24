@@ -1,0 +1,6 @@
+﻿                <form method="post" action="<%= url.Action('update', {:id => view_data.product.ProductID}) %>">
+                    <p><label for="ProductName">Product Name:</label> <%= html.TextBox("product.product_name") %></p>
+                    <p><label for="ProductName">Unit Price:</label> <%= html.TextBox("Product.unit_price") %></p>
+                    <%= html.Hidden('category_name', view_data.product.category.category_name) %>
+                    <input type="submit" value="Update" />
+                </form>

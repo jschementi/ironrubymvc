@@ -1,0 +1,20 @@
+﻿<div class="main">
+  <p>
+    The following message is brought to you by the letter Q
+    and the <code>salutation</code> property of the Ruby <code>HomeModel</code>
+    object within <code>/Models/HomeModel.rb</code>.
+  </p>
+  <blockquote>
+    <p>
+      <strong class="salutation">
+        <%= model.salutation %>
+      </strong>
+    </p>
+  </blockquote>
+  <%= html.render_partial("partial", "my model!") %>
+  <p>
+    Click on <strong>
+      <%= html.action_link("Products", "index", "products") %>
+    </strong> to get started.
+  </p>
+</div>

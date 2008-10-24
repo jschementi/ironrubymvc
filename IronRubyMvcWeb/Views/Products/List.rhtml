@@ -1,0 +1,16 @@
+﻿                <h2>Products</h2>
+                <%= html.ActionLink("Back to Categories", {:controller => "Products", :action => "index"}) %>
+                
+                <ul id="product-list">
+                    <% view_data.products.each{|product| %>
+                        <li class="product">
+                            <p>id: <%= product.ProductID %></p>
+                            
+                            <strong><%= product.product_name %></strong>
+                            <br />
+                            price: <%= product.unit_price %>
+                            
+                            <%= html.ActionLink("[edit]", {:action => "edit", :id => product.ProductID}) %>
+                        </li>   
+                    <%} %>
+                </ul>

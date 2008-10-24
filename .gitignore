@@ -1,0 +1,4 @@
+IronRubyMvcWeb/bin
+IronRubyMvcWeb/obj
+*.csproj.user
+*.suo

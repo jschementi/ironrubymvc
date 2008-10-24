@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>IronRuby on ASP.NET MVC Demo</title>
+    <link rel="stylesheet" type="text/css" href="/content/style.css" media="screen" />
+</head>
+<body>
+    <div id="wrap">
+
+        <div id="header">
+            <h1><%= html.ActionLink("ASP.NET MVC w/ IronRuby Demo", {:controller => "Home", :action => "index"}) %></h1>
+            <h2>DLR and ASP.NET MVC BFF Edition</h2>
+        </div>
+
+        <div id="menu">
+            <ul>
+                <li>
+                    <%= html.ActionLink("Home", {:controller => "Home", :action => "index"}) %>
+                </li>
+                <li>
+                    <%= html.ActionLink("Products", {:controller => "Products", :action => "index"}) %>
+                </li>
+            </ul>
+        </div>
+
+        <div id="content">
+
+	        <div class="main">
+	            <% yield %>
+	        </div>
+
+        </div>
+
+        <div id="bottom"></div>
+
+        <div id="footer">
+            <p>Designed by <a href="http://www.free-css-templates.com/" title="Free CSS templates">Free CSS Templates</a>, Thanks to <a href="http://www.dubaiapartments.biz/" title="Dubai Villas">Dubai Villas</a></p>
+            <p>CSS layout licensed under the <a href="http://creativecommons.org/licenses/by-sa/2.5/" title="license">Creative Creative Commons Attribution-ShareAlike 2.5</a> License.</p>
+            <p>Ruby Logo licensed under the <a href="http://creativecommons.org/licenses/by-sa/2.5/" title="license">Creative Creative Commons Attribution-ShareAlike 2.5</a> License. Attribution: © 2006, Yukihiro Matsumoto</p>
+        </div>
+
+    </div>
+</body>
+</html>
