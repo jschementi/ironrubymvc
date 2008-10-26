@@ -11,10 +11,12 @@
         string _contents;
         RubyView _master;
         RubyTemplate _template;
+        string _helpers;
 
-        public RubyView(string viewContents, RubyView master) {
+        public RubyView(string viewContents, RubyView master, string helperContents) {
             _master = master;
             _contents = viewContents;
+            _helpers = helperContents;
         }
 
         public RubyTemplate Template {
@@ -44,6 +46,8 @@
             Template.AddRequire("System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
             Template.AddRequire("System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
 
+            LoadHelpers(rubyEngine, scope, writer);
+
             StringBuilder script = new StringBuilder();
             Template.ToScript("render_page", script);
 
@@ -61,6 +65,16 @@
             }
             catch (Exception e) {
                 writer.Write(script + "<br />");
+                writer.Write(e.ToString());
+            }
+        }
+
+        private void LoadHelpers(ScriptEngine engine, ScriptScope scope, TextWriter writer) {
+            try {
+                ScriptSource source = engine.CreateScriptSourceFromString(_helpers);
+                source.Execute(scope);
+            } catch (Exception e) {
+                writer.Write(_helpers + "<br />");
                 writer.Write(e.ToString());
             }
         }

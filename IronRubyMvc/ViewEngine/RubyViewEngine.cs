@@ -7,18 +7,18 @@
     public class RubyViewEngine : VirtualPathProviderViewEngine {
         public RubyViewEngine() {
             PartialViewLocationFormats = new string[] {
-                "~/Views/{1}/_{0}.rhtml", 
-                "~/Views/Shared/_{0}.rhtml"
+                "~/Views/{1}/_{0}.html.erb", 
+                "~/Views/Shared/_{0}.html.erb"
             };
 
             ViewLocationFormats = new string[] { 
-                "~/Views/{1}/{0}.rhtml", 
-                "~/Views/Shared/{0}.rhtml", 
+                "~/Views/{1}/{0}.html.erb", 
+                "~/Views/Shared/{0}.html.erb", 
             };
 
             MasterLocationFormats = new string[] { 
-                "~/Views/{1}/{0}.rhtml", 
-                "~/Views/Shared/{0}.rhtml"
+                "~/Views/{1}/{0}.html.erb", 
+                "~/Views/Shared/{0}.html.erb"
             };
         }
 
@@ -32,7 +32,7 @@
             if (String.IsNullOrEmpty(virtualPath))
                 return null;
 
-            return new RubyView(GetContents(virtualPath), masterView);
+            return new RubyView(GetContents(virtualPath), masterView, GetContents("~/Views/Helpers.rb"));
         }
 
         protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath) {
