@@ -1,0 +1,6 @@
+<h1>Here are some people:</h1>
+<ul>
+  <% @people.each do |person| %>
+    <%= partial :"people/_person.html", :locals => {:person => person} %>
+  <% end %>
+</ul>

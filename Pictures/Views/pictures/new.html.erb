@@ -1,0 +1,15 @@
+<h2>upload a picture</h2>
+<% form_for @picture, {}, :html => {:multipart => true} do |f| %>
+  <table>
+    <%= f.hidden_field :album_id%>
+    <tr>
+      <td>title</td>
+      <td><%= f.text_field :title %></td>
+    </tr>
+    <tr>
+      <td>picture</td>
+      <td><%= f.file_field :data %></td>
+    </tr>
+  </table>
+  <%= submit_tag "upload" %>
+<% end %>

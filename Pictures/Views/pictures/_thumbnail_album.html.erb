@@ -1,0 +1,18 @@
+<div class="thumbnail_album">
+  <a href="/albums/<%= album.id %>">
+    <img src="/pictures/<%= album.pictures.first.id %>/serve_thumbnail" alt="<%= album.name %>" width="96" height="71" />
+  </a>
+  
+<%
+=begin
+%>
+  <div class="comments">
+    <%= link_to album.person.name, person_pictures_url(album.person) %>
+  </div>
+  <div class='album_info'>
+    <%= link_to album.name, album_url(album) %><br>
+  </div>
+<%
+=end 
+%>  
+</div>

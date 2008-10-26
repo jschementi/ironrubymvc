@@ -1,0 +1,5 @@
+<form action="/pictures/<%= @picture.id %>/comments" method="post">
+  <input type="hidden" name="picture[id]" value="<%= @picture.id %>" id="picture_id" />
+  <textarea name="comment[body]" rows="8" cols="40"></textarea>
+  <input type="submit" value="Submit" />
+</form>

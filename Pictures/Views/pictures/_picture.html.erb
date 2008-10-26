@@ -1,0 +1,54 @@
+<h2><%= picture.title %></h2>
+
+<div class="picture">
+
+  <div class="credits">
+    by <a href="/people/<%= picture.person.id %>/pictures"><%= picture.person.name %></a>
+    <% if picture.album %>
+      (part of the <a href="/albums/<%= picture.album.id %>"><%= picture.album.name %></a> album)
+    <% end %>
+  </div>
+
+  <div class="resizing_controls">
+    <a href="javascript:switchPictureResolution('small');" onclick="">Small (320x240)</a> | 
+    <a href="javascript:switchPictureResolution('medium');" onclick="">Medium (640x480)</a> | 
+    <a href="javascript:switchPictureResolution('full');" onclick="">Original</a>
+  </div>
+
+  <img src="/pictures/<%= picture.id %>/serve" alt="<%= picture.title %>" class='picture_medium' id='picture' />
+
+  <% unless picture.tags.blank? %>
+    <h3>Tags: 
+    <% for tag in picture.tags %>
+      <a href='/pictures/tagged?tag=<%= tag.name %>'><%= tag.name %></a>
+    <% end %>
+    </h3>
+  <% end %>
+
+  <% if current_person %>
+    <div class="tagging">
+      <form method="post" action="/pictures/<%= picture.id %>/taggings">
+        <input type="text" name="name" id="name" />
+        <input type="submit" value="Tag it!" name="commit" />
+        <input id="person_id" type="hidden" value="<%= person.id %>" name="person_id"/>
+      </form>
+    </div>
+  <% end %>
+
+  <div class='picture_comments'>
+  	<div id="comment_for-<%= picture.id %>" style='display:none;'>
+  		<% comment = Comment.new(:picture => picture) %>
+      <form id="new_comment" class="new_comment" method="post" action="/pictures/<%= picture.id %>/comments">
+        <textarea rows="5" cols="40" id="comment_body" name="comment[body]"></textarea>
+  		  <input type="submit" value="Submit" name="commit" />
+      </form>
+  	</div>
+    <a href="javascript:void(0)" 
+       id="comment_link_for-<%= picture.id %>"
+       onclick="Element.show('comment_for-<%= picture.id %>'); Element.hide('comment_link_for-<%= picture.id %>')">Add a comment</a>
+    <% picture.comments.each do |comment| %>
+      <%= partial :"comments/comment.html", :locals => {:comment => comment} %>
+    <% end %>
+  </div>
+  
+</div>

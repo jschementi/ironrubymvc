@@ -1,0 +1,31 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+fall:
+  id: 1
+  name: Fall
+  person_id: 1
+
+germany:
+  id: 2    
+  name: Germany
+  person_id: 1
+
+japan:
+  id: 3    
+  name: Japan
+  person_id: 1
+
+scenery:
+  id: 4    
+  name: Scenary
+  person_id: 2
+  
+spring:
+  id: 5    
+  name: Spring
+  person_id: 2
+  
+washington_dc:
+  id: 6    
+  name: Washington DC
+  person_id: 2

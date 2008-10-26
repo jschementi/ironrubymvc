@@ -1,0 +1,51 @@
+<% unless picture_index_title.blank? %>
+  <h2><%= picture_index_title %></h2>
+<% end %>
+
+<div id="tag_cloud">
+  tags: <%= view "../tags/_cloud.html" %>
+</div>
+
+<% unless @pictures.blank? or @pictures.first.blank? %>
+
+<div id="featured_picture">
+  <%= partial :"pictures/_thumbnail_picture.html", :locals => {:picture => @pictures.first, :width => 560, :height => 420, :thumbnail => :false } %>
+</div>
+
+<div id="recent_pictures">
+  <% @pictures = ([@pictures[1..3]] << @pictures[4..6] << @pictures[7..9] << @pictures[10..12]) %>
+  <table cellpadding="0" cellspacing="0" border="0">
+    <% @pictures.each do |pictures| %>
+      <tr>
+        <% unless pictures.nil? %>
+          <% pictures.each do |picture| %>
+            <td><%= partial :"pictures/_thumbnail_picture.html", :locals => {:picture => picture} %></td>
+          <% end %>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<% else %>
+  <div id="no_pictures">
+    No recent pictures; Log in and add one!
+  </div>
+<% end %>
+
+<div class="clear">&nbsp;</div>
+
+<h3>albums</h3>
+<div id="recent_albums">
+  <% unless @albums.blank? %>
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <% @albums.each do |album| %>
+          <td><%= partial :"pictures/_thumbnail_album.html", :locals => {:album => album} %></td>
+        <% end %>
+      </tr>
+    </table>
+  <% else %>
+    No recent albums!
+  <% end %>
+</div>

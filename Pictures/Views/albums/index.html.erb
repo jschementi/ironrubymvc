@@ -1,0 +1,7 @@
+<h2><%= @person.blank? ? "Recent" : @person.name + "'s" %> Albums</h2>
+<ul>
+<% @albums.each do |album| %>
+  <li><a href="/albums/<%= album %>"><%= album.name %></a></li>
+<% end %>
+</ul>
+

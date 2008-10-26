@@ -1,0 +1,11 @@
+<% if @pictures.blank? %>
+  <div id='empty'>There are no pictures tagged with <em><%= params[:tag] %></em></div>
+<% else %>
+  <h2>Pictures tagged with <%= params[:tag] %></div>
+  <table><tr>
+  <% @pictures.each_with_index do |picture, index| %>
+    <%= "</tr><tr>" if index > 1 && index % 6 == 0 %>
+    <td><%= partial :"pictures/_thumbnail_picture", :locals => {:picture => picture} %></td>
+  <% end %>
+  <tr></table>
+<% end %>

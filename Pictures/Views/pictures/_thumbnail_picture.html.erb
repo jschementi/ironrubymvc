@@ -1,0 +1,11 @@
+<% width ||= 96 %>
+<% height ||= 96 %>
+<% thumbnail ||= :true %>
+<div class="thumbnail_picture image_hover">
+  <a href="/people/<%= picture.person.id %>/pictures/<%= picture.id %>" style="height: <%= height %>px" onmouseover="onImageMouseOver(this)" onmouseout="onImageMouseOut(this)">
+    <img src="/pictures/<%= picture.id %>/serve<%= thumbnail == :true ? "_thumbnail" : "" %>" alt="<%= picture.title %>" width="<%= width %>" height="<%= height %>" />
+  </a>
+  <div class='comments popup' style="display: none" onmouseover="onPopupMouseOver(this)" onmouseout="onPopupMouseOut(this)">
+    <a href="/people/<%= picture.person.id %>/pictures"><%= picture.person.name %></a>
+  </div>
+</div>
