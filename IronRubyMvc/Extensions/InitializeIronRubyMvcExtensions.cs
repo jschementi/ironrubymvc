@@ -19,7 +19,10 @@
 
         public static void InitializeIronRubyMvc(this HttpApplication app, VirtualPathProvider vpp, string routesPath) {
             //var langSetup = Ruby.CreateLanguageSetup();
-            ScriptRuntime runtime = Ruby.CreateRuntime(Ruby.CreateRuntimeSetup());
+            var setup = Ruby.CreateRuntimeSetup();
+            setup.DebugMode = true;
+            ScriptRuntime runtime = Ruby.CreateRuntime(setup);
+
             app.Application.SetScriptRuntime(runtime);
 
             if (vpp.FileExists(routesPath))

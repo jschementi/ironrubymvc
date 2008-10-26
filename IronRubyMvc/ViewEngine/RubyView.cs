@@ -46,6 +46,7 @@
             Template.AddRequire("System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
             Template.AddRequire("System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
 
+            // TODO: this should only be done once ... not on each view rendering.
             LoadHelpers(rubyEngine, scope, writer);
 
             StringBuilder script = new StringBuilder();

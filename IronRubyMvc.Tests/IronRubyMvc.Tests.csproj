@@ -82,10 +82,6 @@
     <Compile Include="ViewEngine\RubyTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronRubyMvcWeb\IronRubyMvcWeb.csproj">
-      <Project>{2E516619-7937-42EC-9427-AA554B36B1B7}</Project>
-      <Name>IronRubyMvcWeb</Name>
-    </ProjectReference>
     <ProjectReference Include="..\IronRubyMvc\IronRubyMvc.csproj">
       <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
       <Name>IronRubyMvc</Name>
