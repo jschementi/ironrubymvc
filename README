@@ -1,4 +1,13 @@
-IronRubyMvc - extension to ASP.NET MVC to support IronRuby
-IronRubyMvc.Test - erb tests
+IronRubyMvc - an extension to ASP.NET MVC to support IronRuby
+=============================================================
+
+IronRubyMvc.Test - Tests ERB functionality
 IronRubyMvcWeb - "Hello, World" test website
-Pictures - Another demo application
+Pictures - "Real" Demo application
+
+Running IronRubyMvcWeb:
+1. Start cassini against the website
+
+Running Pictures:
+1. Start cassini against Pictures
+2. ruby Pictures\server\app.rb
