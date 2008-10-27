@@ -1,4 +1,6 @@
 require 'in_memory_model'
+require 'picture'
+require 'person'
 
 class Album < InMemoryModel
   belongs_to :person

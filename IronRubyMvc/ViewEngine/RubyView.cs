@@ -65,7 +65,7 @@
                 source.Execute(scope);
             }
             catch (Exception e) {
-                writer.Write(script + "<br />");
+                //writer.Write(script + "<br />");
                 writer.Write(e.ToString());
             }
         }
@@ -75,7 +75,7 @@
                 ScriptSource source = engine.CreateScriptSourceFromString(_helpers);
                 source.Execute(scope);
             } catch (Exception e) {
-                writer.Write(_helpers + "<br />");
+                //writer.Write(_helpers + "<br />");
                 writer.Write(e.ToString());
             }
         }

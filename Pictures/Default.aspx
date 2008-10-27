@@ -1,2 +1,2 @@
 ﻿<%@ Page Language="C#" %>
-<% Response.Redirect("~/Pictures"); %>
+<% Response.Redirect("~/pictures"); %>

@@ -1,5 +1,3 @@
-require 'base_model'
-
 class InMemoryModel < ActiveModel::Base
   self.logger = nil
   class FileDB

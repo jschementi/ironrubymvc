@@ -1,15 +1,4 @@
-# set path to ruby libraries
-ruby_lib = "C:/Users/jimmysch/Projects/vsl1/Merlin/External/Languages/Ruby/ruby-1.8.6/lib"
-ironruby_lib = "C:/Users/jimmysch/Projects/vsl1/Merlin/Main/Languages/Ruby/Libs"
-$: << ironruby_lib
-$: << "#{ruby_lib}/ruby/site_ruby/1.8"
-$: << "#{ruby_lib}/ruby/site_ruby"
-#$: << "#{ruby_lib}/ruby/1.8"
-$: << "."
-$: << File.dirname(__FILE__) + "/../lib/activemodel/lib"
-$: << File.dirname(__FILE__) + "/../lib/activesupport/lib"
-
-require "active_model"
+require 'base_model'
 
 class ApplicationController < Controller
   def initialize(context = nil)
@@ -48,5 +37,21 @@ class ApplicationController < Controller
 
   def set_tags!
     @tags = Tag.all
+  end
+  
+  def person
+    @person ||= Person.find(params[:person_id]) if params[:person_id]
+  end
+
+  def album_person
+    @person ||= person || current_person
+  end
+
+  def albums
+    album_person.blank? ? Album.all : album_person.albums
+  end
+  
+  def session
+    @session ||= {}
   end
 end

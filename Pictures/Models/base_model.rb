@@ -6,6 +6,16 @@ $: << "#{ruby_lib}/ruby/site_ruby"
 $: << "#{ruby_lib}/ruby/1.8"
 $: << "."
 $: << File.dirname(__FILE__) + "/../lib/activesupport/lib"
+$: << File.dirname(__FILE__) + "/../lib/activerecord/lib"
 $: << File.dirname(__FILE__) + "/../lib/activemodel/lib"
 
 require "active_model"
+require 'active_record'
+require 'in_memory_model'
+require 'album'
+require 'comment'
+require 'follow'
+require 'person'
+require 'picture'
+require 'tag'
+require 'tagging'

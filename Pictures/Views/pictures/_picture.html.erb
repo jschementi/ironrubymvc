@@ -1,11 +1,11 @@
-<h2><%= picture.title %></h2>
+<h2><%= model.title %></h2>
 
 <div class="picture">
 
   <div class="credits">
-    by <a href="/people/<%= picture.person.id %>/pictures"><%= picture.person.name %></a>
-    <% if picture.album %>
-      (part of the <a href="/albums/<%= picture.album.id %>"><%= picture.album.name %></a> album)
+    by <a href="/people/<%= model.person.id %>/pictures"><%= model.person.name %></a>
+    <% if model.album %>
+      (part of the <a href="/albums/<%= model.album.id %>"><%= model.album.name %></a> album)
     <% end %>
   </div>
 
@@ -15,11 +15,11 @@
     <a href="javascript:switchPictureResolution('full');" onclick="">Original</a>
   </div>
 
-  <img src="/pictures/<%= picture.id %>/serve" alt="<%= picture.title %>" class='picture_medium' id='picture' />
+  <img src="http://localhost:4567/pictures/<%= model.id %>/serve" alt="<%= model.title %>" class='picture_medium' id='picture' />
 
-  <% unless picture.tags.blank? %>
+  <% unless model.tags.blank? %>
     <h3>Tags: 
-    <% for tag in picture.tags %>
+    <% for tag in model.tags %>
       <a href='/pictures/tagged?tag=<%= tag.name %>'><%= tag.name %></a>
     <% end %>
     </h3>
@@ -27,28 +27,12 @@
 
   <% if current_person %>
     <div class="tagging">
-      <form method="post" action="/pictures/<%= picture.id %>/taggings">
+      <form method="post" action="/pictures/<%= model.id %>/taggings">
         <input type="text" name="name" id="name" />
         <input type="submit" value="Tag it!" name="commit" />
-        <input id="person_id" type="hidden" value="<%= person.id %>" name="person_id"/>
+        <input id="person_id" type="hidden" value="<%= model.person.id %>" name="person_id"/>
       </form>
     </div>
   <% end %>
-
-  <div class='picture_comments'>
-  	<div id="comment_for-<%= picture.id %>" style='display:none;'>
-  		<% comment = Comment.new(:picture => picture) %>
-      <form id="new_comment" class="new_comment" method="post" action="/pictures/<%= picture.id %>/comments">
-        <textarea rows="5" cols="40" id="comment_body" name="comment[body]"></textarea>
-  		  <input type="submit" value="Submit" name="commit" />
-      </form>
-  	</div>
-    <a href="javascript:void(0)" 
-       id="comment_link_for-<%= picture.id %>"
-       onclick="Element.show('comment_for-<%= picture.id %>'); Element.hide('comment_link_for-<%= picture.id %>')">Add a comment</a>
-    <% picture.comments.each do |comment| %>
-      <%= partial :"comments/comment.html", :locals => {:comment => comment} %>
-    <% end %>
-  </div>
   
 </div>

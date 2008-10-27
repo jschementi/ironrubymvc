@@ -1,16 +1,16 @@
-<h2><%= @album.name %> Photo Album</h2>
+<h2><%= view_data.album.name %> Photo Album</h2>
 <div>
-  by <a href="/people/<%= @album.person.id %>"><%= @album.person.name %></a>
+  by <a href="/people/<%= view_data.album.person.id %>"><%= view_data.album.person.name %></a>
 </div>
-<% if @album.pictures.blank? %>
+<% if view_data.album.pictures.blank? %>
   <p class='empty'>There are no pictures in this album.</p>
 <% else %>
-  <%= @album.pictures.count %> pictures in this album.</p>
+  <%= view_data.album.pictures.count %> pictures in this album.</p>
   <table><tr>
-  <% @album.pictures.each_with_index do |picture, index| %>
-    <%= "</tr><tr>" if index > 1 && index % 6 == 0 %>
-    <td><%= partial :"pictures/_thumbnail_picture.html", :locals => {:picture => picture} %></td>
+  <% view_data.album.pictures.each_with_index do |picture, index| %>
+    <%= (index > 1 && index % 6 == 0) ? "</tr><tr>" : "" %>
+    <td><%= html.render_partial("thumbnail_picture", picture, :width => 96, :height => 96, :thumbnail => :true) %></td>
   <% end %>
   <tr></table>
 <% end %>
-<p class='add'><a href="/albums/<%= @album %>/pictures/new">Add a Picture</a></p>
+<p class='add'><a href="/albums/<%= view_data.album %>/pictures/new">Add a Picture</a></p>

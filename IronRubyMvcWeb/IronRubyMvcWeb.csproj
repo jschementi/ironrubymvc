@@ -116,7 +116,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Routes.rb" />
-    <None Include="Views\Home\Index.rhtml" />
+    <None Include="Views\Home\index.html.erb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Controllers\Helpers\BaseController.rb" />
@@ -128,10 +128,10 @@
       <DependentUpon>Northwind.dbml</DependentUpon>
     </None>
     <None Include="Models\ProductsRepository.rb" />
-    <None Include="Views\Products\Edit.rhtml" />
-    <None Include="Views\Products\Index.rhtml" />
-    <None Include="Views\Products\List.rhtml" />
-    <None Include="Views\Shared\layout.rhtml" />
+    <None Include="Views\Products\Edit.html.erb" />
+    <None Include="Views\Products\Index.html.erb" />
+    <None Include="Views\Products\List.html.erb" />
+    <None Include="Views\Shared\layout.html.erb" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

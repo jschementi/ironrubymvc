@@ -1,9 +1,0 @@
-<div class='tag_cloud'>
-  <% unless @tags.blank? %>
-    <% @tags.each do |tag| %>
-      <span><a href='/pictures/tagged?tag=<%= tag.name %>'><%= tag.name %></a></span>
-    <% end %>
-  <% else %>
-    No tags!
-  <% end %>
-</div>

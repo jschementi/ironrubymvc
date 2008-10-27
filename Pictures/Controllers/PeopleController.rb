@@ -1,12 +1,10 @@
+require 'ApplicationController'
+
 class PeopleController < ApplicationController
   
   def show
     @person = Person.find(params[:id])
-    respond_to do |format|
-      format.html
-      format.js { render :json => @person }
-      format.xml { render :xml => @person }
-    end    
+    return_view "show", "layout"
   end
   
   def index

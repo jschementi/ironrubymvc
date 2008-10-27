@@ -1,17 +1,19 @@
 class AlbumsController < ApplicationController
-  before_filter :authenticate, :only => [:new, :create]
 
   def index
     @person = person
     @albums = albums
+    return_view "index", "layout"
   end
   
   def new
     @album = Album.new
+    return_view "new", "layout"
   end
   
   def show
     @album = Album.find(params[:id])
+    return_view "show", "layout"
   end
   
   def create

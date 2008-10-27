@@ -1,1 +1,5 @@
 Hello! <%= model.salutation %>
+
+<% Album.find(:all).each do |album| %>
+  Title: <%= album.name %><br />
+<% end %>

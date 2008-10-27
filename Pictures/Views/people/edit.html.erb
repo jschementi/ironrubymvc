@@ -1,5 +1,5 @@
-<form action="/people/<%= @person.id %>" method="post">
-  <%= partial :"people/_form.html" %>
+<form action="/people/edit/<%= view_data.person.id %>" method="post">
+  <%= html.render_partial "form" %>
   
   <input type="submit" value="Save" />
 </form>

@@ -1,0 +1,318 @@
+/* general *******************************************************************/
+
+body {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  margin: 0; 
+  border: 0;
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 14px;
+  text-align: center;
+}
+
+a, a:link, a:visited {
+  color: orange;
+  text-decoration: none;
+  padding: 0.1em;
+}
+a:hover {
+  color: #222;
+  text-decoration: none;
+  background-color: orange;
+}
+
+a img {
+  border: 0;
+}
+
+html body div.clear,
+html body span.clear
+{
+  background: none;
+  border: 0;
+  clear: both;
+  display: block;
+  float: none;
+  font-size: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+div#container {
+  background-color: #222;
+  width: 904px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+/* image hover box ***********************************************************/
+
+div.image_hover div.popup {
+  position: absolute;
+  background-color: #111;
+  color: white;
+  padding: 0 3px;
+  border: 0; 
+  margin: 0;
+  height: auto;
+}
+
+div.image_hover div.popup a {
+  font-size: 12px;
+  background-color: transparent;
+  color: orange;
+  padding: 0.1em;
+}
+div.image_hover div.popup a:hover {
+  background-color: orange;
+  color: black;
+}
+
+div.image_hover div.popup {
+  /* default position; override yourself */
+  top: 0px;
+  left: 0px;
+  width: auto;
+  height: auto;
+}
+
+/* header ********************************************************************/
+
+div#header {
+  background: transparent url('/images/gradient.png') repeat-x;
+  height: 42px;
+  position: relative;
+}
+div#header h1 {
+  padding: 0; margin: 0;
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  text-indent: -100000px;
+  background: transparent url('/images/logo.png') no-repeat;
+  width: 113px;
+  height: 26px;
+}
+
+div#header div.login_top_bar div.right {
+  display: inline;
+}
+div#header div.login_top_bar div.clear {
+  display: inline;
+}
+div#header div.login_top_bar {
+  position: absolute;
+  right: 14px;
+  bottom: 1px;
+}
+div#header div.height123 div.login_top_bar div.right {
+  float: none;
+  margin: 0px;
+  font-size: inherit;
+}
+div.login_top_bar label {
+  position: relative;
+  top: 2px;
+  padding: 2px; 
+}
+div.login_top_bar input[type=text],
+div.login_top_bar input[type=password] {
+  padding: 2px;
+  margin: 0px;
+  border: 1px solid gray;
+}
+
+/* menu **********************************************************************/
+
+div#header div.marginright40 {
+  padding-left: 150px;
+}
+div#header div.right {
+  float: left;
+  margin: 21px 5px 0 5px;
+  font-size: 16px;
+}
+div#header div.sub_nav_button {
+  position: relative; 
+}
+div#header div.sub_nav_button a {
+  padding: 20px 5px 0px 5px;
+  color: black;
+  position: relative;
+  bottom: 1px;
+}
+div#header div.sub_nav_button a:hover {
+  border-bottom: 3px solid #555;
+}
+div#header sub_nav_button_outer {
+  height: 0px; width: 0px;
+}
+
+/* content *******************************************************************/
+
+div#content {
+  padding: 0;
+  margin: 0;
+}
+
+div#content h2, 
+div#content h3 {
+  padding: 0 7px;
+  margin: 20px 0 10px;
+  font-weight: 200;
+  border-bottom: 1px solid gray;
+}
+div#content h2 {
+  font-size: 24px;
+  line-height: 17px;
+}
+div#content h3 {
+  font-size: 20px;
+  line-height: 14px;
+}
+
+div#content div#featured_picture {
+  float: left;
+  margin-top: 4px;
+  margin-left: 4px;
+}
+div#content div#recent_pictures {
+  float: left;
+  margin-top: 4px;
+}
+div#content div#recent_albums {
+  margin: 15px;
+}
+
+div#content div#no_pictures {
+  font-size: 20px;
+  text-align: center;
+}
+
+div#content table tr td {
+  padding: 0;
+  margin: 0;
+}
+
+/* thumbnails ****************************************************************/
+
+div.thumbnail_picture {
+  position: relative;
+  margin: 0; 
+  padding: 0;
+  float: left;
+}
+
+div.thumbnail_picture a {
+  float: left;
+  background-color: #555;
+  padding: 2px;
+  margin: 4px;
+}
+div.thumbnail_picture a:hover {
+  background-color: orange;
+}
+
+div.thumbnail_picture div.comments {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  left: auto;
+  top: auto;
+}
+
+/* albums ********************************************************************/
+
+div.thumbnail_album {
+  background: transparent url(/images/album.png) no-repeat;
+  width: 114px;
+  height: 118px;
+  position: relative;
+  margin-right: 10px;
+}
+div.thumbnail_album a {
+  padding: 5px;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+}
+div.thumbnail_album a,
+div.thumbnail_album a img {
+  width: 96px;
+  height: 96px;
+}
+
+div.thumbnail_album div.comments {
+  position: absolute;
+  bottom: 20px;
+  right: 0px;
+}
+
+div.thumbnail_album div.album_info {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  text-align: center;
+}
+div.thumbnail_album div.album_info a {
+  height: auto;
+}
+
+div#content form#new_album {
+  margin: 50px;
+}
+
+/* tags **********************************************************************/
+
+div#content div#tag_cloud {
+  margin: 8px 8px 0;
+  color: gray;
+}
+div#content div#tag_cloud div.tag_cloud {
+  display: inline;
+}
+
+/* upload ********************************************************************/
+
+div#content form#new_picture {
+  margin: 50px;
+}
+
+/* picture page **************************************************************/
+
+div#content div.picture {
+  margin: 8px;
+}
+
+div#content img#picture {
+  border: 1px solid gray;
+  padding: 2px;
+}
+
+img.picture_small {
+  width: 320px;
+  height: 240px;
+}
+img.picture_medium {
+  width: 640px;
+  height: 480px;
+}
+img.picture_full {
+}
+
+/* footer ********************************************************************/
+
+div#footer {
+  background-color: black;
+  font-size: 12px;
+  padding: 5px;
+  text-align: center;
+  border-top: 1px solid gray;
+}

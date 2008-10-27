@@ -18,11 +18,15 @@
         }
 
         public static void InitializeIronRubyMvc(this HttpApplication app, VirtualPathProvider vpp, string routesPath) {
-            //var langSetup = Ruby.CreateLanguageSetup();
-            var setup = Ruby.CreateRuntimeSetup();
-            setup.DebugMode = true;
-            ScriptRuntime runtime = Ruby.CreateRuntime(setup);
+            var rubySetup = Ruby.CreateLanguageSetup();
+            rubySetup.Options["InterpretedMode"] = true;
 
+            var runtimeSetup = new ScriptRuntimeSetup();
+            runtimeSetup.LanguageSetups.Add(rubySetup);
+            runtimeSetup.DebugMode = true;
+
+            var runtime = Ruby.CreateRuntime(runtimeSetup);
+            
             app.Application.SetScriptRuntime(runtime);
 
             if (vpp.FileExists(routesPath))
@@ -34,12 +38,12 @@
         }
 
         static void ProcessRubyRoutes(ScriptRuntime runtime, VirtualPathProvider vpp, string routesPath) {
-            var routeColection = new RubyRouteCollection(RouteTable.Routes);
+            var routeCollection = new RubyRouteCollection(RouteTable.Routes);
 
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
             RubyExecutionContext rubyContext = Ruby.GetExecutionContext(runtime);
 
-            rubyContext.DefineReadOnlyGlobalVariable("routes", routeColection);
+            rubyContext.DefineReadOnlyGlobalVariable("routes", routeCollection);
 
             // REVIEW: Should we pull this information from the loaded versions of these assemblies?
             string header = @"

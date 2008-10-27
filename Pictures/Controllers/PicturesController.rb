@@ -1,19 +1,23 @@
 require 'ApplicationController'
-require 'picture'
 
 class PicturesController < ApplicationController
   
   def index
+    @tags = Tag.all
     filtered_pictures(:limit => 13)
     filtered_albums(:limit => 5)
-    view 'index', "layout"
+    return_view 'index', 'layout'
+  end
+  
+  def test
+    view 'test', 'layout'
   end
   
   def mine
     params[:person_id] = current_person.id
-    @pictures = filtered_pictures(:limit => 13)
-    @albums   = filtered_albums(:limit => 5)
-    view 'index', 'layout'
+    filtered_pictures(:limit => 13)
+    filtered_albums(:limit => 5)
+    return_view 'index', 'layout'
   end
   
   def new
@@ -32,21 +36,12 @@ class PicturesController < ApplicationController
   
   def show
     @picture = Picture.find(params[:id])
-    view 'show', 'layout'
-  end
-  
-  def serve
-    @picture = Picture.find(params[:id])
-    send_data @picture.data, :filename => @picture.filename, :mime_type => @picture.mime_type
-  end
-  
-  def serve_thumbnail
-    @picture = Picture.find(params[:id])
-    send_data(@picture.thumbnail_data || @picture.data, :filename => @picture.filename, :mime_type => @picture.mime_type)
+    return_view 'show', 'layout'
   end
 
   def tagged
     @pictures = Picture.tagged_with(params[:tag])
+    return_view 'tagged', 'layout'
   end
   
   private
