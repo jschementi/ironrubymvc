@@ -1,4 +1,5 @@
-﻿namespace IronRubyMvc {
+﻿extern alias Core;
+namespace IronRubyMvc {
     using System;
     using System.IO;
     using System.Linq;
@@ -11,9 +12,9 @@
     using IronRuby;
     using IronRuby.Builtins;
 
-    internal class RubyControllerActionInvoker : ControllerActionInvoker {
+   internal class RubyControllerActionInvoker : ControllerActionInvoker {
 
-        Func<object> _action;
+        Core::System.Func<object> _action;
 
         public RubyControllerActionInvoker(RequestContext context, ScriptRuntime scriptRuntime, string controllerName) {
             Controller = controllerName;
@@ -23,8 +24,8 @@
         public string Controller { get; private set; }
 
         public ScriptRuntime ScriptRuntime { get; private set; }
-
-        protected override MethodInfo FindActionMethod(string actionName) {
+        protected override ActionDescriptor FindAction(ControllerContext controllerContext, ControllerDescriptor controllerDescriptor, string actionName)
+        {
             // For now limit action name to alphanumeric characters
             if (!Regex.IsMatch(actionName, @"^(\w)+$"))
                 return null;
@@ -46,39 +47,46 @@
 
             // inject controller code
             string fileName = String.Format(@"~\Controllers\{0}.rb", Controller);
-            if (!HostingEnvironment.VirtualPathProvider.FileExists(fileName)) {
+            if (!HostingEnvironment.VirtualPathProvider.FileExists(fileName))
+            {
                 return null;
             }
 
             var file = HostingEnvironment.VirtualPathProvider.GetFile(fileName);
-            using (Stream stream = file.Open()) {
-                using (TextReader reader = new StreamReader(stream)) {
+            using (Stream stream = file.Open())
+            {
+                using (TextReader reader = new StreamReader(stream))
+                {
                     var allScript = reader.ReadToEnd();
                     var source = rubyEngine.CreateScriptSourceFromString(allScript);
                     source.Execute();
                 }
             }
 
-            rubyContext.DefineReadOnlyGlobalVariable("controller_context", ControllerContext);
+            rubyContext.DefineReadOnlyGlobalVariable("controller_context", controllerContext);
             rubyContext.DefineReadOnlyGlobalVariable("script_runtime", ScriptRuntime);
 
             string controllerRubyClassName = ScriptRuntime.Globals.GetVariableNames().SingleOrDefault(name => String.Equals(name, Controller, StringComparison.OrdinalIgnoreCase));
-            if (String.IsNullOrEmpty(controllerRubyClassName)) {
+            if (String.IsNullOrEmpty(controllerRubyClassName))
+            {
                 // controller not found
                 return null;
             }
 
             RubyClass controllerRubyClass = ScriptRuntime.Globals.GetVariable<RubyClass>(controllerRubyClassName);
             string controllerRubyMethodName = null;
-            controllerRubyClass.EnumerateMethods((_, symbolId, __) => {
-                if (String.Equals(symbolId.ToString(), actionName, StringComparison.OrdinalIgnoreCase)) {
+            controllerRubyClass.EnumerateMethods((_, symbolId, __) =>
+            {
+                if (String.Equals(symbolId.ToString(), actionName, StringComparison.OrdinalIgnoreCase))
+                {
                     controllerRubyMethodName = symbolId.ToString();
                     return true;
                 }
                 return false;
             });
 
-            if (String.IsNullOrEmpty(controllerRubyMethodName)) {
+            if (String.IsNullOrEmpty(controllerRubyMethodName))
+            {
                 // action not found
                 return null;
             }
@@ -93,15 +101,20 @@ $controller.method :{1}";
             object action = rubyEngine.CreateScriptSourceFromString(code).Execute();
             _action = () => rubyEngine.Operations.Call(action);
 
-            return RubyController.InvokeActionMethod;
+            return new ReflectedActionDescriptor(RubyController.InvokeActionMethod, actionName, controllerDescriptor);
         }
+        
 
-        protected override object GetParameterValue(ParameterInfo parameterInfo) {
-            if (parameterInfo.Name == "__action") {
+        protected override object GetParameterValue(ControllerContext controllerContext, ParameterDescriptor parameterDescriptor)
+        {
+            if (parameterDescriptor.ParameterName == "__action")
+            {
                 return _action;
             }
-            return base.GetParameterValue(parameterInfo);
+            return base.GetParameterValue(controllerContext, parameterDescriptor);
         }
+
+       
 
         private static string PascalCaseIt(string s) {
 

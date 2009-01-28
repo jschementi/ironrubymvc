@@ -18,7 +18,7 @@
         }
 
         public static void InitializeIronRubyMvc(this HttpApplication app, VirtualPathProvider vpp, string routesPath) {
-            var rubySetup = Ruby.CreateLanguageSetup();
+            var rubySetup = Ruby.CreateRubySetup();
             rubySetup.Options["InterpretedMode"] = true;
 
             var runtimeSetup = new ScriptRuntimeSetup();
@@ -41,7 +41,7 @@
             var routeCollection = new RubyRouteCollection(RouteTable.Routes);
 
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
-            RubyExecutionContext rubyContext = Ruby.GetExecutionContext(runtime);
+            var rubyContext = Ruby.GetExecutionContext(runtime);
 
             rubyContext.DefineReadOnlyGlobalVariable("routes", routeCollection);
 

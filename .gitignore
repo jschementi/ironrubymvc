@@ -2,3 +2,11 @@ IronRubyMvcWeb/bin
 IronRubyMvcWeb/obj
 *.csproj.user
 *.suo
+*.resharper.user
+IronRubyMvc.Tests/bin/
+IronRubyMvc.Tests/obj/
+IronRubyMvc/bin/
+IronRubyMvc/obj/
+Pictures/bin/
+Pictures/obj/
+_ReSharper.IronRubyMvc/
