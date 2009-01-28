@@ -30,16 +30,16 @@
         public void Render(ViewContext context, TextWriter writer) {
             ScriptRuntime runtime = context.HttpContext.Application.GetScriptRuntime();
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
-            RubyExecutionContext rubyContext = Ruby.GetExecutionContext(runtime);
+            var rubyContext = Ruby.GetExecutionContext(runtime);
 
             ScriptScope scope = runtime.CreateScope();
             scope.SetVariable("view_data", context.ViewData);
             scope.SetVariable("model", context.ViewData.Model);
             scope.SetVariable("context", context);
             scope.SetVariable("response", context.HttpContext.Response);
-            scope.SetVariable("url", new RubyUrlHelper(context));
+            scope.SetVariable("url", new RubyUrlHelper(context.RequestContext));
             scope.SetVariable("html", new RubyHtmlHelper(context, new Container(context.ViewData)));
-            scope.SetVariable("ajax", new AjaxHelper(context));
+//            scope.SetVariable("ajax", new AjaxHelper(context, context.View));
 
             Template.AddRequire("System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             Template.AddRequire("System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");

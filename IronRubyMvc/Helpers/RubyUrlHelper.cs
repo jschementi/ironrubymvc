@@ -1,9 +1,11 @@
-﻿namespace IronRubyMvc {
+﻿using System.Web.Routing;
+
+namespace IronRubyMvc {
     using System.Web.Mvc;
     using IronRuby.Builtins;
 
     public class RubyUrlHelper : UrlHelper {
-        public RubyUrlHelper(ViewContext viewContext)
+        public RubyUrlHelper(RequestContext viewContext)
             : base(viewContext) {
         }
 

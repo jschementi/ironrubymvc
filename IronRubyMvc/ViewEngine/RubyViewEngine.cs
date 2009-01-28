@@ -28,7 +28,7 @@
                 return reader.ReadToEnd();
         }
 
-        RubyView GetView(RequestContext requestContext, string virtualPath, RubyView masterView) {
+        RubyView GetView(ControllerContext requestContext, string virtualPath, RubyView masterView) {
             if (String.IsNullOrEmpty(virtualPath))
                 return null;
 
