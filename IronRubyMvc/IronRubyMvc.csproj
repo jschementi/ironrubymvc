@@ -72,20 +72,17 @@
       <HintPath>..\dependencies\System.Web.Routing.dll</HintPath>
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\RubyActionDescriptor.cs" />
     <Compile Include="Controllers\RubyController.cs" />
     <Compile Include="Controllers\RubyControllerActionInvoker.cs" />
     <Compile Include="Controllers\RubyControllerFactory.cs" />
+    <Compile Include="Controllers\RubyParameterDescriptor.cs" />
     <Compile Include="Extensions\ScriptRuntimeExtensions.cs" />
+    <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
     <Compile Include="Helpers\RubyUrlHelper.cs" />
