@@ -49,7 +49,7 @@
             string header = @"
 require 'System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
 require 'System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
-require 'System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
+require 'System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
             ";
 
             rubyEngine.CreateScriptSourceFromString(header).Execute();

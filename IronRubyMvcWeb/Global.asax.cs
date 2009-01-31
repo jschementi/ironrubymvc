@@ -9,5 +9,7 @@
         protected void Application_Start(object sender, EventArgs e) {
             this.InitializeIronRubyMvc();
         }
+
+        protected void Application_BeginRequest(object sender, EventArgs e){}
     }
 }

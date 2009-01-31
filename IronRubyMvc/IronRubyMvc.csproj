@@ -72,13 +72,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AssemblyResourceReader.cs" />
+    <Compile Include="Core\FileReader.cs" />
+    <Compile Include="Core\IReader.cs" />
+    <Compile Include="Core\Reader.cs" />
+    <Compile Include="Core\DefaultScriptRunner.cs" />
+    <Compile Include="Core\IScriptRunner.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
     <Compile Include="Controllers\RubyController.cs" />
     <Compile Include="Controllers\RubyControllerActionInvoker.cs" />
     <Compile Include="Controllers\RubyControllerDescriptor.cs" />
     <Compile Include="Controllers\RubyControllerFactory.cs" />
+    <Compile Include="Core\RubyEngineFactory.cs" />
+    <Compile Include="Core\RubyMvcEngine.cs" />
     <Compile Include="Controllers\RubyParameterDescriptor.cs" />
+    <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ScriptRuntimeExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
@@ -97,6 +107,9 @@
     <Compile Include="ViewEngine\RubyViewEngine.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controllers\controller.rb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

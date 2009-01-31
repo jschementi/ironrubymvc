@@ -1,13 +1,9 @@
 ﻿using System;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
-using IronRuby;
 using IronRuby.Builtins;
-using IronRuby.Runtime;
-using Microsoft.Scripting.Hosting;
+using IronRubyMvc.Core;
 
 namespace IronRubyMvc
 {
@@ -15,15 +11,21 @@ namespace IronRubyMvc
     {
         private Func<object> _action;
 
-        public RubyControllerActionInvoker(RequestContext context, ScriptRuntime scriptRuntime, string controllerName)
+        public RubyControllerActionInvoker(string controllerName)
+            : this(RubyEngineFactory.Create(), controllerName)
         {
-            Controller = controllerName;
-            ScriptRuntime = scriptRuntime;
         }
 
-        public string Controller { get; private set; }
+        public RubyControllerActionInvoker(RubyMvcEngine engine, string controllerName)
+        {
+            
+            ControllerName = controllerName;
+            Engine = engine;
+        }
 
-        public ScriptRuntime ScriptRuntime { get; private set; }
+        public string ControllerName { get; private set; }
+
+        public RubyMvcEngine Engine { get; private set; }
 
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,
                                                        ControllerDescriptor controllerDescriptor, string actionName)
@@ -32,71 +34,23 @@ namespace IronRubyMvc
             if (!Regex.IsMatch(actionName, @"^(\w)+$"))
                 return null;
 
-            ScriptEngine rubyEngine = Ruby.GetEngine(ScriptRuntime);
-            RubyContext rubyContext = Ruby.GetExecutionContext(ScriptRuntime);
+            Engine.LoadController(ControllerName);
 
-            // add references (mscorlib, System, Mvc, and RubyController) + other headers
-            foreach (Type type in new[] {typeof (object), typeof (Uri), typeof (Controller), typeof (RubyController)})
-                ScriptRuntime.LoadAssembly(type.Assembly);
+            Engine.DefineReadOnlyGlobalVariable("request_context", controllerContext.RequestContext);
+            Engine.DefineReadOnlyGlobalVariable("script_runtime", Engine);
 
-            rubyEngine.CreateScriptSourceFromString("Controller = IronRubyMvc::RubyController").Execute();
+            var controllerRubyClassName = Engine.GetVariableName(ControllerName);
 
-            // add Controllers + Models paths
-            string controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Controllers");
-            string modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Models");
-            rubyContext.Loader.SetLoadPaths(new[] {controllersDir, modelsDir});
-            //rubyContext.Loader.SetLoadPaths(controllersDir, modelsDir);
-
-            // inject controller code
-            string fileName = String.Format(@"~\Controllers\{0}.rb", Controller);
-            if (!HostingEnvironment.VirtualPathProvider.FileExists(fileName))
-            {
-                return null;
-            }
-
-            VirtualFile file = HostingEnvironment.VirtualPathProvider.GetFile(fileName);
-            using (Stream stream = file.Open())
-            {
-                using (TextReader reader = new StreamReader(stream))
-                {
-                    string allScript = reader.ReadToEnd();
-                    ScriptSource source = rubyEngine.CreateScriptSourceFromString(allScript);
-                    source.Execute();
-                }
-            }
-
-            rubyContext.DefineReadOnlyGlobalVariable("request_context", controllerContext.RequestContext);
-            rubyContext.DefineReadOnlyGlobalVariable("script_runtime", ScriptRuntime);
-
-            string controllerRubyClassName = string.Empty;
-            foreach (var variableName in ScriptRuntime.Globals.GetVariableNames())
-            {
-                if (String.Equals(variableName, Controller, StringComparison.OrdinalIgnoreCase))
-                    controllerRubyClassName = variableName;
-            }
-                
             if (String.IsNullOrEmpty(controllerRubyClassName))
             {
                 // controller not found
                 return null;
             }
 
-            //this.ScriptRuntime.UseFile()
-            var controllerRubyClass = ScriptRuntime.Globals.GetVariable<RubyModule>(controllerRubyClassName);
-            string controllerRubyMethodName = null;
-            using (rubyContext.ClassHierarchyLocker())
-            {
-                controllerRubyClass.EnumerateMethods((_, symbolId, __) =>
-                                                         {
-                                                             if (String.Equals(symbolId, actionName,
-                                                                               StringComparison.OrdinalIgnoreCase))
-                                                             {
-                                                                 controllerRubyMethodName = symbolId;
-                                                                 return true;
-                                                             }
-                                                             return false;
-                                                         });
-            }
+            //this.Engine.UseFile()
+            var controllerRubyClass = Engine.GetRubyClass(controllerRubyClassName);
+            var controllerRubyMethodName = Engine.GetMethodName(actionName, controllerRubyClass);
+
 
             if (String.IsNullOrEmpty(controllerRubyMethodName))
             {
@@ -104,16 +58,7 @@ namespace IronRubyMvc
                 return null;
             }
 
-            //Instantiate controller.
-            string actionScript =
-                @"$controller = {0}.new
-$controller.Initialize $request_context
-$controller.method :{1}";
-
-            // get explicit reference to action method object
-            string code = String.Format(actionScript, controllerRubyClassName, controllerRubyMethodName);
-            object action = rubyEngine.CreateScriptSourceFromString(code).Execute();
-            _action = () => rubyEngine.Operations.Call(action);
+            _action = Engine.GetControllerAction(controllerRubyClassName, controllerRubyMethodName);
 
             return new RubyActionDescriptor(RubyController.InvokeActionMethod, actionName, controllerDescriptor);
         }
