@@ -2,26 +2,25 @@
     using System;
     using System.IO;
     using System.Web.Hosting;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     public static class UnitTestHelpers {
-        public static void AssertThrows<TExpectedException>(Action method) where TExpectedException : Exception {
-            try {
-                method();
-            }
-            catch (TExpectedException) {
-
-            }
-        }
-
-        public static void AssertThrows<TExpectedException>(Action method, string message) where TExpectedException : Exception {
-            try {
-                method();
-            }
-            catch (TExpectedException e) {
-                Assert.AreEqual(message, e.Message);
-            }
-        }
+//        public static void AssertThrows<TExpectedException>(Action method) where TExpectedException : Exception {
+//            try {
+//                method();
+//            }
+//            catch (TExpectedException) {
+//
+//            }
+//        }
+//
+//        public static void AssertThrows<TExpectedException>(Action method, string message) where TExpectedException : Exception {
+//            try {
+//                method();
+//            }
+//            catch (TExpectedException e) {
+//                Assert.Equal(message, e.Message);
+//            }
+//        }
 
         public static MemoryStream ToMemoryStream(this string s) {
             var stream = new MemoryStream();

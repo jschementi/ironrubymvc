@@ -3,7 +3,7 @@ using System.Web.Hosting;
 
 namespace IronRubyMvc.Core
 {
-    internal class FileReader : Reader
+    public class FileReader : Reader
     {
         public override string Read(string filePath)
         {
