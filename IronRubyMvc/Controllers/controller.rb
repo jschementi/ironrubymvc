@@ -3,11 +3,12 @@
   class RubyController
     
     class << self
-      def before_filter(b)
+      def before_filter(name, options, &b)
         raise NotImplementedError.new
       end
       
-      def after_filter
+      def after_filter(name, options, &b)
+        raise NotImplementedError.new
       end
     end
     

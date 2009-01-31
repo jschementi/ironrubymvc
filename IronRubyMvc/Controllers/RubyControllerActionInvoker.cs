@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Web.Mvc;
-using System.Web.Routing;
-using IronRuby.Builtins;
+﻿using System.Web.Mvc;
 using IronRubyMvc.Core;
 
 namespace IronRubyMvc
@@ -11,7 +7,6 @@ namespace IronRubyMvc
     {
         public RubyControllerActionInvoker(string controllerName)
         {
-            
             ControllerName = controllerName;
         }
 
@@ -27,18 +22,16 @@ namespace IronRubyMvc
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,
                                                        ControllerDescriptor controllerDescriptor, string actionName)
         {
-
-           return controllerDescriptor.FindAction(controllerContext, actionName);
-            
+            return controllerDescriptor.FindAction(controllerContext, actionName);
         }
 
 
         protected override object GetParameterValue(ControllerContext controllerContext,
                                                     ParameterDescriptor parameterDescriptor)
         {
-            return parameterDescriptor.ParameterName == "__action" 
-                ? ((RubyParameterDescriptor)parameterDescriptor).Action 
-                : base.GetParameterValue(controllerContext, parameterDescriptor);
+            return parameterDescriptor.ParameterName == "__action"
+                       ? ((RubyParameterDescriptor) parameterDescriptor).Action
+                       : base.GetParameterValue(controllerContext, parameterDescriptor);
         }
 
 

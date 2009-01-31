@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Mvc;
+using IronRubyMvc.Core;
 using IronRubyMvc.Helpers;
 
 namespace IronRubyMvc
@@ -55,16 +56,21 @@ namespace IronRubyMvc
             get { return ((RubyControllerDescriptor) ControllerDescriptor); }
         }
 
+        private RubyMvcEngine Engine
+        {
+            get { return RubyControllerDescriptor.Engine; }
+        }
+
         public Func<object> Action
         {
             get
             {
-                var controllerRubyMethodName = RubyControllerDescriptor.Engine.GetMethodName(ActionName, RubyControllerDescriptor.RubyControllerClass);
+                var controllerRubyMethodName = Engine.GetMethodName(ActionName, RubyControllerDescriptor.RubyControllerClass);
 
 
                 return String.IsNullOrEmpty(controllerRubyMethodName) 
                     ? null 
-                    : RubyControllerDescriptor.Engine.GetControllerAction(RubyControllerDescriptor.ControllerName, controllerRubyMethodName);
+                    : Engine.GetControllerAction(RubyControllerDescriptor.ControllerName, controllerRubyMethodName);
             }
         }
 
