@@ -93,6 +93,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
+    <Compile Include="Extensions\Inflector.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
     <Compile Include="Helpers\RubyUrlHelper.cs" />
     <Compile Include="Extensions\InitializeIronRubyMvcExtensions.cs" />

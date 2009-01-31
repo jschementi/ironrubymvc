@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace IronRubyMvc.Core
 {
-    internal class AssemblyResourceReader : Reader
+    public class AssemblyResourceReader : Reader
     {
         private readonly Assembly _assembly;
 
