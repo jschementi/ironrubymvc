@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Web.Mvc;
 
@@ -8,9 +9,22 @@ namespace IronRubyMvc
         private System.Type _parameterType;
         public RubyParameterDescriptor(ParameterInfo parameterInfo, ActionDescriptor actionDescriptor) : base(parameterInfo, actionDescriptor)
         {
+            
         }
 
-        public override System.Type ParameterType
+        public Func<object> Action
+        {
+            get
+            {
+                var rubyActionDescriptor = ActionDescriptor as RubyActionDescriptor;
+                if (rubyActionDescriptor.IsNull())
+                    return null;
+                
+                return rubyActionDescriptor.Action;
+            }
+        }
+
+        public new System.Type ParameterType
         {
             get
             {
@@ -18,11 +32,9 @@ namespace IronRubyMvc
                     return _parameterType;
                 return base.ParameterType;
             }
+            internal set{ _parameterType = value;}
         }
 
-        public void SetParameterType(System.Type parameterType)
-        {
-            _parameterType = parameterType;
-        }
+
     }
 }

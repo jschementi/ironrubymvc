@@ -1,4 +1,6 @@
-﻿namespace IronRubyMvc {
+﻿using IronRubyMvc.Core;
+
+namespace IronRubyMvc {
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -19,6 +21,7 @@
         public static readonly MethodInfo InvokeActionMethod = typeof(RubyController).GetMethod("InvokeAction");
 
         public string ControllerName { get; set; }
+        public string ControllerClassName { get { return string.Format(Constants.CONTROLLERCLASS_FORMAT, ControllerName); } }
 
         public IDictionary<object, object> Params {
             get {
@@ -47,7 +50,7 @@
         }
 
         protected override void Execute(RequestContext requestContext) {
-            ActionInvoker = new RubyControllerActionInvoker(ControllerName + "Controller");
+            ActionInvoker = new RubyControllerActionInvoker(ControllerClassName);
             base.Execute(requestContext);
         }
 

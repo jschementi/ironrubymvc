@@ -73,6 +73,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\AssemblyResourceReader.cs" />
+    <Compile Include="Core\Constants.cs" />
+    <Compile Include="Core\Enums.cs" />
     <Compile Include="Core\FileReader.cs" />
     <Compile Include="Core\IReader.cs" />
     <Compile Include="Core\Reader.cs" />
