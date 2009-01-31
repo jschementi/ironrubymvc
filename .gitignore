@@ -10,3 +10,7 @@ IronRubyMvc/obj/
 Pictures/bin/
 Pictures/obj/
 _ReSharper.IronRubyMvc/
+.DS_Store
+IronRubyMvc/.DS_Store
+IronRubyMvc/Controllers/._RubyController.cs
+IronRubyMvc/Controllers/._RubyControllerActionInvoker.cs

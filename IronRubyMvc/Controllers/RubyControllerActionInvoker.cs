@@ -1,7 +1,5 @@
-﻿extern alias Core;
-using System;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Hosting;
 using System.Web.Mvc;
@@ -15,7 +13,7 @@ namespace IronRubyMvc
 {
     internal class RubyControllerActionInvoker : ControllerActionInvoker
     {
-        private Core::System.Func<object> _action;
+        private Func<object> _action;
 
         public RubyControllerActionInvoker(RequestContext context, ScriptRuntime scriptRuntime, string controllerName)
         {
@@ -34,8 +32,8 @@ namespace IronRubyMvc
             if (!Regex.IsMatch(actionName, @"^(\w)+$"))
                 return null;
 
-            var rubyEngine = Ruby.GetEngine(ScriptRuntime);
-            var rubyContext = Ruby.GetExecutionContext(ScriptRuntime);
+            ScriptEngine rubyEngine = Ruby.GetEngine(ScriptRuntime);
+            RubyContext rubyContext = Ruby.GetExecutionContext(ScriptRuntime);
 
             // add references (mscorlib, System, Mvc, and RubyController) + other headers
             foreach (Type type in new[] {typeof (object), typeof (Uri), typeof (Controller), typeof (RubyController)})
@@ -44,20 +42,20 @@ namespace IronRubyMvc
             rubyEngine.CreateScriptSourceFromString("Controller = IronRubyMvc::RubyController").Execute();
 
             // add Controllers + Models paths
-            var controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Controllers");
-            var modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Models");
+            string controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Controllers");
+            string modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Models");
             rubyContext.Loader.SetLoadPaths(new[] {controllersDir, modelsDir});
             //rubyContext.Loader.SetLoadPaths(controllersDir, modelsDir);
 
             // inject controller code
-            var fileName = String.Format(@"~\Controllers\{0}.rb", Controller);
+            string fileName = String.Format(@"~\Controllers\{0}.rb", Controller);
             if (!HostingEnvironment.VirtualPathProvider.FileExists(fileName))
             {
                 return null;
             }
 
-            var file = HostingEnvironment.VirtualPathProvider.GetFile(fileName);
-            using (var stream = file.Open())
+            VirtualFile file = HostingEnvironment.VirtualPathProvider.GetFile(fileName);
+            using (Stream stream = file.Open())
             {
                 using (TextReader reader = new StreamReader(stream))
                 {
@@ -70,9 +68,13 @@ namespace IronRubyMvc
             rubyContext.DefineReadOnlyGlobalVariable("request_context", controllerContext.RequestContext);
             rubyContext.DefineReadOnlyGlobalVariable("script_runtime", ScriptRuntime);
 
-            var controllerRubyClassName =
-                ScriptRuntime.Globals.GetVariableNames().SingleOrDefault(
-                    name => String.Equals(name, Controller, StringComparison.OrdinalIgnoreCase));
+            string controllerRubyClassName = string.Empty;
+            foreach (var variableName in ScriptRuntime.Globals.GetVariableNames())
+            {
+                if (String.Equals(variableName, Controller, StringComparison.OrdinalIgnoreCase))
+                    controllerRubyClassName = variableName;
+            }
+                
             if (String.IsNullOrEmpty(controllerRubyClassName))
             {
                 // controller not found
@@ -80,8 +82,8 @@ namespace IronRubyMvc
             }
 
             //this.ScriptRuntime.UseFile()
-                var controllerRubyClass = ScriptRuntime.Globals.GetVariable<RubyModule>(controllerRubyClassName);
-                string controllerRubyMethodName = null;
+            var controllerRubyClass = ScriptRuntime.Globals.GetVariable<RubyModule>(controllerRubyClassName);
+            string controllerRubyMethodName = null;
             using (rubyContext.ClassHierarchyLocker())
             {
                 controllerRubyClass.EnumerateMethods((_, symbolId, __) =>
@@ -122,7 +124,7 @@ $controller.method :{1}";
         {
             if (parameterDescriptor.ParameterName == "__action")
             {
-                ((RubyParameterDescriptor)parameterDescriptor).SetParameterType(_action.GetType());
+                ((RubyParameterDescriptor) parameterDescriptor).SetParameterType(_action.GetType());
                 return _action;
             }
             return base.GetParameterValue(controllerContext, parameterDescriptor);
