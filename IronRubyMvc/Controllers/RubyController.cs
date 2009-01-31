@@ -47,9 +47,7 @@
         }
 
         protected override void Execute(RequestContext requestContext) {
-            ActionInvoker = new RubyControllerActionInvoker(requestContext,
-                                                            requestContext.HttpContext.Application.GetScriptRuntime(), 
-                                                            ControllerName + "Controller");
+            ActionInvoker = new RubyControllerActionInvoker(ControllerName + "Controller");
             base.Execute(requestContext);
         }
 
