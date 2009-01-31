@@ -16,8 +16,15 @@
         }
 
         public override PropertyDescriptorCollection GetProperties() {
-            PropertyDescriptor[] descriptors = Object.Select(
-                entry => new HashPropertyDescriptor(Convert.ToString(entry.Key, CultureInfo.InvariantCulture), entry.Value)).ToArray();
+            var descriptors = new PropertyDescriptor[Object.Count];
+            int i = 0;
+            foreach (var entry in Object)
+            {
+                descriptors[i++] = 
+                    new HashPropertyDescriptor(Convert.ToString(entry.Key, CultureInfo.InvariantCulture), entry.Value);
+            }
+//            PropertyDescriptor[] descriptors = Object.Select(
+//                entry => new HashPropertyDescriptor(Convert.ToString(entry.Key, CultureInfo.InvariantCulture), entry.Value)).ToArray();
             return new PropertyDescriptorCollection(descriptors);
         }
 
