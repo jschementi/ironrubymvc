@@ -1,11 +1,13 @@
-﻿namespace IronRubyMvc {
+﻿using IronRubyMvc.Core;
+
+namespace IronRubyMvc {
     using System;
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     using System.Web.Routing;
 
     public class RubyControllerFactory : IControllerFactory {
-        IControllerFactory _innerFactory;
+        readonly IControllerFactory _innerFactory;
 
         public RubyControllerFactory(IControllerFactory innerFactory) {
             _innerFactory = innerFactory;
@@ -17,16 +19,16 @@
             try {
                 result = _innerFactory.CreateController(context, controllerName);
             }
-            catch (Exception) { }
+            catch { }
 
-            if (result == null && Regex.IsMatch(controllerName, @"^(\w)+$"))  // Limit to alphanum characters for now
+            if (result == null && Regex.IsMatch(controllerName, Constants.CONTROLLERNAME_NAME_REGEX))  // Limit to alphanum characters for now
                 result = new RubyController { ControllerName = controllerName };
 
             return result;
         }
 
         public void ReleaseController(IController controller) {
-            IDisposable disposable = controller as IDisposable;
+            var disposable = controller as IDisposable;
 
             if (disposable != null)
                 disposable.Dispose();

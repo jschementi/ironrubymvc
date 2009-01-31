@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Data.Linq;
+﻿using System.Linq;
 using IronRubyMvcWeb.Models.Northwind;
 
 namespace IronRubyMvcWeb.Models
 {
     public class NorthwindRepository
     {
-        NorthwindDataContext dataContext = null;
+        private readonly NorthwindDataContext dataContext;
 
         public NorthwindRepository() : this(new NorthwindDataContext())
-        { 
+        {
         }
 
         public NorthwindRepository(NorthwindDataContext dataContext)
@@ -19,37 +17,28 @@ namespace IronRubyMvcWeb.Models
         }
 
         public virtual IQueryable<Category> Categories
-        { 
-            get
-            {
-                return this.dataContext.Categories;
-            }
+        {
+            get { return dataContext.Categories; }
         }
 
         public virtual IQueryable<Product> Products
         {
-            get
-            {
-                return this.dataContext.Products;
-            }
+            get { return dataContext.Products; }
         }
 
         public virtual IQueryable<Supplier> Suppliers
         {
-            get 
-            {
-                return this.dataContext.Suppliers;    
-            }
+            get { return dataContext.Suppliers; }
         }
 
         public virtual void SubmitChanges()
         {
-            this.dataContext.SubmitChanges();
+            dataContext.SubmitChanges();
         }
 
         public virtual void InsertProductOnSubmit(Product p)
         {
-            this.dataContext.Products.InsertOnSubmit(p);
+            dataContext.Products.InsertOnSubmit(p);
         }
     }
 }

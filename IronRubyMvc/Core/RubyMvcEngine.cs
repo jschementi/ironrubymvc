@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
+using System.Web.Mvc;
 using IronRuby;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
@@ -32,25 +34,22 @@ namespace IronRubyMvc.Core
         public IScriptRunner ScriptRunner { get; set; }
         
 
-        public object LoadController(string controllerName)
+        public object LoadController(string controllerName, ControllerContext controllerContext)
         {
-            var fileName = String.Format(@"~\Controllers\{0}.rb", controllerName);
+            var fileName = String.Format(Constants.CONTROLLER_PATH_FORMAT, controllerName);
             SetModelAndControllersPath();
-            new DefaultScriptRunner(Engine, ReaderType.AssemblyResource).ExecuteFile(string.Format("IronRubyMvc.Controllers.controller.rb"));
+            new DefaultScriptRunner(Engine, ReaderType.AssemblyResource).ExecuteFile(Constants.RUBYCONTROLLER_FILE);
+            
+            DefineReadOnlyGlobalVariable(Constants.REQUEST_CONTEXT_VARIABLE, controllerContext.RequestContext);
+            DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
 
             return ScriptRunner.ExecuteFile(fileName);
         }
 
         public Func<object> GetControllerAction(string controllerName, string actionName)
         {
-            //Instantiate controller.
-            var actionScript =
-                @"$controller = {0}.new
-$controller.Initialize $request_context
-$controller.method :{1}";
-
             // get explicit reference to action method object
-            var code = String.Format(actionScript, controllerName, actionName);
+            var code = String.Format(Constants.GET_ACTIONMETHOD_SCRIPT, controllerName, actionName);
             var action = ExecuteScript(code);
             return () => Engine.Operations.Call(action);
         }
@@ -72,8 +71,8 @@ $controller.method :{1}";
 
         public void SetModelAndControllersPath()
         {
-            var controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Controllers");
-            var modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, "Models");
+            var controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.CONTROLLERS);
+            var modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.MODELS);
 
             Context.Loader.SetLoadPaths(new[] { controllersDir, modelsDir });
         }
@@ -85,17 +84,17 @@ $controller.method :{1}";
 
         public bool VariableExists(string variable)
         {
-            return GetVariableName(variable).IsNotNullOrBlank();
+            return GetGlobalVariableName(variable).IsNotNullOrBlank();
         }
 
-        public string GetVariableName(string nameProposal)
+        public string GetGlobalVariableName(string nameProposal)
         {
             foreach (var variableName in Runtime.Globals.GetVariableNames())
             {
                 if (String.Equals(variableName, nameProposal, StringComparison.OrdinalIgnoreCase))
                     return variableName;
             }
-            return string.Empty;
+            return String.Empty;
         }
 
         public bool MethodExists(string methodName, RubyClass rubyClass)
@@ -105,7 +104,7 @@ $controller.method :{1}";
 
         public string GetMethodName(string methodName, RubyClass rubyClass)
         {
-            var result = string.Empty;
+            var result = String.Empty;
             using (Context.ClassHierarchyLocker())
             {
                 rubyClass.EnumerateMethods((_, symbolId, __) =>
@@ -116,10 +115,25 @@ $controller.method :{1}";
                                                        result = symbolId;
                                                        return true;
                                                    }
+                                                   
                                                    return false;
                                                });
             }
             return result;
+        }
+
+        public string[] GetMethodNames(RubyClass rubyClass)
+        {
+            var result = new List<string>();
+            using (Context.ClassHierarchyLocker())
+            {
+                rubyClass.ForEachInstanceMethod(true, (_, symbolId, __) =>
+                {
+                    result.Add(symbolId);
+                    return true;
+                });
+            }
+            return result.ToArray();
         }
 
         public Func<object> GetDelegate(object obj)
@@ -138,5 +152,16 @@ $controller.method :{1}";
             return Runtime.Globals.GetVariable<T>(name);
         }
 
+        public static RubyMvcEngine Create()
+        {
+            var rubyEngine = new RubyMvcEngine();
+
+            foreach (Type type in new[] {typeof (object), typeof (Uri), typeof (Controller), typeof (RubyController)})
+                rubyEngine.LoadAssembly(type.Assembly);
+
+            rubyEngine.ExecuteScript("Controller = IronRubyMvc::RubyController");
+
+            return rubyEngine;
+        }
     }
 }

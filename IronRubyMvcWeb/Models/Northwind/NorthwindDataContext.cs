@@ -1,16 +1,15 @@
-﻿using System;
-using System.Data.Linq;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-
-using System.Collections.Generic;
-using IronRubyMvcWeb.Models.Northwind;
 
 namespace IronRubyMvcWeb.Models.Northwind
 {
     public partial class NorthwindDataContext
     {
+        private readonly IList<Category> categories;
+
         public NorthwindDataContext(IList<Category> categories)
-            : base(global::System.Configuration.ConfigurationManager.ConnectionStrings["NORTHWNDConnectionString"].ConnectionString, mappingSource)
+            : base(ConfigurationManager.ConnectionStrings["NORTHWNDConnectionString"].ConnectionString, mappingSource)
         {
             this.categories = categories;
         }
@@ -21,14 +20,12 @@ namespace IronRubyMvcWeb.Models.Northwind
             this.categories = categories;
         }
 
-        IList<Category> categories;
-
         public virtual IList<Category> GetCategories()
         {
-            if (this.categories == null)
-                return this.Categories.ToList();
+            if (categories == null)
+                return Categories.ToList();
             else
-                return this.categories;
+                return categories;
         }
     }
 }

@@ -1,15 +1,18 @@
-﻿namespace IronRubyMvcWeb {
-    using System;
-    using System.Web;
-    using System.Web.Mvc;
-    using IronRubyMvc;
-    using System.Web.Routing;
+﻿using System;
+using System.Web;
+using IronRubyMvc;
 
-    public class GlobalApplication : HttpApplication {
-        protected void Application_Start(object sender, EventArgs e) {
+namespace IronRubyMvcWeb
+{
+    public class GlobalApplication : HttpApplication
+    {
+        protected void Application_Start(object sender, EventArgs e)
+        {
             this.InitializeIronRubyMvc();
         }
 
-        protected void Application_BeginRequest(object sender, EventArgs e){}
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+        }
     }
 }
