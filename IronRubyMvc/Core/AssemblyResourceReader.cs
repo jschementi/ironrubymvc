@@ -22,7 +22,7 @@ namespace IronRubyMvc.Core
                 if (stream.IsNotNull())
                     using (var reader = new StreamReader(stream))
                         return reader.ReadToEnd();
-            return null;
+            return string.Empty;
         }
     }
 }
