@@ -7,11 +7,11 @@ class HomeModel
 end
 
 class HomeController < Controller
-  def initialize(context = nil)
-    if(context != nil)
-        base.Initialize(context)
-    end
-  end
+#  def initialize(context = nil)
+#    if(context != nil)
+#        base.Initialize(context)
+#    end
+#  end
   
   def index
     view nil, 'layout', HomeModel.new

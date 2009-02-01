@@ -1,12 +1,17 @@
-﻿namespace Pictures {
-    using System;
-    using System.Web;
-    using System.Web.Mvc;
-    using IronRubyMvc;
-    using System.Web.Routing;
+﻿#region Usings
 
-    public class GlobalApplication : HttpApplication {
-        protected void Application_Start(object sender, EventArgs e) {
+using System;
+using System.Web;
+using IronRubyMvcLibrary;
+
+#endregion
+
+namespace Pictures
+{
+    public class GlobalApplication : HttpApplication
+    {
+        protected void Application_Start(object sender, EventArgs e)
+        {
             this.InitializeIronRubyMvc();
         }
     }

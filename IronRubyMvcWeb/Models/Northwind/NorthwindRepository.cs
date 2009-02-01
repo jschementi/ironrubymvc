@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿#region Usings
+
+using System.Linq;
 using IronRubyMvcWeb.Models.Northwind;
+
+#endregion
 
 namespace IronRubyMvcWeb.Models
 {

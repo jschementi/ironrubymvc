@@ -1,6 +1,10 @@
 ﻿module IronRubyMvc
   
-  class RubyController
+  #module Controllers
+  
+  class Controller < IronRubyMvcLibrary::Controllers::RubyController
+    
+    
     
     class << self
       def before_filter(name, options, &b)
@@ -14,4 +18,10 @@
     
   end
   
+  #end
+  
+  
+  
 end
+
+Controller = IronRubyMvc::Controller

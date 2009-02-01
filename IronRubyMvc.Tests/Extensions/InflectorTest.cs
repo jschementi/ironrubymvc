@@ -1,8 +1,12 @@
+#region Usings
+
 using System.Collections.Generic;
-using IronRubyMvc.Extensions;
+using IronRubyMvcLibrary.Extensions;
 using Xunit;
 
-namespace IronRubyMvc.Tests.Extensions
+#endregion
+
+namespace IronRubyMvcLibrary.Tests.Extensions
 {
     public class InflectorTest
     {

@@ -1,17 +1,20 @@
+#region Usings
+
 using System;
 using System.IO;
-using System.Web.Hosting;
-using IronRubyMvc.Core;
+using IronRubyMvcLibrary.Core;
 using Xunit;
 
-namespace IronRubyMvc.Tests.Core
+#endregion
+
+namespace IronRubyMvcLibrary.Tests.Core
 {
     [Concern(typeof (FileReader))]
     public class when_reading_a_file_and_an_existing_path_is_given : InstanceContextSpecification<FileReader>
     {
         private string _filePath;
-        private string _result;
         private IPathProvider _pathProvider;
+        private string _result;
 
         protected override void EstablishContext()
         {
@@ -39,13 +42,13 @@ namespace IronRubyMvc.Tests.Core
         }
     }
 
-    [Concern(typeof(FileReader))]
+    [Concern(typeof (FileReader))]
     public class when_reading_a_file_and_a_non_existing_path_is_given : InstanceContextSpecification<FileReader>
     {
-        private string _filePath;
         private Action _action;
-        private string _result;
+        private string _filePath;
         private IPathProvider _pathProvider;
+        private string _result;
 
         protected override void EstablishContext()
         {
@@ -78,7 +81,5 @@ namespace IronRubyMvc.Tests.Core
         {
             _result.ShouldBeEmpty();
         }
-
-
     }
 }

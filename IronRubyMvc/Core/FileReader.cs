@@ -1,7 +1,10 @@
-using System.IO;
-using System.Web.Hosting;
+#region Usings
 
-namespace IronRubyMvc.Core
+using System.IO;
+
+#endregion
+
+namespace IronRubyMvcLibrary.Core
 {
     public class FileReader : Reader
     {
@@ -12,7 +15,9 @@ namespace IronRubyMvc.Core
             _pathProvider = pathProvider;
         }
 
-        public FileReader() : this(new VirtualPathProvider()){}
+        public FileReader() : this(new VirtualPathProvider())
+        {
+        }
 
         public override string Read(string filePath)
         {
@@ -21,12 +26,11 @@ namespace IronRubyMvc.Core
                 return string.Empty;
             }
 
-            using (var stream = _pathProvider.Open(filePath))
+            using (Stream stream = _pathProvider.Open(filePath))
             {
                 using (TextReader reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
-                    
                 }
             }
         }

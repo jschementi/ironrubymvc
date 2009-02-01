@@ -1,10 +1,17 @@
-﻿namespace IronRubyMvc {
-    using System.Collections;
-    using System.Web.Mvc;
-    using System.Web.Routing;
+﻿#region Usings
 
-    public static class DictionaryExtensions {
-        public static RouteValueDictionary ToRouteDictionary(this IDictionary dictionary) {
+using System.Collections;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+#endregion
+
+namespace IronRubyMvcLibrary
+{
+    public static class DictionaryExtensions
+    {
+        public static RouteValueDictionary ToRouteDictionary(this IDictionary dictionary)
+        {
             var rvd = new RouteValueDictionary();
 
             if (dictionary != null)
@@ -14,7 +21,8 @@
             return rvd;
         }
 
-        public static ViewDataDictionary ToViewDataDictionary(this IDictionary dictionary) {
+        public static ViewDataDictionary ToViewDataDictionary(this IDictionary dictionary)
+        {
             var vdd = new ViewDataDictionary();
 
             if (dictionary != null)

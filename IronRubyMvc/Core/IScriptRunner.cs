@@ -1,4 +1,4 @@
-namespace IronRubyMvc.Core
+namespace IronRubyMvcLibrary.Core
 {
     internal interface IScriptRunner
     {
@@ -10,5 +10,7 @@ namespace IronRubyMvc.Core
         T ExecuteFile<T>(string scriptPath);
         object ExecuteScript(string script);
         T ExecuteScript<T>(string script);
+        bool Exists(string scriptPath);
+        bool Exists();
     }
 }

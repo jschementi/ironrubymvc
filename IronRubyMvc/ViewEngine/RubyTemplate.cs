@@ -1,35 +1,46 @@
-﻿namespace IronRubyMvc {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Text.RegularExpressions;
+﻿#region Usings
 
-    public class RubyTemplate {
-        List<string> _requires = new List<string>();
-        string _template;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 
-        public RubyTemplate(string templateContents) {
+#endregion
+
+namespace IronRubyMvcLibrary
+{
+    public class RubyTemplate
+    {
+        private readonly List<string> _requires = new List<string>();
+        private readonly string _template;
+
+        public RubyTemplate(string templateContents)
+        {
             if (templateContents == null)
                 throw new ArgumentNullException("templateContents");
 
             _template = templateContents;
         }
 
-        public void AddRequire(string require) {
+        public void AddRequire(string require)
+        {
             _requires.Add(require);
         }
 
-        public string ToScript() {
+        public string ToScript()
+        {
             return ToScript(null);
         }
 
-        public string ToScript(string methodName) {
-            StringBuilder builder = new StringBuilder();
+        public string ToScript(string methodName)
+        {
+            var builder = new StringBuilder();
             ToScript(methodName, builder);
             return builder.ToString().Trim();
         }
 
-        public void ToScript(string methodName, StringBuilder builder) {
+        public void ToScript(string methodName, StringBuilder builder)
+        {
             string contents = _template;
 
             builder.AppendLine();
@@ -38,15 +49,17 @@
             if (!String.IsNullOrEmpty(methodName))
                 builder.AppendLine("def " + methodName);
 
-            Regex scriptBlocks = new Regex("<%.*?%>", RegexOptions.Compiled | RegexOptions.Singleline);
+            var scriptBlocks = new Regex("<%.*?%>", RegexOptions.Compiled | RegexOptions.Singleline);
             MatchCollection matches = scriptBlocks.Matches(contents);
 
             int currentIndex = 0;
             int blockBeginIndex = 0;
 
-            foreach (Match match in matches) {
+            foreach (Match match in matches)
+            {
                 blockBeginIndex = match.Index;
-                RubyScriptBlock block = RubyScriptBlock.Parse(contents.Substring(currentIndex, blockBeginIndex - currentIndex));
+                RubyScriptBlock block =
+                    RubyScriptBlock.Parse(contents.Substring(currentIndex, blockBeginIndex - currentIndex));
 
                 if (!String.IsNullOrEmpty(block.Contents))
                     builder.AppendLine(block.Contents);
@@ -56,12 +69,14 @@
                 currentIndex = match.Index + match.Length;
             }
 
-            if (currentIndex < contents.Length - 1) {
+            if (currentIndex < contents.Length - 1)
+            {
                 RubyScriptBlock endBlock = RubyScriptBlock.Parse(contents.Substring(currentIndex));
                 builder.Append(endBlock.Contents);
             }
 
-            if (!String.IsNullOrEmpty(methodName)) {
+            if (!String.IsNullOrEmpty(methodName))
+            {
                 builder.AppendLine();
                 builder.AppendLine("end");
             }

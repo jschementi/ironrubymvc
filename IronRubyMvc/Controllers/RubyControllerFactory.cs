@@ -1,37 +1,51 @@
-﻿using IronRubyMvc.Core;
-using IronRubyMvc.Extensions;
+﻿#region Usings
 
-namespace IronRubyMvc {
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Web.Mvc;
-    using System.Web.Routing;
+using System;
+using System.Web.Mvc;
+using System.Web.Routing;
+using IronRubyMvcLibrary.Core;
 
-    public class RubyControllerFactory : IControllerFactory {
-        readonly IControllerFactory _innerFactory;
+#endregion
 
-        public RubyControllerFactory(IControllerFactory innerFactory) {
+namespace IronRubyMvcLibrary.Controllers
+{
+    public class RubyControllerFactory : IControllerFactory
+    {
+        private readonly IControllerFactory _innerFactory;
+
+        public RubyControllerFactory(IControllerFactory innerFactory)
+        {
             _innerFactory = innerFactory;
         }
 
-        public IController CreateController(RequestContext context, string controllerName) {
+        #region IControllerFactory Members
+
+        public IController CreateController(RequestContext context, string controllerName)
+        {
             IController result = null;
 
-            try {
+            try
+            {
                 result = _innerFactory.CreateController(context, controllerName);
             }
-            catch { }
+            catch
+            {
+            }
 
-            result = new RubyController { ControllerName = controllerName.Pascalize() };
+            RubyMediator mediator = RubyMediator.Create();
+            result = mediator.LoadController(context, controllerName);
 
             return result;
         }
 
-        public void ReleaseController(IController controller) {
+        public void ReleaseController(IController controller)
+        {
             var disposable = controller as IDisposable;
 
             if (disposable != null)
                 disposable.Dispose();
         }
+
+        #endregion
     }
 }

@@ -1,4 +1,8 @@
-﻿using System.Web.Mvc;
+﻿#region Usings
+
+using System.Web.Mvc;
+
+#endregion
 
 namespace IronRubyMvcWeb.Views.Home
 {

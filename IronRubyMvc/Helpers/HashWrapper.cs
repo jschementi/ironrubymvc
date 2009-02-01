@@ -1,26 +1,30 @@
-﻿namespace IronRubyMvc {
-    using System;
-    using System.ComponentModel;
-    using System.Globalization;
-    using System.Linq;
-    using IronRuby.Builtins;
+﻿#region Usings
 
-    public class HashWrapper : CustomTypeDescriptor {
-        public HashWrapper(Hash hash) {
+using System;
+using System.ComponentModel;
+using System.Globalization;
+using IronRuby.Builtins;
+
+#endregion
+
+namespace IronRubyMvcLibrary
+{
+    public class HashWrapper : CustomTypeDescriptor
+    {
+        public HashWrapper(Hash hash)
+        {
             Object = hash;
         }
 
-        public Hash Object {
-            get;
-            private set;
-        }
+        public Hash Object { get; private set; }
 
-        public override PropertyDescriptorCollection GetProperties() {
+        public override PropertyDescriptorCollection GetProperties()
+        {
             var descriptors = new PropertyDescriptor[Object.Count];
             int i = 0;
             foreach (var entry in Object)
             {
-                descriptors[i++] = 
+                descriptors[i++] =
                     new HashPropertyDescriptor(Convert.ToString(entry.Key, CultureInfo.InvariantCulture), entry.Value);
             }
 //            PropertyDescriptor[] descriptors = Object.Select(
@@ -28,46 +32,59 @@
             return new PropertyDescriptorCollection(descriptors);
         }
 
-        private class HashPropertyDescriptor : PropertyDescriptor {
+        #region Nested type: HashPropertyDescriptor
 
-            private object _value;
+        private class HashPropertyDescriptor : PropertyDescriptor
+        {
+            private readonly object _value;
 
             public HashPropertyDescriptor(string name, object value)
-                : base(name, null /* attributes */) {
+                : base(name, null /* attributes */)
+            {
                 _value = value;
             }
 
-            public override bool CanResetValue(object component) {
-                return false;
-            }
-
-            public override Type ComponentType {
+            public override Type ComponentType
+            {
                 get { throw new NotImplementedException(); }
             }
 
-            public override object GetValue(object component) {
-                return _value;
-            }
-
-            public override bool IsReadOnly {
+            public override bool IsReadOnly
+            {
                 get { return true; }
             }
 
-            public override Type PropertyType {
-                get { return typeof(object); }
+            public override Type PropertyType
+            {
+                get { return typeof (object); }
             }
 
-            public override void ResetValue(object component) {
+            public override bool CanResetValue(object component)
+            {
+                return false;
+            }
+
+            public override object GetValue(object component)
+            {
+                return _value;
+            }
+
+            public override void ResetValue(object component)
+            {
                 throw new NotImplementedException();
             }
 
-            public override void SetValue(object component, object value) {
+            public override void SetValue(object component, object value)
+            {
                 throw new NotImplementedException();
             }
 
-            public override bool ShouldSerializeValue(object component) {
+            public override bool ShouldSerializeValue(object component)
+            {
                 throw new NotImplementedException();
             }
         }
+
+        #endregion
     }
 }

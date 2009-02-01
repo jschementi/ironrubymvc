@@ -1,33 +1,40 @@
 ﻿// REVIEW: This all uses Response.Write, should pass in the text writer instead?
 
-namespace IronRubyMvc {
-    using System;
+#region Usings
 
-    internal class RubyScriptBlock {
-        public static RubyScriptBlock Parse(string block) {
-            return new RubyScriptBlock(block);
-        }
+using System;
 
-        public string Contents { get; private set; }
+#endregion
 
-        RubyScriptBlock(string block) {
+namespace IronRubyMvcLibrary
+{
+    internal class RubyScriptBlock
+    {
+        [ThreadStatic] private static bool ignoreNextNewLine;
+
+        private RubyScriptBlock(string block)
+        {
             bool ignoreNewLine = ignoreNextNewLine;
 
-            if (String.IsNullOrEmpty(block)) {
+            if (String.IsNullOrEmpty(block))
+            {
                 Contents = string.Empty;
                 return;
             }
 
             int endOffset = 4;
-            if (block.EndsWith("-%>")) {
+            if (block.EndsWith("-%>"))
+            {
                 endOffset = 5;
                 ignoreNextNewLine = true;
             }
-            else {
+            else
+            {
                 ignoreNextNewLine = false;
             }
 
-            if (block.StartsWith("<%=")) {
+            if (block.StartsWith("<%="))
+            {
                 int outputLength = block.Length - endOffset - 1;
                 if (outputLength < 1)
                     throw new InvalidOperationException("Started a '<%=' block without ending it.");
@@ -37,7 +44,8 @@ namespace IronRubyMvc {
                 return;
             }
 
-            if (block.StartsWith("<%")) {
+            if (block.StartsWith("<%"))
+            {
                 Contents = block.Substring(2, block.Length - endOffset).Trim();
                 return;
             }
@@ -53,7 +61,11 @@ namespace IronRubyMvc {
                 Contents = "response.Write(\"{0}\")".FormattedWith(block);
         }
 
-        [ThreadStatic]
-        static bool ignoreNextNewLine = false;
+        public string Contents { get; private set; }
+
+        public static RubyScriptBlock Parse(string block)
+        {
+            return new RubyScriptBlock(block);
+        }
     }
 }

@@ -1,30 +1,24 @@
+#region Usings
+
 using System;
 using System.Reflection;
 using System.Web.Mvc;
 
-namespace IronRubyMvc
+#endregion
+
+namespace IronRubyMvcLibrary.Controllers
 {
     public class RubyParameterDescriptor : ReflectedParameterDescriptor
     {
-        private System.Type _parameterType;
-        public RubyParameterDescriptor(ParameterInfo parameterInfo, ActionDescriptor actionDescriptor) : base(parameterInfo, actionDescriptor)
+        private Type _parameterType;
+
+        public RubyParameterDescriptor(ParameterInfo parameterInfo, ActionDescriptor actionDescriptor)
+            : base(parameterInfo, actionDescriptor)
         {
-            
         }
 
-        public Func<object> Action
-        {
-            get
-            {
-                var rubyActionDescriptor = ActionDescriptor as RubyActionDescriptor;
-                if (rubyActionDescriptor.IsNull())
-                    return null;
-                
-                return rubyActionDescriptor.Action;
-            }
-        }
 
-        public new System.Type ParameterType
+        public new Type ParameterType
         {
             get
             {
@@ -32,9 +26,7 @@ namespace IronRubyMvc
                     return _parameterType;
                 return base.ParameterType;
             }
-            internal set{ _parameterType = value;}
+            internal set { _parameterType = value; }
         }
-
-
     }
 }

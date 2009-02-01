@@ -137,9 +137,9 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronRubyMvc\IronRubyMvc.csproj">
+    <ProjectReference Include="..\IronRubyMvc\IronRubyMvcLibrary.csproj">
       <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
-      <Name>IronRubyMvc</Name>
+      <Name>IronRubyMvcLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,12 +1,16 @@
-using System.Threading;
-using System;
+#region Usings
 
-namespace IronRubyMvc.Helpers
+using System;
+using System.Threading;
+
+#endregion
+
+namespace IronRubyMvcLibrary.Helpers
 {
     internal static class DescriptorUtil
     {
-
-        public static TDescriptor[] LazilyFetchOrCreateDescriptors<TReflection, TDescriptor>(ref TDescriptor[] cacheLocation, Func<TReflection[]> initializer, Func<TReflection, TDescriptor> converter)
+        public static TDescriptor[] LazilyFetchOrCreateDescriptors<TReflection, TDescriptor>(
+            ref TDescriptor[] cacheLocation, Func<TReflection[]> initializer, Func<TReflection, TDescriptor> converter)
         {
             // did we already calculate this once?
             TDescriptor[] existingCache = Interlocked.CompareExchange(ref cacheLocation, null, null);
@@ -16,17 +20,16 @@ namespace IronRubyMvc.Helpers
             }
 
             TReflection[] memberInfos = initializer();
-            TDescriptor[] descriptors = new TDescriptor[memberInfos.Length];
-            var i = 0;
+            var descriptors = new TDescriptor[memberInfos.Length];
+            int i = 0;
             foreach (var memberInfo in memberInfos)
             {
-                var descriptor = converter(memberInfo);
-                if(descriptor != null) descriptors[i++] = descriptor;
+                TDescriptor descriptor = converter(memberInfo);
+                if (descriptor != null) descriptors[i++] = descriptor;
             }
             //memberInfos.Select(converter).Where(descriptor => descriptor != null).ToArray();
             TDescriptor[] updatedCache = Interlocked.CompareExchange(ref cacheLocation, descriptors, null);
             return updatedCache ?? descriptors;
         }
-
     }
 }
