@@ -33,7 +33,7 @@
             string contents = _template;
 
             builder.AppendLine();
-            _requires.ForEach(require => builder.AppendLine(string.Format("require '{0}'", require)));
+            _requires.ForEach(require => builder.AppendLine("require '{0}'".FormattedWith(require)));
 
             if (!String.IsNullOrEmpty(methodName))
                 builder.AppendLine("def " + methodName);

@@ -169,7 +169,7 @@ namespace IronRubyMvc.Tests
 
         private string ExpectedWrite(string s)
         {
-            return string.Format("response.Write({0})", s);
+            return "response.Write({0})".FormattedWith(s);
         }
     }
 }

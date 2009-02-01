@@ -42,7 +42,7 @@
 
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
             var rubyContext = Ruby.GetExecutionContext(runtime);
-
+            
             rubyContext.DefineReadOnlyGlobalVariable("routes", routeCollection);
 
             // REVIEW: Should we pull this information from the loaded versions of these assemblies?
@@ -55,10 +55,10 @@ require 'System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
             rubyEngine.CreateScriptSourceFromString(header).Execute();
 
             using (var stream = vpp.GetFile(routesPath).Open())
-            using (var reader = new StreamReader(stream)) {
-                string routesText = reader.ReadToEnd();
-                rubyEngine.CreateScriptSourceFromString(routesText).Execute();
-            }
+                using (var reader = new StreamReader(stream)) {
+                    string routesText = reader.ReadToEnd();
+                    rubyEngine.CreateScriptSourceFromString(routesText).Execute();
+                }
         }
     }
 }

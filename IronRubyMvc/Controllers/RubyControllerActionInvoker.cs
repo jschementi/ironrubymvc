@@ -12,7 +12,7 @@ namespace IronRubyMvc
 
         public string ControllerName { get; private set; }
 
-        public RubyMvcEngine Engine { get; private set; }
+        public RubyMediator RubyMediator { get; private set; }
 
         protected override ControllerDescriptor GetControllerDescriptor(ControllerContext controllerContext)
         {
@@ -35,9 +35,6 @@ namespace IronRubyMvc
         }
 
 
-        private static string PascalCaseIt(string s)
-        {
-            return s[0].ToString().ToUpper() + s.Substring(1);
-        }
+        
     }
 }

@@ -56,21 +56,21 @@ namespace IronRubyMvc
             get { return ((RubyControllerDescriptor) ControllerDescriptor); }
         }
 
-        private RubyMvcEngine Engine
+        private RubyMediator RubyMediator
         {
-            get { return RubyControllerDescriptor.Engine; }
+            get { return RubyControllerDescriptor.RubyMediator; }
         }
 
         public Func<object> Action
         {
             get
             {
-                var controllerRubyMethodName = Engine.GetMethodName(ActionName, RubyControllerDescriptor.RubyControllerClass);
+                var controllerRubyMethodName = RubyMediator.GetMethodName(ActionName, RubyControllerDescriptor.RubyControllerClass);
 
 
                 return String.IsNullOrEmpty(controllerRubyMethodName) 
                     ? null 
-                    : Engine.GetControllerAction(RubyControllerDescriptor.ControllerName, controllerRubyMethodName);
+                    : RubyMediator.GetControllerAction(RubyControllerDescriptor.ControllerName, controllerRubyMethodName);
             }
         }
 

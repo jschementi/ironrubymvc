@@ -21,7 +21,7 @@ namespace IronRubyMvc {
         public static readonly MethodInfo InvokeActionMethod = typeof(RubyController).GetMethod("InvokeAction");
 
         public string ControllerName { get; set; }
-        public string ControllerClassName { get { return string.Format(Constants.CONTROLLERCLASS_FORMAT, ControllerName); } }
+        public string ControllerClassName { get { return Constants.CONTROLLERCLASS_FORMAT.FormattedWith(ControllerName); } }
 
         public IDictionary<object, object> Params {
             get {
