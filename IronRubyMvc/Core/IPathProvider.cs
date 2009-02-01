@@ -1,10 +1,14 @@
+#region Usings
+
 using System.IO;
 
-namespace IronRubyMvc.Core
+#endregion
+
+namespace IronRubyMvcLibrary.Core
 {
     public interface IPathProvider
     {
         bool FileExists(string filePath);
-        Stream Open(string filePath); 
+        Stream Open(string filePath);
     }
 }

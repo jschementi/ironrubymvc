@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvc", "IronRubyMvc\IronRubyMvc.csproj", "{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvcLibrary", "IronRubyMvc\IronRubyMvcLibrary.csproj", "{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictures", "Pictures\Pictures.csproj", "{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}"
 EndProject

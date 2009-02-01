@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#region Usings
+
+using System.Collections.Generic;
 using System.Linq;
 using IronRubyMvcWeb.Models.Northwind;
+
+#endregion
 
 namespace IronRubyMvcWeb.Models
 {

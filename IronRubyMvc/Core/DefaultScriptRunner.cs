@@ -8,33 +8,29 @@ using Microsoft.Scripting.Hosting;
 
 namespace IronRubyMvcLibrary.Core
 {
-    internal class ScopedScriptRunner : IScriptRunner
+    internal class DefaultScriptRunner
     {
         private readonly ScriptEngine _engine;
-        private readonly ScriptScope _scope;
 
 
-        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope)
-            : this(engine, scope, string.Empty, new FileReader())
+        public DefaultScriptRunner(ScriptEngine engine)
+            : this(engine, string.Empty, new FileReader())
         {
         }
 
-        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope, ReaderType readerType)
+        public DefaultScriptRunner(ScriptEngine engine, ReaderType readerType)
             : this(
-                engine, scope, string.Empty,
+                engine, string.Empty,
                 readerType == ReaderType.File ? new FileReader() : (IReader) new AssemblyResourceReader())
         {
         }
 
-        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope, string scriptPath, IReader reader)
+        public DefaultScriptRunner(ScriptEngine engine, string scriptPath, IReader reader)
         {
             _engine = engine;
-            _scope = scope;
             ScriptPath = scriptPath;
             Reader = reader;
         }
-
-        #region IScriptRunner Members
 
         public string ScriptPath { get; private set; }
 
@@ -69,7 +65,7 @@ namespace IronRubyMvcLibrary.Core
 
         public virtual object ExecuteScript(string script)
         {
-            return _engine.Execute(script, _scope);
+            return _engine.Execute(script);
         }
 
         public virtual T ExecuteScript<T>(string script)
@@ -86,7 +82,5 @@ namespace IronRubyMvcLibrary.Core
         {
             return ScriptPath.IsNullOrBlank() ? false : Exists(ScriptPath);
         }
-
-        #endregion
     }
 }

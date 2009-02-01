@@ -99,9 +99,9 @@
     <Compile Include="ViewEngine\RubyTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronRubyMvc\IronRubyMvc.csproj">
+    <ProjectReference Include="..\IronRubyMvc\IronRubyMvcLibrary.csproj">
       <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
-      <Name>IronRubyMvc</Name>
+      <Name>IronRubyMvcLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

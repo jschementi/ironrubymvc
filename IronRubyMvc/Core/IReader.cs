@@ -1,4 +1,4 @@
-namespace IronRubyMvc.Core
+namespace IronRubyMvcLibrary.Core
 {
     internal interface IReader
     {

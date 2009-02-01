@@ -1,36 +1,48 @@
-﻿namespace IronRubyMvc {
-    using System;
-    using System.IO;
-    using System.Text;
-    using System.Web.Mvc;
-    using Microsoft.Scripting.Hosting;
-    using IronRuby;
-    using IronRuby.Runtime;
+﻿#region Usings
 
-    public class RubyView : IView {
-        string _contents;
-        RubyView _master;
-        RubyTemplate _template;
-        string _helpers;
+using System;
+using System.IO;
+using System.Text;
+using System.Web.Mvc;
+using IronRuby;
+using IronRuby.Runtime;
+using Microsoft.Scripting.Hosting;
 
-        public RubyView(string viewContents, RubyView master, string helperContents) {
+#endregion
+
+namespace IronRubyMvcLibrary
+{
+    public class RubyView : IView
+    {
+        private readonly string _contents;
+        private readonly string _helpers;
+        private readonly RubyView _master;
+        private RubyTemplate _template;
+
+        public RubyView(string viewContents, RubyView master, string helperContents)
+        {
             _master = master;
             _contents = viewContents;
             _helpers = helperContents;
         }
 
-        public RubyTemplate Template {
-            get {
+        public RubyTemplate Template
+        {
+            get
+            {
                 if (_template == null)
                     _template = new RubyTemplate(_contents);
                 return _template;
             }
         }
 
-        public void Render(ViewContext context, TextWriter writer) {
+        #region IView Members
+
+        public void Render(ViewContext context, TextWriter writer)
+        {
             ScriptRuntime runtime = context.HttpContext.Application.GetScriptRuntime();
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
-            var rubyContext = Ruby.GetExecutionContext(runtime);
+            RubyContext rubyContext = Ruby.GetExecutionContext(runtime);
 
             ScriptScope scope = runtime.CreateScope();
             scope.SetVariable("view_data", context.ViewData);
@@ -42,14 +54,15 @@
 //            scope.SetVariable("ajax", new AjaxHelper(context, context.View));
 
             Template.AddRequire("System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-            Template.AddRequire("System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
+            Template.AddRequire(
+                "System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
             Template.AddRequire("System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
             Template.AddRequire("System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
 
             // TODO: this should only be done once ... not on each view rendering.
             LoadHelpers(rubyEngine, scope, writer);
 
-            StringBuilder script = new StringBuilder();
+            var script = new StringBuilder();
             Template.ToScript("render_page", script);
 
             if (_master != null)
@@ -60,32 +73,50 @@
             script.AppendLine("def view_data.method_missing(methodname); get_Item(methodname.to_s); end");
             script.AppendLine("render_layout { |content| render_page }");
 
-            try {
+            try
+            {
                 ScriptSource source = rubyEngine.CreateScriptSourceFromString(script.ToString());
                 source.Execute(scope);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 //writer.Write(script + "<br />");
                 writer.Write(e.ToString());
             }
         }
 
-        private void LoadHelpers(ScriptEngine engine, ScriptScope scope, TextWriter writer) {
-            try {
+        #endregion
+
+        private void LoadHelpers(ScriptEngine engine, ScriptScope scope, TextWriter writer)
+        {
+            try
+            {
                 ScriptSource source = engine.CreateScriptSourceFromString(_helpers);
                 source.Execute(scope);
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 //writer.Write(_helpers + "<br />");
                 writer.Write(e.ToString());
             }
         }
 
-        internal class Container : IViewDataContainer {
-            internal Container(ViewDataDictionary viewData) {
+        #region Nested type: Container
+
+        internal class Container : IViewDataContainer
+        {
+            internal Container(ViewDataDictionary viewData)
+            {
                 ViewData = viewData;
             }
 
+            #region IViewDataContainer Members
+
             public ViewDataDictionary ViewData { get; set; }
+
+            #endregion
         }
+
+        #endregion
     }
 }

@@ -1,11 +1,15 @@
+#region Usings
+
 using System;
 using System.Collections.Generic;
 
-namespace IronRubyMvc
+#endregion
+
+namespace IronRubyMvcLibrary
 {
     public static class IEnumerableExtensions
     {
-        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action )
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
             foreach (var t in collection)
             {

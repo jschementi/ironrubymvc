@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region Usings
+
+using System;
 using Xunit;
 
-namespace IronRubyMvc.Tests
+#endregion
+
+namespace IronRubyMvcLibrary.Tests
 {
     public class RubyTemplateTests
     {

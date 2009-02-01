@@ -1,10 +1,14 @@
 // Taken from Andrew Peters
 // More info: http://andrewpeters.net/inflectornet/
 
+#region Usings
+
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace IronRubyMvc.Extensions
+#endregion
+
+namespace IronRubyMvcLibrary.Extensions
 {
     public static class Inflector
     {
@@ -73,27 +77,9 @@ namespace IronRubyMvc.Extensions
 
         #endregion
 
-        private class Rule
-        {
-            private readonly Regex _regex;
-            private readonly string _replacement;
-
-            public Rule(string pattern, string replacement)
-            {
-                _regex = new Regex(pattern, RegexOptions.IgnoreCase);
-                _replacement = replacement;
-            }
-
-            public string Apply(string word)
-            {
-                if (!_regex.IsMatch(word))
-                {
-                    return null;
-                }
-
-                return _regex.Replace(word, _replacement);
-            }
-        }
+        private static readonly List<Rule> _plurals = new List<Rule>();
+        private static readonly List<Rule> _singulars = new List<Rule>();
+        private static readonly List<string> _uncountables = new List<string>();
 
         private static void AddIrregular(string singular, string plural)
         {
@@ -115,10 +101,6 @@ namespace IronRubyMvc.Extensions
         {
             _singulars.Add(new Rule(rule, replacement));
         }
-
-        private static readonly List<Rule> _plurals = new List<Rule>();
-        private static readonly List<Rule> _singulars = new List<Rule>();
-        private static readonly List<string> _uncountables = new List<string>();
 
         public static string Pluralize(this string word)
         {
@@ -151,10 +133,7 @@ namespace IronRubyMvc.Extensions
         public static string Titleize(this string word)
         {
             return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
-                                 delegate(Match match)
-                                 {
-                                     return match.Captures[0].Value.ToUpper();
-                                 });
+                                 delegate(Match match) { return match.Captures[0].Value.ToUpper(); });
         }
 
         public static string Humanize(this string lowercaseAndUnderscoredWord)
@@ -175,9 +154,9 @@ namespace IronRubyMvc.Extensions
         public static string Underscore(this string pascalCasedWord)
         {
             return Regex.Replace(
-              Regex.Replace(
-                Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                "$1_$2"), @"[-\s]", "_").ToLower();
+                Regex.Replace(
+                    Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
+                    "$1_$2"), @"[-\s]", "_").ToLower();
         }
 
         public static string Capitalize(this string word)
@@ -193,14 +172,14 @@ namespace IronRubyMvc.Extensions
         public static string Ordinalize(this string number)
         {
             int n = int.Parse(number);
-            int nMod100 = n % 100;
+            int nMod100 = n%100;
 
             if (nMod100 >= 11 && nMod100 <= 13)
             {
                 return number + "th";
             }
 
-            switch (n % 10)
+            switch (n%10)
             {
                 case 1:
                     return number + "st";
@@ -217,5 +196,31 @@ namespace IronRubyMvc.Extensions
         {
             return underscoredWord.Replace('_', '-');
         }
+
+        #region Nested type: Rule
+
+        private class Rule
+        {
+            private readonly Regex _regex;
+            private readonly string _replacement;
+
+            public Rule(string pattern, string replacement)
+            {
+                _regex = new Regex(pattern, RegexOptions.IgnoreCase);
+                _replacement = replacement;
+            }
+
+            public string Apply(string word)
+            {
+                if (!_regex.IsMatch(word))
+                {
+                    return null;
+                }
+
+                return _regex.Replace(word, _replacement);
+            }
+        }
+
+        #endregion
     }
 }

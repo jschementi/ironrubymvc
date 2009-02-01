@@ -1,4 +1,4 @@
-namespace IronRubyMvc
+namespace IronRubyMvcLibrary
 {
     public static class StringExtensions
     {

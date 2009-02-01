@@ -8,8 +8,8 @@
     <ProjectGuid>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronRubyMvc</RootNamespace>
-    <AssemblyName>IronRubyMvc</AssemblyName>
+    <RootNamespace>IronRubyMvcLibrary</RootNamespace>
+    <AssemblyName>IronRubyMvcLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ControllerConfiguration.cs" />
+    <Compile Include="Core\DefaultScriptRunner.cs" />
     <Compile Include="Core\AssemblyResourceReader.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enums.cs" />

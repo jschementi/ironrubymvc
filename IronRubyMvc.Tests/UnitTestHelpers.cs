@@ -1,9 +1,15 @@
-﻿namespace IronRubyMvc.Tests {
-    using System;
-    using System.IO;
-    using System.Web.Hosting;
+﻿#region Usings
 
-    public static class UnitTestHelpers {
+using System;
+using System.IO;
+using System.Web.Hosting;
+
+#endregion
+
+namespace IronRubyMvcLibrary.Tests
+{
+    public static class UnitTestHelpers
+    {
 //        public static void AssertThrows<TExpectedException>(Action method) where TExpectedException : Exception {
 //            try {
 //                method();
@@ -22,7 +28,8 @@
 //            }
 //        }
 
-        public static MemoryStream ToMemoryStream(this string s) {
+        public static MemoryStream ToMemoryStream(this string s)
+        {
             var stream = new MemoryStream();
             var writer = new StreamWriter(stream);
             writer.Write(s);
@@ -31,39 +38,46 @@
             return stream;
         }
 
-        public static StreamReader ToStreamReader(this string s) {
+        public static StreamReader ToStreamReader(this string s)
+        {
             Stream stream = s.ToMemoryStream();
             return new StreamReader(stream);
         }
     }
 
     //found a bug with Moq and MarshallByRef. This is my work around.
-    internal class TestVirtualPathProvider : VirtualPathProvider {
-        string path;
-        VirtualFile file;
+    internal class TestVirtualPathProvider : VirtualPathProvider
+    {
+        private readonly VirtualFile file;
+        private readonly string path;
 
-        public TestVirtualPathProvider(string path, VirtualFile file) {
+        public TestVirtualPathProvider(string path, VirtualFile file)
+        {
             this.path = path;
             this.file = file;
         }
 
-        public override VirtualFile GetFile(string virtualPath) {
-            if (virtualPath == this.path)
-                return this.file;
+        public override VirtualFile GetFile(string virtualPath)
+        {
+            if (virtualPath == path)
+                return file;
             throw new InvalidOperationException("wrong path passed in");
         }
     }
 
-    internal class TestVirtualFile : VirtualFile {
-        Stream stream;
+    internal class TestVirtualFile : VirtualFile
+    {
+        private readonly Stream stream;
 
         public TestVirtualFile(Stream stream, string virtualPath)
-            : base(virtualPath) {
+            : base(virtualPath)
+        {
             this.stream = stream;
         }
 
-        public override System.IO.Stream Open() {
-            return this.stream;
+        public override Stream Open()
+        {
+            return stream;
         }
     }
 }

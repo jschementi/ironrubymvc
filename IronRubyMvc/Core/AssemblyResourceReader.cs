@@ -1,7 +1,11 @@
+#region Usings
+
 using System.IO;
 using System.Reflection;
 
-namespace IronRubyMvc.Core
+#endregion
+
+namespace IronRubyMvcLibrary.Core
 {
     public class AssemblyResourceReader : Reader
     {
@@ -12,13 +16,13 @@ namespace IronRubyMvc.Core
             _assembly = assembly;
         }
 
-        public AssemblyResourceReader() : this(typeof(AssemblyResourceReader).Assembly)
+        public AssemblyResourceReader() : this(typeof (AssemblyResourceReader).Assembly)
         {
-            
         }
+
         public override string Read(string filePath)
         {
-            using (var stream = _assembly.GetManifestResourceStream(filePath))
+            using (Stream stream = _assembly.GetManifestResourceStream(filePath))
                 if (stream.IsNotNull())
                     using (var reader = new StreamReader(stream))
                         return reader.ReadToEnd();

@@ -1,15 +1,16 @@
+#region Usings
+
 using Xunit;
 
-namespace IronRubyMvc.Tests.Core
-{
+#endregion
 
+namespace IronRubyMvcLibrary.Tests.Core
+{
     public class RubyMediatorTest
     {
         [Fact]
         public void ShouldInstantiateClass()
         {
-            
         }
-        
     }
 }

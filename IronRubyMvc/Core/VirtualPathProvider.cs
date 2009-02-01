@@ -1,11 +1,17 @@
+#region Usings
+
 using System.IO;
 using System.Web.Hosting;
 
-namespace IronRubyMvc.Core
+#endregion
+
+namespace IronRubyMvcLibrary.Core
 {
     //Wraps the VirtualPathProvider so that testing is a bit easier
     public class VirtualPathProvider : IPathProvider
     {
+        #region IPathProvider Members
+
         public bool FileExists(string filePath)
         {
             return HostingEnvironment.VirtualPathProvider.FileExists(filePath);
@@ -13,8 +19,10 @@ namespace IronRubyMvc.Core
 
         public Stream Open(string filePath)
         {
-            var file = HostingEnvironment.VirtualPathProvider.GetFile(filePath);
+            VirtualFile file = HostingEnvironment.VirtualPathProvider.GetFile(filePath);
             return file.Open();
         }
+
+        #endregion
     }
 }

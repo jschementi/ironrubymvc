@@ -1,60 +1,49 @@
+#region Usings
+
 using System;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using IronRuby.Builtins;
-using IronRubyMvc.Core;
+using IronRubyMvcLibrary.Core;
 
-namespace IronRubyMvc
+#endregion
+
+namespace IronRubyMvcLibrary.Controllers
 {
     public class RubyControllerDescriptor : ControllerDescriptor
     {
-        private readonly string _controllerName;
-        private RubyMediator _rubyMediator;
-        public RubyControllerDescriptor(string controllerName)
+        private readonly ControllerContext _context;
+
+        public RubyControllerDescriptor(RubyClass rubyClass, ControllerContext context)
         {
-            _controllerName = controllerName;
+            RubyControllerClass = rubyClass;
+            _context = context;
+        }
+
+        public ControllerContext Context
+        {
+            get { return _context; }
         }
 
         public override string ControllerName
         {
-            get { return _controllerName; }
+            get { return RubyControllerClass.Name; }
         }
 
-        internal RubyMediator RubyMediator
+        internal RubyMediator RubyMediator { get; set; }
+
+        public override Type ControllerType
         {
-            get
-            {
-                if (_rubyMediator.IsNull())
-                    _rubyMediator = RubyMediator.Create();
-                return _rubyMediator;
-            }
+            get { return typeof (RubyController); }
         }
 
-        internal void ResetRubyEngine()
-        {
-            _rubyMediator = RubyMediator.Create();
-        }
+        public RubyClass RubyControllerClass { get; private set; }
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
         {
-            // For now limit action name to alphanumeric characters
-            if (!Regex.IsMatch(actionName, Constants.ACTION_NAME_REGEX))
-                return null;
+            Func<object> action = RubyMediator.GetControllerAction((RubyController) controllerContext.Controller,
+                                                                   actionName);
 
-            RubyMediator.LoadController(ControllerName, controllerContext);
-
-
-            var controllerRubyClassName = RubyMediator.GetGlobalVariableName(ControllerName);
-
-            if (String.IsNullOrEmpty(controllerRubyClassName))
-            {
-                // controller not found
-                return null;
-            }
-
-            //_rubyMediator.UseFile()
-            RubyControllerClass = RubyMediator.GetRubyClass(controllerRubyClassName);
-            
+            if (action.IsNull()) return null;
 
             return RubyActionDescriptor.Create(actionName, this);
         }
@@ -63,13 +52,5 @@ namespace IronRubyMvc
         {
             return new RubyActionDescriptor[0];
         }
-
-        public override Type ControllerType
-        {
-            get { return typeof (RubyController); }
-        }
-
-        public RubyClass RubyControllerClass
-        { get; private set; }
     }
 }

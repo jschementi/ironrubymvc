@@ -1,13 +1,18 @@
-﻿using System.Web.Mvc;
-using IronRubyMvc.Core;
+﻿#region Usings
 
-namespace IronRubyMvc
+using System.Web.Mvc;
+using IronRubyMvcLibrary.Core;
+
+#endregion
+
+namespace IronRubyMvcLibrary.Controllers
 {
     internal class RubyControllerActionInvoker : ControllerActionInvoker
     {
-        public RubyControllerActionInvoker(string controllerName)
+        public RubyControllerActionInvoker(string controllerName, RubyMediator mediator)
         {
             ControllerName = controllerName;
+            RubyMediator = mediator;
         }
 
         public string ControllerName { get; private set; }
@@ -16,7 +21,8 @@ namespace IronRubyMvc
 
         protected override ControllerDescriptor GetControllerDescriptor(ControllerContext controllerContext)
         {
-            return new RubyControllerDescriptor(ControllerName);
+            return new RubyControllerDescriptor(((RubyController) controllerContext.Controller).RubyType,
+                                                controllerContext) {RubyMediator = RubyMediator};
         }
 
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,
@@ -24,17 +30,5 @@ namespace IronRubyMvc
         {
             return controllerDescriptor.FindAction(controllerContext, actionName);
         }
-
-
-        protected override object GetParameterValue(ControllerContext controllerContext,
-                                                    ParameterDescriptor parameterDescriptor)
-        {
-            return parameterDescriptor.ParameterName == "__action"
-                       ? ((RubyParameterDescriptor) parameterDescriptor).Action
-                       : base.GetParameterValue(controllerContext, parameterDescriptor);
-        }
-
-
-        
     }
 }
