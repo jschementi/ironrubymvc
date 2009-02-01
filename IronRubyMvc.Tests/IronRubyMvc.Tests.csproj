@@ -90,8 +90,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\AssemblyResourceReaderSpec.cs" />
+    <Compile Include="Core\FileReaderSpec.cs" />
+    <Compile Include="Core\RubyMediatorTest.cs" />
     <Compile Include="Extensions\InflectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RubyExperiments.cs" />
     <Compile Include="UnitTestHelpers.cs" />
     <Compile Include="ViewEngine\RubyTemplateTests.cs" />
   </ItemGroup>
@@ -103,6 +106,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\EmbeddedTestResource.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Core\TestFile.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

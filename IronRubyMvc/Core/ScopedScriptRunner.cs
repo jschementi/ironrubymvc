@@ -3,25 +3,29 @@ using Microsoft.Scripting.Hosting;
 
 namespace IronRubyMvc.Core
 {
-    internal class DefaultScriptRunner: IScriptRunner
+    internal class ScopedScriptRunner: IScriptRunner
     {
         private readonly ScriptEngine _engine;
+        private readonly ScriptScope _scope;
 
-        public DefaultScriptRunner(ScriptEngine engine) 
-            : this(engine, string.Empty, new FileReader())
+        
+
+        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope) 
+            : this(engine, scope, string.Empty, new FileReader())
         {
             
         }
 
-        public DefaultScriptRunner(ScriptEngine engine, ReaderType readerType) 
-            : this(engine, string.Empty, readerType == ReaderType.File ? new FileReader() : (IReader)new AssemblyResourceReader())
+        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope, ReaderType readerType) 
+            : this(engine, scope, string.Empty, readerType == ReaderType.File ? new FileReader() : (IReader)new AssemblyResourceReader())
         {
             
         }
 
-        public DefaultScriptRunner(ScriptEngine engine, string scriptPath, IReader reader)
+        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope, string scriptPath, IReader reader)
         {
             _engine = engine;
+            _scope = scope;
             ScriptPath = scriptPath;
             Reader = reader;
         }
@@ -38,7 +42,7 @@ namespace IronRubyMvc.Core
             if(Reader.IsNull())
                 throw new NullReferenceException("You need to provice a Reader in order to execute a script");
 
-            return _engine.CreateScriptSourceFromString(Reader.Read(ScriptPath)).Execute();
+            return ExecuteScript(Reader.Read(ScriptPath));
         }
 
         public virtual T Execute<T>()
@@ -59,7 +63,7 @@ namespace IronRubyMvc.Core
 
         public virtual object ExecuteScript(string script)
         {
-            return _engine.CreateScriptSourceFromString(script).Execute();
+            return _engine.Execute(script, _scope);
         }
 
         public virtual T ExecuteScript<T>(string script)

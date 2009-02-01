@@ -4,9 +4,9 @@ namespace IronRubyMvc.Core
     {
         public const string RUBYCONTROLLER_FILE = "IronRubyMvc.Controllers.controller.rb";
         public const string CONTROLLER_PATH_FORMAT = @"~\Controllers\{0}.rb";
-        public const string GET_ACTIONMETHOD_SCRIPT = @"$controller = {0}.new
-$controller.Initialize $request_context
-$controller.method :{1}";
+        public const string GET_ACTIONMETHOD_SCRIPT = @"controller = {0}.new
+controller.Initialize $request_context
+controller.method :{1}";
 
         public const string CONTROLLERS = "Controllers";
         public const string MODELS = "Models";

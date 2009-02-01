@@ -11,5 +11,10 @@ namespace IronRubyMvc
         {
             return !value.IsNullOrBlank();
         }
+
+        public static string FormattedWith(this string formatString, params object[] parameters)
+        {
+            return string.Format(formatString, parameters);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace IronRubyMvc
     public class RubyControllerDescriptor : ControllerDescriptor
     {
         private readonly string _controllerName;
-        private RubyMvcEngine _engine;
+        private RubyMediator _rubyMediator;
         public RubyControllerDescriptor(string controllerName)
         {
             _controllerName = controllerName;
@@ -20,19 +20,19 @@ namespace IronRubyMvc
             get { return _controllerName; }
         }
 
-        internal RubyMvcEngine Engine
+        internal RubyMediator RubyMediator
         {
             get
             {
-                if (_engine.IsNull())
-                    _engine = RubyMvcEngine.Create();
-                return _engine;
+                if (_rubyMediator.IsNull())
+                    _rubyMediator = RubyMediator.Create();
+                return _rubyMediator;
             }
         }
 
         internal void ResetRubyEngine()
         {
-            _engine = RubyMvcEngine.Create();
+            _rubyMediator = RubyMediator.Create();
         }
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
@@ -41,10 +41,10 @@ namespace IronRubyMvc
             if (!Regex.IsMatch(actionName, Constants.ACTION_NAME_REGEX))
                 return null;
 
-            Engine.LoadController(ControllerName, controllerContext);
+            RubyMediator.LoadController(ControllerName, controllerContext);
 
 
-            var controllerRubyClassName = Engine.GetGlobalVariableName(ControllerName);
+            var controllerRubyClassName = RubyMediator.GetGlobalVariableName(ControllerName);
 
             if (String.IsNullOrEmpty(controllerRubyClassName))
             {
@@ -52,8 +52,8 @@ namespace IronRubyMvc
                 return null;
             }
 
-            //_engine.UseFile()
-            RubyControllerClass = Engine.GetRubyClass(controllerRubyClassName);
+            //_rubyMediator.UseFile()
+            RubyControllerClass = RubyMediator.GetRubyClass(controllerRubyClassName);
             
 
             return RubyActionDescriptor.Create(actionName, this);

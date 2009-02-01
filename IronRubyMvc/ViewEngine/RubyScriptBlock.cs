@@ -33,7 +33,7 @@ namespace IronRubyMvc {
                     throw new InvalidOperationException("Started a '<%=' block without ending it.");
 
                 string output = block.Substring(3, outputLength).Trim();
-                Contents = String.Format("response.Write({0})", output).Trim();
+                Contents = "response.Write({0})".FormattedWith(output).Trim();
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace IronRubyMvc {
             block = block.Replace(@"""", @"\""");
 
             if (block.Length > 0)
-                Contents = string.Format("response.Write(\"{0}\")", block);
+                Contents = "response.Write(\"{0}\")".FormattedWith(block);
         }
 
         [ThreadStatic]

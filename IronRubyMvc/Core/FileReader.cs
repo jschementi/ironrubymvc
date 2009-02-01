@@ -5,15 +5,23 @@ namespace IronRubyMvc.Core
 {
     public class FileReader : Reader
     {
+        private readonly IPathProvider _pathProvider;
+
+        public FileReader(IPathProvider pathProvider)
+        {
+            _pathProvider = pathProvider;
+        }
+
+        public FileReader() : this(new VirtualPathProvider()){}
+
         public override string Read(string filePath)
         {
-            if (!HostingEnvironment.VirtualPathProvider.FileExists(filePath))
+            if (!_pathProvider.FileExists(filePath))
             {
-                return null;
+                return string.Empty;
             }
 
-            var file = HostingEnvironment.VirtualPathProvider.GetFile(filePath);
-            using (var stream = file.Open())
+            using (var stream = _pathProvider.Open(filePath))
             {
                 using (TextReader reader = new StreamReader(stream))
                 {

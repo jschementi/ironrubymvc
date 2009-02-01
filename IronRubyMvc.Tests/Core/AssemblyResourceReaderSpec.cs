@@ -33,7 +33,7 @@ namespace IronRubyMvc.Tests.Core
     }
 
     [Concern(typeof (AssemblyResourceReader))]
-    public class when_reading_a_resource_and_an_non_existing_path_is_given : InstanceContextSpecification<AssemblyResourceReader>
+    public class when_reading_a_resource_and_a_non_existing_path_is_given : InstanceContextSpecification<AssemblyResourceReader>
     {
         private string _resourcePath;
         private Action _action;

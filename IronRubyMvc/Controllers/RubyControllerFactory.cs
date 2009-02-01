@@ -1,4 +1,5 @@
 ﻿using IronRubyMvc.Core;
+using IronRubyMvc.Extensions;
 
 namespace IronRubyMvc {
     using System;
@@ -21,8 +22,7 @@ namespace IronRubyMvc {
             }
             catch { }
 
-            if (result == null && Regex.IsMatch(controllerName, Constants.CONTROLLERNAME_NAME_REGEX))  // Limit to alphanum characters for now
-                result = new RubyController { ControllerName = controllerName };
+            result = new RubyController { ControllerName = controllerName.Pascalize() };
 
             return result;
         }

@@ -19,13 +19,13 @@ class BaseController < Controller
     instance_variables.each { |varname| view_data.Add(varname[1..-1], instance_variable_get(varname.to_sym)) }
   end
   
-  def to_decimal value
+  def to_decimal(value)
 	  System::Convert::ToDecimal value
   end
   
-  def return_view *args
+  def return_view(*args)
     fill_view_data
-    view *args
+    view args
   end
 end
 
