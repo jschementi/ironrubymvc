@@ -45,7 +45,7 @@ namespace IronRubyMvcLibrary.Controllers
 //    [RubyClassDefinition("RubyController", HideClrMembers = false, Extends = typeof(Controller))]
     public class RubyController : Controller
     {
-        public static readonly MethodInfo InvokeActionMethod = typeof (RubyController).GetMethod("InvokeAction");
+//        public static readonly MethodInfo InvokeActionMethod = typeof (RubyController).GetMethod("InvokeAction");
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
 
         private RubyEngine _engine;
@@ -72,6 +72,7 @@ namespace IronRubyMvcLibrary.Controllers
 //        }
 
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
         public IDictionary<object, object> Params
         {
             get

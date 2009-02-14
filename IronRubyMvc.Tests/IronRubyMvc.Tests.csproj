@@ -94,6 +94,7 @@
     <Compile Include="Core\AssemblyResourceReaderSpec.cs" />
     <Compile Include="Core\FileReaderSpec.cs" />
     <Compile Include="Core\RubyMediatorTest.cs" />
+    <Compile Include="Extensions\DictionaryExtensionsFixture.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsFixture.cs" />
     <Compile Include="Extensions\InflectorTest.cs" />
     <Compile Include="Extensions\ObjectExtensionsFixture.cs" />

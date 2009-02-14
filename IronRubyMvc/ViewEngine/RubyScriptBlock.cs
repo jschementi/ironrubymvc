@@ -3,6 +3,7 @@
 #region Usings
 
 using System;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 

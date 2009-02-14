@@ -12,7 +12,7 @@ namespace IronRubyMvcLibrary.Core
     {
         protected virtual void Application_Start(object sender, EventArgs e)
         {
-            this.InitializeIronRubyMvc();
+            RubyEngine.InitializeIronRubyMvc(new VirtualPathProvider(), "~/routes.rb");
         }
     }
 }

@@ -14,9 +14,8 @@ namespace IronRubyMvcLibrary.Extensions
         {
             var rvd = new RouteValueDictionary();
 
-            if (dictionary != null)
-                foreach (var key in dictionary.Keys)
-                    rvd.Add(key.ToString(), (dictionary[key] ?? "").ToString());
+            if (dictionary.IsNotNull())
+                dictionary.Keys.ForEach(key => rvd.Add(key.ToString(), (dictionary[key] ?? string.Empty).ToString()));
 
             return rvd;
         }

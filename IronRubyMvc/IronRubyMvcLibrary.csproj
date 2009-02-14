@@ -101,12 +101,12 @@
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
     <Compile Include="Extensions\Inflector.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
     <Compile Include="Helpers\RubyUrlHelper.cs" />
-    <Compile Include="Extensions\InitializeIronRubyMvcExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Routing\RubyRouteCollection.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
@@ -128,6 +128,9 @@
     <None Include="..\IronRubyMvcKey.snk">
       <Link>IronRubyMvcKey.snk</Link>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="CustomDictionary.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Extensions
 {
     /// <summary>
     /// Contains the extension methods for <see cref="string"/>

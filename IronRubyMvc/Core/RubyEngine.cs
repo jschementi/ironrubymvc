@@ -1,7 +1,6 @@
 #region Usings
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -13,6 +12,7 @@ using IronRuby.Builtins;
 using IronRuby.Runtime;
 using IronRubyMvcLibrary.Controllers;
 using IronRubyMvcLibrary.Extensions;
+using IronRubyMvcLibrary.ViewEngine;
 using Microsoft.Scripting.Hosting;
 
 #endregion
@@ -61,15 +61,15 @@ namespace IronRubyMvcLibrary.Core
 
         public RubyController LoadController(RequestContext requestContext, string controllerName)
         {
-            string controllerFilePath = GetControllerFilePath(controllerName);
+            var controllerFilePath = GetControllerFilePath(controllerName);
 
             if (controllerFilePath.IsNullOrBlank())
                 return null;
 
             ScriptRunner.ExecuteFile(GetControllerFilePath(controllerName));
 
-            RubyClass controllerClass = GetRubyClass(GetControllerClassName(controllerName));
-            RubyController controller = ConfigureController(controllerClass, requestContext);
+            var controllerClass = GetRubyClass(GetControllerClassName(controllerName));
+            var controller = ConfigureController(controllerClass, requestContext);
 
             return controller;
         }
@@ -94,9 +94,7 @@ namespace IronRubyMvcLibrary.Core
 
         internal void RequireRubyFile(string path, ReaderType readerType)
         {
-            var result = new DefaultScriptRunner(Engine, readerType).ExecuteFile(path);
-            
-            if(result.IsNull()) throw new FileNotFoundException("File cannot be found.", path);
+            new DefaultScriptRunner(Engine, readerType).ExecuteFile(path);
         }
 
         public RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext)
@@ -106,7 +104,8 @@ namespace IronRubyMvcLibrary.Core
 //            
 //            Operations.Invoke(initializeMethod, );
 //            controller.InternalInitialize(new ControllerConfiguration { Context = requestContext, Engine = this, RubyClass = rubyClass });
-            CallMethod(controller, "internal_initialize".Pascalize(), new ControllerConfiguration{Context = requestContext, Engine = this, RubyClass = rubyClass});
+            CallMethod(controller, "internal_initialize".Pascalize(),
+                       new ControllerConfiguration {Context = requestContext, Engine = this, RubyClass = rubyClass});
             return controller;
         }
 
@@ -137,8 +136,8 @@ namespace IronRubyMvcLibrary.Core
 
         public void SetModelAndControllersPath()
         {
-            string controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.CONTROLLERS);
-            string modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.MODELS);
+            var controllersDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.CONTROLLERS);
+            var modelsDir = Path.Combine(HostingEnvironment.ApplicationPhysicalPath, Constants.MODELS);
 
             Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir});
         }
@@ -210,12 +209,12 @@ namespace IronRubyMvcLibrary.Core
             return Runtime.Globals.GetVariable<T>(name);
         }
 
-//        public void LoadAsssemblies(params Type[] assemblies)
-//        {
-//            assemblies.ForEach(type => LoadAssembly(type.Assembly));
-//        }
+        public void LoadAsssemblies(params Type[] assemblies)
+        {
+            assemblies.ForEach(type => LoadAssembly(type.Assembly));
+        }
 
-        public static RubyEngine Create(ScriptRuntime runtime)
+        private static RubyEngine Create(ScriptRuntime runtime)
         {
 //            ScriptRuntime runtime = HttpContext.Current.Application.GetScriptRuntime();
             new[] {typeof (object), typeof (Uri), typeof (Controller), typeof (RubyController)}
@@ -225,6 +224,34 @@ namespace IronRubyMvcLibrary.Core
 //            rubyEngine.ExecuteScript("Controller = IronRubyMvc::RubyController");
 
             return rubyEngine;
+        }
+
+        public static void InitializeIronRubyMvc(IPathProvider vpp, string routesPath)
+        {
+            var rubySetup = Ruby.CreateRubySetup();
+            rubySetup.Options["InterpretedMode"] = true;
+
+            var runtimeSetup = new ScriptRuntimeSetup();
+            runtimeSetup.LanguageSetups.Add(rubySetup);
+            runtimeSetup.DebugMode = true;
+
+            var runtime = Ruby.CreateRuntime(runtimeSetup);
+            var engine = Create(runtime);
+
+            if (vpp.FileExists(routesPath))
+                ProcessRubyRoutes(engine, routesPath);
+
+            var factory = new RubyControllerFactory(ControllerBuilder.Current.GetControllerFactory(), engine);
+            ControllerBuilder.Current.SetControllerFactory(factory);
+            ViewEngines.Engines.Add(new RubyViewEngine());
+        }
+
+        private static void ProcessRubyRoutes(RubyEngine engine, string routesPath)
+        {
+            var routeCollection = new RubyRouteCollection(RouteTable.Routes);
+            engine.DefineReadOnlyGlobalVariable("routes", routeCollection);
+            engine.LoadAsssemblies(typeof(HttpResponseBase), typeof(RouteTable), typeof(ActionDescriptor));
+            engine.RequireRubyFile(routesPath, ReaderType.File);
         }
     }
 }
