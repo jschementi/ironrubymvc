@@ -1,6 +1,6 @@
 namespace IronRubyMvcLibrary.Core
 {
-    internal interface IScriptRunner
+    public interface IScriptRunner
     {
         string ScriptPath { get; }
         IReader Reader { get; }

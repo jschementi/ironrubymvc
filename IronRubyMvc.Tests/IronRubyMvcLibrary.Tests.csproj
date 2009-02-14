@@ -7,8 +7,8 @@
     <ProjectGuid>{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronRubyMvc.Tests</RootNamespace>
-    <AssemblyName>IronRubyMvc.Tests</AssemblyName>
+    <RootNamespace>IronRubyMvcLibrary.Tests</RootNamespace>
+    <AssemblyName>IronRubyMvcLibrary.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -92,8 +92,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\AssemblyResourceReaderSpec.cs" />
+    <Compile Include="Core\DefaultScriptRunnerSpec.cs" />
+    <EmbeddedResource Include="Core\EmbeddedTestScript.rb" />
     <Compile Include="Core\FileReaderSpec.cs" />
-    <Compile Include="Core\RubyMediatorTest.cs" />
+    <Compile Include="Core\RouteCollectionSpec.cs" />
+    <Compile Include="Core\ScopedScriptRunnerSpec.cs" />
     <Compile Include="Extensions\DictionaryExtensionsFixture.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsFixture.cs" />
     <Compile Include="Extensions\InflectorTest.cs" />

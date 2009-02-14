@@ -36,5 +36,10 @@ namespace IronRubyMvcLibrary.Core
                                      Constraints = constraints.ToRouteDictionary()
                                  });
         }
+
+        public RouteBase this[string name]
+        {
+            get { return routes[name]; }
+        }
     }
 }
