@@ -96,6 +96,7 @@
     <EmbeddedResource Include="Core\EmbeddedTestScript.rb" />
     <Compile Include="Core\FileReaderSpec.cs" />
     <Compile Include="Core\RouteCollectionSpec.cs" />
+    <Compile Include="Core\RubyEngineSpec.cs" />
     <Compile Include="Core\ScopedScriptRunnerSpec.cs" />
     <Compile Include="Extensions\DictionaryExtensionsFixture.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsFixture.cs" />

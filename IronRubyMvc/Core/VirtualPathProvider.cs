@@ -19,8 +19,13 @@ namespace IronRubyMvcLibrary.Core
 
         public Stream Open(string filePath)
         {
-            VirtualFile file = HostingEnvironment.VirtualPathProvider.GetFile(filePath);
+            var file = HostingEnvironment.VirtualPathProvider.GetFile(filePath);
             return file.Open();
+        }
+
+        public string ApplicationPhysicalPath
+        {
+            get { return HostingEnvironment.ApplicationPhysicalPath; }
         }
 
         #endregion
