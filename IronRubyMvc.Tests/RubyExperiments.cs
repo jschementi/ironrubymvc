@@ -235,7 +235,7 @@ namespace IronRubyMvcLibrary.Tests
             member.ShouldNotBeNull();
             member.ShouldBeAnInstanceOf<RubyMethod>();
             var method = (RubyMethod) member;
-            operations.Call(method, "DLR context").ToString().ShouldBeEqualTo("DLR context is expired ");
+            operations.Invoke(method, "DLR context").ToString().ShouldBeEqualTo("DLR context is expired ");
         }
 
         [Fact]

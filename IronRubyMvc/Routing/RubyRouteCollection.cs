@@ -7,7 +7,7 @@ using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Core
 {
     public class RubyRouteCollection
     {

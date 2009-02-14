@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using System;
+using IronRubyMvcLibrary.Extensions;
 using IronRubyMvcLibrary.ViewEngine;
 using Xunit;
 

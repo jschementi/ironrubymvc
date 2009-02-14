@@ -1,5 +1,5 @@
 using System;
-using IronRubyMvcLibrary;
+using IronRubyMvcLibrary.Extensions;
 using Xunit;
 
 namespace IronRubyMvc.Tests.Extensions
