@@ -10,5 +10,6 @@ namespace IronRubyMvcLibrary.Core
     {
         bool FileExists(string filePath);
         Stream Open(string filePath);
+        string ApplicationPhysicalPath { get; }
     }
 }
