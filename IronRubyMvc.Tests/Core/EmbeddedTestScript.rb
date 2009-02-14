@@ -1,0 +1,1 @@
+"It works".to_clr_string

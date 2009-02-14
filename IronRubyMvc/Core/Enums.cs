@@ -1,6 +1,6 @@
 ﻿namespace IronRubyMvcLibrary.Core
 {
-    internal enum ReaderType
+    public enum ReaderType
     {
         File,
         AssemblyResource

@@ -9,7 +9,7 @@ using Microsoft.Scripting.Hosting;
 
 namespace IronRubyMvcLibrary.Core
 {
-    internal class DefaultScriptRunner : IScriptRunner
+    public class DefaultScriptRunner : IScriptRunner
     {
         private readonly ScriptEngine _engine;
 

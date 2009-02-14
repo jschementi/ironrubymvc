@@ -17,7 +17,7 @@ namespace IronRubyMvcLibrary.Tests.Core
 
         protected override void EstablishContext()
         {
-            _resourcePath = "IronRubyMvc.Tests.Core.EmbeddedTestResource.txt";
+            _resourcePath = "IronRubyMvcLibrary.Tests.Core.EmbeddedTestResource.txt";
         }
 
         protected override AssemblyResourceReader CreateSut()

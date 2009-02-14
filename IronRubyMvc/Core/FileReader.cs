@@ -15,9 +15,7 @@ namespace IronRubyMvcLibrary.Core
             _pathProvider = pathProvider;
         }
 
-        public FileReader() : this(new VirtualPathProvider())
-        {
-        }
+        public FileReader() : this(new VirtualPathProvider()){}
 
         public override string Read(string filePath)
         {
