@@ -12,6 +12,9 @@
     <AssemblyName>IronRubyMvcLibrary</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\IronRubyMvcKey.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +24,9 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRules>-Microsoft.Design#CA2210</CodeAnalysisRules>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -81,6 +87,7 @@
     <Compile Include="Core\IPathProvider.cs" />
     <Compile Include="Core\IReader.cs" />
     <Compile Include="Core\Reader.cs" />
+    <Compile Include="Core\RubyMvcApplication.cs" />
     <Compile Include="Core\ScopedScriptRunner.cs" />
     <Compile Include="Core\IScriptRunner.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
@@ -88,12 +95,11 @@
     <Compile Include="Controllers\RubyControllerActionInvoker.cs" />
     <Compile Include="Controllers\RubyControllerDescriptor.cs" />
     <Compile Include="Controllers\RubyControllerFactory.cs" />
-    <Compile Include="Core\RubyMediator.cs" />
+    <Compile Include="Core\RubyEngine.cs" />
     <Compile Include="Controllers\RubyParameterDescriptor.cs" />
     <Compile Include="Core\VirtualPathProvider.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
-    <Compile Include="Extensions\ScriptRuntimeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
@@ -117,6 +123,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controllers\controller.rb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\IronRubyMvcKey.snk">
+      <Link>IronRubyMvcKey.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

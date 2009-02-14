@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Web.Mvc;
 using System.Web.Routing;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 

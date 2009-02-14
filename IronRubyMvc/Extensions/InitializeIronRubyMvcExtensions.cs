@@ -8,11 +8,14 @@ using System.Web.Routing;
 using IronRuby;
 using IronRuby.Runtime;
 using IronRubyMvcLibrary.Controllers;
+using IronRubyMvcLibrary.Core;
+using IronRubyMvcLibrary.ViewEngine;
 using Microsoft.Scripting.Hosting;
+using VirtualPathProvider=System.Web.Hosting.VirtualPathProvider;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Extensions
 {
     public static class InitializeIronRubyMvcExtensions
     {
@@ -36,42 +39,26 @@ namespace IronRubyMvcLibrary
             runtimeSetup.DebugMode = true;
 
             ScriptRuntime runtime = Ruby.CreateRuntime(runtimeSetup);
+            RubyEngine engine = RubyEngine.Create(runtime);
 
-            app.Application.SetScriptRuntime(runtime);
+            ProcessRubyRoutes(engine, routesPath);
 
-            if (vpp.FileExists(routesPath))
-                ProcessRubyRoutes(runtime, vpp, routesPath);
-
-            var factory = new RubyControllerFactory(ControllerBuilder.Current.GetControllerFactory());
+            var factory = new RubyControllerFactory(ControllerBuilder.Current.GetControllerFactory(), engine);
             ControllerBuilder.Current.SetControllerFactory(factory);
             ViewEngines.Engines.Add(new RubyViewEngine());
         }
 
-        private static void ProcessRubyRoutes(ScriptRuntime runtime, VirtualPathProvider vpp, string routesPath)
+        private static void ProcessRubyRoutes(RubyEngine engine, string routesPath)
         {
             var routeCollection = new RubyRouteCollection(RouteTable.Routes);
 
-            ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
-            RubyContext rubyContext = Ruby.GetExecutionContext(runtime);
+            engine.DefineReadOnlyGlobalVariable("routes", routeCollection);
 
-            rubyContext.DefineReadOnlyGlobalVariable("routes", routeCollection);
+            engine.LoadAssembly(typeof (HttpResponseBase).Assembly);
+            engine.LoadAssembly(typeof (RouteTable).Assembly);
+            engine.LoadAssembly(typeof (ActionDescriptor).Assembly);
 
-            // REVIEW: Should we pull this information from the loaded versions of these assemblies?
-            string header =
-                @"
-require 'System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
-require 'System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35'
-require 'System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
-            ";
-
-            rubyEngine.CreateScriptSourceFromString(header).Execute();
-
-            using (Stream stream = vpp.GetFile(routesPath).Open())
-            using (var reader = new StreamReader(stream))
-            {
-                string routesText = reader.ReadToEnd();
-                rubyEngine.CreateScriptSourceFromString(routesText).Execute();
-            }
+            engine.RequireRubyFile(routesPath, ReaderType.File);
         }
     }
 }

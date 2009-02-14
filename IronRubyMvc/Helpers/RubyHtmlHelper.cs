@@ -3,14 +3,12 @@
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using IronRuby.Builtins;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Helpers
 {
-    // Note, it looks like DLR interop is not calling base methods. Until this is fixed, we might
-    // want to come through and add pass-throughs (in addition to the Hash-specific versions).
-
     public class RubyHtmlHelper : HtmlHelper
     {
         private readonly HtmlHelper _helper;

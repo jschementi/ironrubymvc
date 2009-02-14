@@ -9,20 +9,20 @@ namespace IronRubyMvcLibrary.Controllers
 {
     internal class RubyControllerActionInvoker : ControllerActionInvoker
     {
-        public RubyControllerActionInvoker(string controllerName, RubyMediator mediator)
+        public RubyControllerActionInvoker(string controllerName, RubyEngine engine)
         {
             ControllerName = controllerName;
-            RubyMediator = mediator;
+            RubyEngine = engine;
         }
 
         public string ControllerName { get; private set; }
 
-        public RubyMediator RubyMediator { get; private set; }
+        public RubyEngine RubyEngine { get; private set; }
 
         protected override ControllerDescriptor GetControllerDescriptor(ControllerContext controllerContext)
         {
             return new RubyControllerDescriptor(((RubyController) controllerContext.Controller).RubyType,
-                                                controllerContext) {RubyMediator = RubyMediator};
+                                                controllerContext) {RubyEngine = RubyEngine};
         }
 
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,

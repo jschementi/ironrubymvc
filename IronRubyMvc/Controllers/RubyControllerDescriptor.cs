@@ -4,6 +4,7 @@ using System;
 using System.Web.Mvc;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Core;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
@@ -29,7 +30,7 @@ namespace IronRubyMvcLibrary.Controllers
             get { return RubyControllerClass.Name; }
         }
 
-        internal RubyMediator RubyMediator { get; set; }
+        internal RubyEngine RubyEngine { get; set; }
 
         public override Type ControllerType
         {
@@ -40,10 +41,10 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
         {
-            Func<object> action = RubyMediator.GetControllerAction((RubyController) controllerContext.Controller,
+            var hasControllerAction = RubyEngine.HasControllerAction((RubyController) controllerContext.Controller,
                                                                    actionName);
 
-            if (action.IsNull()) return null;
+            if (!hasControllerAction) return null;
 
             return RubyActionDescriptor.Create(actionName, this);
         }

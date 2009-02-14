@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Reflection;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 

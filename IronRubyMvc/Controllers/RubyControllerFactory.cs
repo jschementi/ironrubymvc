@@ -4,6 +4,7 @@ using System;
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRubyMvcLibrary.Core;
+using Microsoft.Scripting.Hosting;
 
 #endregion
 
@@ -12,28 +13,30 @@ namespace IronRubyMvcLibrary.Controllers
     public class RubyControllerFactory : IControllerFactory
     {
         private readonly IControllerFactory _innerFactory;
+        private readonly RubyEngine _engine;
 
-        public RubyControllerFactory(IControllerFactory innerFactory)
+        internal RubyControllerFactory(IControllerFactory innerFactory, RubyEngine engine)
         {
             _innerFactory = innerFactory;
+            _engine = engine;
         }
 
         #region IControllerFactory Members
 
-        public IController CreateController(RequestContext context, string controllerName)
+        public IController CreateController(RequestContext requestContext, string controllerName)
         {
-            IController result = null;
+            IController result;
 
             try
             {
-                result = _innerFactory.CreateController(context, controllerName);
+                return _innerFactory.CreateController(requestContext, controllerName);
             }
             catch
             {
             }
 
-            RubyMediator mediator = RubyMediator.Create();
-            result = mediator.LoadController(context, controllerName);
+//            RubyEngine engine = RubyEngine.Create(_engine);
+            result = _engine.LoadController(requestContext, controllerName);
 
             return result;
         }

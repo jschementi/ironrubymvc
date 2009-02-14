@@ -3,10 +3,11 @@
 using System;
 using System.IO;
 using System.Web.Mvc;
+using IronRubyMvcLibrary.ViewEngine;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.ViewEngine
 {
     public class RubyViewEngine : VirtualPathProviderViewEngine
     {

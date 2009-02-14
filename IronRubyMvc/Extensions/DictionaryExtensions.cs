@@ -6,7 +6,7 @@ using System.Web.Routing;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Extensions
 {
     public static class DictionaryExtensions
     {

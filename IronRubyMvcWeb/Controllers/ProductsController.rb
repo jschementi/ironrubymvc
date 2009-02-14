@@ -9,12 +9,7 @@ class ProductsRepository < IronRubyRepository
 end
 
 class BaseController < Controller
-  def initialize(context = nil)
-    if(context != nil)
-        base.Initialize(context)
-    end
-  end
-
+  
   def fill_view_data
     instance_variables.each { |varname| view_data.Add(varname[1..-1], instance_variable_get(varname.to_sym)) }
   end

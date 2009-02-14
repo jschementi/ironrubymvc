@@ -1,6 +1,6 @@
 namespace IronRubyMvcLibrary.Core
 {
-    internal interface IReader
+    public interface IReader
     {
         string Read(string filePath);
     }
