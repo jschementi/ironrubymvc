@@ -1,2 +1,2 @@
 ﻿<%@ Import Namespace="Pictures"%>
-<%@ Application Codebehind="Global.asax.cs" Inherits="GlobalApplication" Language="C#" %>
+<%@ Application Codebehind="Global.asax.cs" Inherits="Pictures.GlobalApplication" Language="C#" %>

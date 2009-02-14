@@ -1,6 +1,7 @@
 ﻿#region Usings
 
 using System;
+using IronRubyMvcLibrary.ViewEngine;
 using Xunit;
 
 #endregion
@@ -166,6 +167,20 @@ namespace IronRubyMvcLibrary.Tests
             string expected = "[1..10].each do |i|" + Environment.NewLine
                               + ExpectedWrite(@"""\r\n	""") + Environment.NewLine
                               + ExpectedWrite("i") + Environment.NewLine
+                              + "end";
+
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void CanConverToScript()
+        {
+            var template = new RubyTemplate("<% puts 'test' %></html>");
+            string result = template.ToScript("puts_test");
+
+            string expected = "def puts_test" + Environment.NewLine 
+                              + "puts 'test'" + Environment.NewLine
+                              + ExpectedWrite("\"</html>\"") + Environment.NewLine
                               + "end";
 
             Assert.Equal(expected, result);

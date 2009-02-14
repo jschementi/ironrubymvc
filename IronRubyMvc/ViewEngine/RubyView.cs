@@ -6,11 +6,12 @@ using System.Text;
 using System.Web.Mvc;
 using IronRuby;
 using IronRuby.Runtime;
+using IronRubyMvcLibrary.Helpers;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.ViewEngine
 {
     public class RubyView : IView
     {
@@ -18,6 +19,7 @@ namespace IronRubyMvcLibrary
         private readonly string _helpers;
         private readonly RubyView _master;
         private RubyTemplate _template;
+
 
         public RubyView(string viewContents, RubyView master, string helperContents)
         {
@@ -40,7 +42,7 @@ namespace IronRubyMvcLibrary
 
         public void Render(ViewContext context, TextWriter writer)
         {
-            ScriptRuntime runtime = context.HttpContext.Application.GetScriptRuntime();
+            ScriptRuntime runtime = context.ViewData["__scriptRuntime"] as ScriptRuntime;
             ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
             RubyContext rubyContext = Ruby.GetExecutionContext(runtime);
 

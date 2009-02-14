@@ -255,14 +255,14 @@ namespace IronRubyMvcLibrary.Tests
             operations.Call(member, "DLR context").ToString().ShouldBeEqualTo("DLR context is expired ");
         }
 
-        [Fact]
-        public void ShouldBeAbleToFindController()
-        {
-            ScriptScope scope = _engine.CreateScope();
-            object res = _engine.Execute("IronRubyMvc", scope);
-
-            Assert.True((bool) res);
-        }
+//        [Fact]
+//        public void ShouldBeAbleToFindController()
+//        {
+//            ScriptScope scope = _engine.CreateScope();
+//            object res = _engine.Execute("IronRubyMvc", scope);
+//
+//            Assert.True((bool) res);
+//        }
 
         private void AddClass(ScriptScope scope)
         {

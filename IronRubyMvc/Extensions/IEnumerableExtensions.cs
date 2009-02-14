@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Extensions
 {
     public static class IEnumerableExtensions
     {

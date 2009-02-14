@@ -12,7 +12,7 @@ namespace IronRubyMvcLibrary.Controllers
         private readonly string _actionName;
         private readonly ControllerDescriptor _controllerDescriptor;
 //        private readonly MethodInfo _methodInfo;
-        private ParameterDescriptor[] _parametersCache;
+//        private ParameterDescriptor[] _parametersCache;
 
         public RubyActionDescriptor(string actionName, ControllerDescriptor controllerDescriptor)
         {
@@ -52,7 +52,7 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override object Execute(ControllerContext controllerContext, IDictionary<string, object> parameters)
         {
-            return RubyControllerDescriptor.RubyMediator.CallMethod(controllerContext.Controller, ActionName);
+            return RubyControllerDescriptor.RubyEngine.CallMethod(controllerContext.Controller, ActionName);
         }
 
         public override ParameterDescriptor[] GetParameters() //return an empty array for now

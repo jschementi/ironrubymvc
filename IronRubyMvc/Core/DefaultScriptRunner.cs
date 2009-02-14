@@ -2,21 +2,17 @@
 
 using System;
 using System.Web.Hosting;
+using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
 namespace IronRubyMvcLibrary.Core
 {
-    internal class DefaultScriptRunner
+    internal class DefaultScriptRunner : IScriptRunner
     {
         private readonly ScriptEngine _engine;
 
-
-        public DefaultScriptRunner(ScriptEngine engine)
-            : this(engine, string.Empty, new FileReader())
-        {
-        }
 
         public DefaultScriptRunner(ScriptEngine engine, ReaderType readerType)
             : this(
@@ -47,20 +43,10 @@ namespace IronRubyMvcLibrary.Core
             return ExecuteScript(Reader.Read(ScriptPath));
         }
 
-        public virtual T Execute<T>()
-        {
-            return (T) Execute();
-        }
-
         public virtual object ExecuteFile(string scriptPath)
         {
             ScriptPath = scriptPath;
             return Execute();
-        }
-
-        public virtual T ExecuteFile<T>(string scriptPath)
-        {
-            return (T) ExecuteFile(scriptPath);
         }
 
         public virtual object ExecuteScript(string script)
@@ -68,19 +54,5 @@ namespace IronRubyMvcLibrary.Core
             return _engine.Execute(script);
         }
 
-        public virtual T ExecuteScript<T>(string script)
-        {
-            return (T) ExecuteScript(script);
-        }
-
-        public bool Exists(string scriptPath)
-        {
-            return HostingEnvironment.VirtualPathProvider.FileExists(scriptPath);
-        }
-
-        public bool Exists()
-        {
-            return ScriptPath.IsNullOrBlank() ? false : Exists(ScriptPath);
-        }
     }
 }

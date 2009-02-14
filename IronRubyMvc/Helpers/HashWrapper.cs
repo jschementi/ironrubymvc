@@ -7,7 +7,7 @@ using IronRuby.Builtins;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Helpers
 {
     public class HashWrapper : CustomTypeDescriptor
     {

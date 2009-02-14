@@ -10,6 +10,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Core;
+using IronRubyMvcLibrary.Extensions;
+using IronRubyMvcLibrary.Helpers;
 using Microsoft.Scripting;
 using RubyModuleDefinition = IronRuby.Runtime.RubyModuleAttribute;
 using RubyClassDefinition = IronRuby.Runtime.RubyClassAttribute;
@@ -46,7 +48,7 @@ namespace IronRubyMvcLibrary.Controllers
         public static readonly MethodInfo InvokeActionMethod = typeof (RubyController).GetMethod("InvokeAction");
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
 
-        private RubyMediator _mediator;
+        private RubyEngine _engine;
         private IDictionary<object, object> _params;
 
         public string ControllerName { get; internal set; }
@@ -107,29 +109,29 @@ namespace IronRubyMvcLibrary.Controllers
         internal void InternalInitialize(ControllerConfiguration config)
         {
             Initialize(config.Context);
-            SetMediator(config.Mediator);
+            SetMediator(config.Engine);
             ControllerName = config.RubyClass.Name.Replace("Controller", string.Empty);
             RubyType = config.RubyClass;
         }
 
-        internal void SetMediator(RubyMediator mediator)
+        internal void SetMediator(RubyEngine engine)
         {
-            if (mediator == null) throw new ArgumentNullException("mediator");
-            _mediator = mediator;
+            if (engine == null) throw new ArgumentNullException("engine");
+            _engine = engine;
         }
 
 
         protected override void Execute(RequestContext requestContext)
         {
-            ActionInvoker = new RubyControllerActionInvoker(ControllerClassName, _mediator);
+            ActionInvoker = new RubyControllerActionInvoker(ControllerClassName, _engine);
             base.Execute(requestContext);
         }
 
-        [NonAction]
-        public object InvokeAction(Func<object> __action)
-        {
-            return __action();
-        }
+//        [NonAction]
+//        public object InvokeAction(Func<object> action)
+//        {
+//            return action();
+//        }
 
         [NonAction]
         public ActionResult RedirectToRoute(Hash values)
@@ -176,7 +178,7 @@ namespace IronRubyMvcLibrary.Controllers
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var vdd = new ViewDataDictionary();
-            vdd["__scriptRuntime"] = HttpContext.Application.GetScriptRuntime();
+            vdd["__scriptRuntime"] = _engine.Runtime;
 
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;

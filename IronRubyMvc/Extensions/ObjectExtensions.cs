@@ -1,15 +1,32 @@
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Extensions
 {
+    /// <summary>
+    /// Contains the extension methods for <see cref="object" />
+    /// </summary>
     public static class ObjectExtensions
     {
-        public static bool IsNotNull(this object obj)
+        /// <summary>
+        /// Determines whether [is not null] [the specified value].
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is not null] [the specified value]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNotNull(this object value)
         {
-            return obj != null;
+            return value != null;
         }
 
-        public static bool IsNull(this object obj)
+        /// <summary>
+        /// Determines whether the specified value is null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified value is null; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsNull(this object value)
         {
-            return obj == null;
+            return value == null;
         }
     }
 }

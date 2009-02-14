@@ -3,10 +3,11 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.Helpers
 {
     public class RubyUrlHelper : UrlHelper
     {
@@ -22,7 +23,7 @@ namespace IronRubyMvcLibrary
 
         public string Action(string actionName, Hash values)
         {
-            return base.Action(actionName, values.ToRouteDictionary());
+            return Action(actionName, values.ToRouteDictionary());
         }
 
         public new string Action(string actionName, string controllerName)
@@ -32,22 +33,22 @@ namespace IronRubyMvcLibrary
 
         public string Action(string actionName, string controllerName, Hash values)
         {
-            return base.Action(actionName, controllerName, values.ToRouteDictionary());
+            return Action(actionName, controllerName, values.ToRouteDictionary());
         }
 
         public string Action(Hash values)
         {
-            return base.RouteUrl(values.ToRouteDictionary());
+            return RouteUrl(values.ToRouteDictionary());
         }
 
-        public string e(object s)
+        public string E(object value)
         {
-            return base.Encode(s.ToString());
+            return Encode(value.ToString());
         }
 
-        public string e(string s)
+        public string E(string value)
         {
-            return base.Encode(s);
+            return Encode(value);
         }
     }
 }

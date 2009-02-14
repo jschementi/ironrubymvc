@@ -6,7 +6,7 @@ using System;
 
 #endregion
 
-namespace IronRubyMvcLibrary
+namespace IronRubyMvcLibrary.ViewEngine
 {
     internal class RubyScriptBlock
     {
@@ -23,7 +23,7 @@ namespace IronRubyMvcLibrary
             }
 
             int endOffset = 4;
-            if (block.EndsWith("-%>"))
+            if (block.EndsWith("-%>", StringComparison.OrdinalIgnoreCase))
             {
                 endOffset = 5;
                 ignoreNextNewLine = true;
@@ -33,7 +33,7 @@ namespace IronRubyMvcLibrary
                 ignoreNextNewLine = false;
             }
 
-            if (block.StartsWith("<%="))
+            if (block.StartsWith("<%=", StringComparison.OrdinalIgnoreCase))
             {
                 int outputLength = block.Length - endOffset - 1;
                 if (outputLength < 1)
@@ -44,7 +44,7 @@ namespace IronRubyMvcLibrary
                 return;
             }
 
-            if (block.StartsWith("<%"))
+            if (block.StartsWith("<%", StringComparison.OrdinalIgnoreCase))
             {
                 Contents = block.Substring(2, block.Length - endOffset).Trim();
                 return;

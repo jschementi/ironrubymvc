@@ -1,18 +1,12 @@
 ﻿#region Usings
 
-using System;
-using System.Web;
-using IronRubyMvcLibrary;
+using IronRubyMvcLibrary.Core;
 
 #endregion
 
 namespace Pictures
 {
-    public class GlobalApplication : HttpApplication
+    public class GlobalApplication : RubyMvcApplication
     {
-        protected void Application_Start(object sender, EventArgs e)
-        {
-            this.InitializeIronRubyMvc();
-        }
     }
 }

@@ -4,7 +4,9 @@
 #region Usings
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 #endregion
 
@@ -77,7 +79,10 @@ namespace IronRubyMvcLibrary.Extensions
 
         #endregion
 
-        private static readonly List<Rule> _plurals = new List<Rule>();
+        private static readonly List<Rule> _plurals = new List<Rule>
+                                                          {
+                                                              
+    };
         private static readonly List<Rule> _singulars = new List<Rule>();
         private static readonly List<string> _uncountables = new List<string>();
 
@@ -89,7 +94,7 @@ namespace IronRubyMvcLibrary.Extensions
 
         private static void AddUncountable(string word)
         {
-            _uncountables.Add(word.ToLower());
+            _uncountables.Add(word.ToUpperInvariant());
         }
 
         private static void AddPlural(string rule, string replacement)
@@ -112,11 +117,11 @@ namespace IronRubyMvcLibrary.Extensions
             return ApplyRules(_singulars, word);
         }
 
-        private static string ApplyRules(List<Rule> rules, string word)
+        private static string ApplyRules(IList<Rule> rules, string word)
         {
             string result = word;
 
-            if (!_uncountables.Contains(word.ToLower()))
+            if (!_uncountables.Contains(word.ToUpperInvariant()))
             {
                 for (int i = rules.Count - 1; i >= 0; i--)
                 {
@@ -133,7 +138,7 @@ namespace IronRubyMvcLibrary.Extensions
         public static string Titleize(this string word)
         {
             return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
-                                 delegate(Match match) { return match.Captures[0].Value.ToUpper(); });
+                                 delegate(Match match) { return match.Captures[0].Value.ToUpper(CultureInfo.InvariantCulture); });
         }
 
         public static string Humanize(this string lowercaseAndUnderscoredWord)
@@ -143,7 +148,7 @@ namespace IronRubyMvcLibrary.Extensions
 
         public static string Pascalize(this string lowercaseAndUnderscoredWord)
         {
-            return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)", match => match.Groups[1].Value.ToUpper());
+            return Regex.Replace(lowercaseAndUnderscoredWord, "(?:^|_)(.)", match => match.Groups[1].Value.ToUpper(CultureInfo.InvariantCulture));
         }
 
         public static string Camelize(this string lowercaseAndUnderscoredWord)
@@ -156,22 +161,22 @@ namespace IronRubyMvcLibrary.Extensions
             return Regex.Replace(
                 Regex.Replace(
                     Regex.Replace(pascalCasedWord, @"([A-Z]+)([A-Z][a-z])", "$1_$2"), @"([a-z\d])([A-Z])",
-                    "$1_$2"), @"[-\s]", "_").ToLower();
+                    "$1_$2"), @"[-\s]", "_").ToLowerInvariant();
         }
 
         public static string Capitalize(this string word)
         {
-            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
+            return word.Substring(0, 1).ToUpperInvariant() + word.Substring(1).ToLowerInvariant();
         }
 
         public static string Uncapitalize(this string word)
         {
-            return word.Substring(0, 1).ToLower() + word.Substring(1);
+            return word.Substring(0, 1).ToLowerInvariant() + word.Substring(1);
         }
 
         public static string Ordinalize(this string number)
         {
-            int n = int.Parse(number);
+            int n = int.Parse(number, CultureInfo.InvariantCulture);
             int nMod100 = n%100;
 
             if (nMod100 >= 11 && nMod100 <= 13)

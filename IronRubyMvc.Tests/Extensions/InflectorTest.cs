@@ -6,7 +6,7 @@ using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Extensions
+namespace IronRubyMvc.Tests.Extensions
 {
     public class InflectorTest
     {
