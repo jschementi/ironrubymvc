@@ -9,6 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvcWeb", "IronRubyM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvcLibrary.Tests", "IronRubyMvc.Tests\IronRubyMvcLibrary.Tests.csproj", "{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A75F5714-408B-405F-B535-C50C575191A2}"
+	ProjectSection(SolutionItems) = preProject
+		IronRubyMvcKey.public = IronRubyMvcKey.public
+		IronRubyMvcKey.snk = IronRubyMvcKey.snk
+		README = README
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

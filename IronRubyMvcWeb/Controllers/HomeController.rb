@@ -9,7 +9,7 @@ end
 class HomeController < Controller
 #  def initialize(context = nil)
 #    if(context != nil)
-#        base.Initialize(context)
+#        super.Initialize(context)
 #    end
 #  end
   

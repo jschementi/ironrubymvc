@@ -156,6 +156,8 @@ namespace IronRubyMvcLibrary.Extensions
             return Uncapitalize(Pascalize(lowercaseAndUnderscoredWord));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+            Justification = "Lower case is required")]
         public static string Underscore(this string pascalCasedWord)
         {
             return Regex.Replace(
@@ -164,11 +166,15 @@ namespace IronRubyMvcLibrary.Extensions
                     "$1_$2"), @"[-\s]", "_").ToLowerInvariant();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+            Justification = "Lower case is required.")]
         public static string Capitalize(this string word)
         {
             return word.Substring(0, 1).ToUpperInvariant() + word.Substring(1).ToLowerInvariant();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+            Justification = "Lower case is required.")]
         public static string Uncapitalize(this string word)
         {
             return word.Substring(0, 1).ToLowerInvariant() + word.Substring(1);

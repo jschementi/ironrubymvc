@@ -1,8 +1,9 @@
-using System;
+#region Usings
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
@@ -11,17 +12,19 @@ using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting;
 using Moq.Mvc;
 using Xunit;
+using System;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Tests.Controllers
 {
-
     [Concern(typeof (RubyController))]
     public class when_a_controller_is_initialized : with_ironruby_and_an_engine_initialized<RubyController>
     {
         private const string _controllerName = "SomeController";
-        private RubyClass _rubyClass;
-        private RequestContext _requestContext;
         protected HttpContextMock _httpContextMock;
+        private RequestContext _requestContext;
+        private RubyClass _rubyClass;
 
         protected override void EstablishContext()
         {
@@ -34,7 +37,7 @@ namespace IronRubyMvcLibrary.Tests.Controllers
             script.AppendLine("end");
 
             _rubyEngine.ExecuteScript(script.ToString());
-             _rubyClass = _rubyEngine.GetRubyClass(_controllerName);
+            _rubyClass = _rubyEngine.GetRubyClass(_controllerName);
 
             _httpContextMock = new HttpContextMock();
             var httpContext = _httpContextMock.Object;
@@ -42,7 +45,6 @@ namespace IronRubyMvcLibrary.Tests.Controllers
 //            EstablishHttpContext(httpContext);
 
             _requestContext = new RequestContext(httpContext, new RouteData());
-            
         }
 
 //        protected virtual void EstablishHttpContext(HttpContextBase httpContext)
@@ -53,13 +55,10 @@ namespace IronRubyMvcLibrary.Tests.Controllers
         protected override RubyController CreateSut()
         {
             return _rubyEngine.ConfigureController(_rubyClass, _requestContext);
-
-
         }
 
         protected override void Because()
         {
-
         }
 
         [Observation]
@@ -79,6 +78,7 @@ namespace IronRubyMvcLibrary.Tests.Controllers
     public class when_being_asked_for_the_params : when_a_controller_is_initialized
     {
         private IDictionary<object, object> _params;
+
         protected override void EstablishContext()
         {
             base.EstablishContext();
@@ -92,7 +92,6 @@ namespace IronRubyMvcLibrary.Tests.Controllers
                                   };
             _httpContextMock.HttpRequest.Expect(r => r.Form).Returns(form);
             _httpContextMock.HttpRequest.Expect(r => r.QueryString).Returns(queryString);
-
         }
 
         protected override RubyController CreateSut()
@@ -104,10 +103,10 @@ namespace IronRubyMvcLibrary.Tests.Controllers
 
             return sut;
         }
-        
+
         protected override void Because()
         {
-           _params = Sut.Params;
+            _params = Sut.Params;
         }
 
         [Observation]
@@ -153,20 +152,279 @@ namespace IronRubyMvcLibrary.Tests.Controllers
         }
     }
 
-//    [Concern(typeof (RubyController))]
-//    public class when_asked_to_execute : when_a_controller_is_initialized
-//    {
-//        private Action _action;
-//
-//        protected override void Because()
-//        {
-//            _action = () => Sut.
-//        }
-//
-//        [Observation]
-//        public void first_observation()
-//        {
-//
-//        }
-//    }
+    [Concern(typeof (RubyController))]
+    public class when_asked_to_redirect_to_route : when_a_controller_is_initialized
+    {
+        private RedirectToRouteResult _result;
+
+        protected override void Because()
+        {
+            _result = Sut.RedirectToRoute(new Hash(new Dictionary<object, object> {{"MyRoute", "RouteValue"}})) as RedirectToRouteResult;
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_return_a_redirect_to_route_result()
+        {
+            _result.ShouldBeAnInstanceOf<RedirectToRouteResult>();
+        }
+
+        [Observation]
+        public void should_return_the_correct_redirect_to_route_result()
+        {
+            _result.RouteValues["MyRoute"].ShouldNotBeNull();
+            _result.RouteValues["MyRoute"].ShouldBeEqualTo("RouteValue");
+        }
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_to_redirect_to_action : when_a_controller_is_initialized
+    {
+        private RedirectToRouteResult _result;
+
+        protected override void Because()
+        {
+            _result = Sut.RedirectToAction("my_action", new Hash(new Dictionary<object, object> { { "MyRoute", "RouteValue" } })) as RedirectToRouteResult;
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_return_a_redirect_to_action_result()
+        {
+            _result.ShouldBeAnInstanceOf<RedirectToRouteResult>();
+        }
+
+        [Observation]
+        public void should_return_the_correct_redirect_to_route_result()
+        {
+            _result.RouteValues["MyRoute"].ShouldNotBeNull();
+            _result.RouteValues["MyRoute"].ShouldBeEqualTo("RouteValue");
+        }
+
+        [Observation]
+        public void should_have_the_correct_action_name()
+        {
+            _result.RouteValues["action"].ShouldBeEqualTo("my_action");
+        }
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_viewdata : when_a_controller_is_initialized
+    {
+        private IDictionary _result;
+
+        protected override void Because()
+        {
+            _result = Sut.ViewData();
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_return_a_redirect_to_action_result()
+        {
+            _result.ShouldBeAnInstanceOf<Dictionary<object, object>>();
+        }
+        
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_a_view : when_a_controller_is_initialized
+    {
+        private ViewResult _result;
+
+        protected override void Because()
+        {
+            _result = Sut.View();
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_have_view_data()
+        {
+            _result.ViewData.ShouldNotBeEmpty();
+        }
+
+        [Observation]
+        public void should_have_temp_data()
+        {
+            _result.TempData.ShouldBeEqualTo(Sut.TempData);
+        }
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_a_view_by_name : when_a_controller_is_initialized
+    {
+        private ViewResult _result;
+
+        protected override void Because()
+        {
+            _result = Sut.View("my_action");
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_have_view_data()
+        {
+            _result.ViewData.ShouldNotBeEmpty();
+        }
+
+        [Observation]
+        public void should_have_temp_data()
+        {
+            _result.TempData.ShouldBeEqualTo(Sut.TempData);
+        }
+
+        [Observation]
+        public void should_have_a_view_name()
+        {
+            _result.ViewName = "my_action";
+        }
+
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_a_view_with_an_object : when_a_controller_is_initialized
+    {
+        private ViewResult _result;
+        private object _viewItem;
+
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+            _viewItem = new object();
+        }
+
+        protected override void Because()
+        {
+            _result = Sut.View(_viewItem);
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_have_view_data()
+        {
+            _result.ViewData.Model.ShouldBeEqualTo(_viewItem);
+        }
+
+        [Observation]
+        public void should_have_temp_data()
+        {
+            _result.TempData.ShouldBeEqualTo(Sut.TempData);
+        }
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_a_view_with_name_and_master : when_a_controller_is_initialized
+    {
+        private ViewResult _result;
+
+        protected override void Because()
+        {
+            _result = Sut.View("my_action", "the_master");
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_have_view_data()
+        {
+            _result.ViewData.ShouldNotBeEmpty();
+        }
+
+        [Observation]
+        public void should_have_temp_data()
+        {
+            _result.TempData.ShouldBeEqualTo(Sut.TempData);
+        }
+
+        [Observation]
+        public void should_have_a_view_name()
+        {
+            _result.ViewName.ShouldBeEqualTo("my_action");
+        }
+
+        [Observation]
+        public void should_have_a_layout_name()
+        {
+            _result.MasterName.ShouldBeEqualTo("the_master");
+        }
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_for_a_view_with_name_and_object : when_a_controller_is_initialized
+    {
+        private ViewResult _result;
+        private object _viewItem;
+
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+            _viewItem = new object();
+        }
+
+        protected override void Because()
+        {
+            _result = Sut.View("my_action", _viewItem);
+        }
+
+        [Observation]
+        public void should_return_a_result()
+        {
+            _result.ShouldNotBeNull();
+        }
+
+        [Observation]
+        public void should_have_view_data()
+        {
+            _result.ViewData.Model.ShouldBeEqualTo(_viewItem);
+        }
+
+        [Observation]
+        public void should_have_temp_data()
+        {
+            _result.TempData.ShouldBeEqualTo(Sut.TempData);
+        }
+
+        [Observation]
+        public void should_have_a_view_name()
+        {
+            _result.ViewName.ShouldBeEqualTo("my_action");
+        }
+
+        
+    }
 }

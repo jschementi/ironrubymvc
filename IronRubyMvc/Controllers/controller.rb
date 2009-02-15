@@ -68,8 +68,13 @@
     include IronRubyMvc::Controllers::Filters
     include IronRubyMvc::Controllers::Selectors    
     
-    def internal_initialize(context)
-      
+    def fill_view_data
+      instance_variables.each { |varname| view_data.Add(varname[1..-1], instance_variable_get(varname.to_sym)) }
+    end
+    
+    def return_view(*args)
+      fill_view_data
+      view args
     end
     
   end

@@ -1,8 +1,8 @@
 IronRubyMvc - an extension to ASP.NET MVC to support IronRuby
 =============================================================
 
-IronRubyMvc.Test - Tests ERB functionality
-IronRubyMvcWeb - "Hello, World" test website
+IronRubyMvc.Test - Tests Library.
+IronRubyMvcWeb - "Hello, World" test website. You need to change the connection string and attach the database or use sql express.
 Pictures - "Real" Demo application
 
 Running IronRubyMvcWeb:

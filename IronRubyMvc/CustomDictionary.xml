@@ -11,6 +11,14 @@
 
             <!-- Javascript Object Notation -->
             <Word>JSON</Word>
+            <Word>Ordinalize</Word>
+            <Word>Dasherize</Word>
+            <Word>Capitalize</Word>
+            <Word>Pascalize</Word>
+            <Word>Camelize</Word>
+            <Word>Underscore</Word>
+            <Word>Uncapitalize</Word>
+            <Word>Titleize</Word>
         </Recognized>
         <Unrecognized>
             <!-- Words that should cause a violation. -->
