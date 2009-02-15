@@ -31,6 +31,10 @@ namespace IronRubyMvcLibrary.Controllers
         public string ControllerName { get; internal set; }
         public RubyClass RubyType { get; private set; }
 
+//        public static Hash ActionFilters { get; set; }
+//
+//        public static Hash ActionResult { get; set; }
+
         public string ControllerClassName
         {
             get { return Constants.CONTROLLERCLASS_FORMAT.FormattedWith(ControllerName); }

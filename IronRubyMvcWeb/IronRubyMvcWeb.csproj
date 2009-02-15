@@ -129,7 +129,7 @@
     </None>
     <None Include="Models\ProductsRepository.rb" />
     <None Include="Views\Products\Edit.html.erb" />
-    <None Include="Views\Products\Index.html.erb" />
+    <None Include="Views\Products\index.html.erb" />
     <None Include="Views\Products\List.html.erb" />
     <None Include="Views\Shared\layout.html.erb" />
   </ItemGroup>
