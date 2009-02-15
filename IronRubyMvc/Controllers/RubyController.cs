@@ -21,34 +21,12 @@ using RubyMethodDefinition = IronRuby.Runtime.RubyMethodAttribute;
 
 namespace IronRubyMvcLibrary.Controllers
 {
-//    [RubyModuleDefinition("IronRubyMvc")]
-//    public static class IronRubyMvcModule
-//    {
-//        #region Nested type: RubyControllerOps
-//
-//        [RubyClassDefinition("Controller", Extends = typeof (RubyController))]
-//        public class RubyControllerOps : RubyController
-//        {
-//            [RubyMethodDefinition("info", RubyMethodAttributes.PublicInstance)]
-//            public static void Info(RubyController self)
-//            {
-//                self.ViewData().Add("Platform", "IronRuby Mvc 1.0");
-//            }
-//
-//           
-//        }
-//
-//        #endregion
-//
-//        //    [IronRuby.Runtime.RubyClass("Controller", Extends = typeof(Controller))]
-//    }
-//    [RubyClassDefinition("RubyController", HideClrMembers = false, Extends = typeof(Controller))]
+
     public class RubyController : Controller
     {
-//        public static readonly MethodInfo InvokeActionMethod = typeof (RubyController).GetMethod("InvokeAction");
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
 
-        private RubyEngine _engine;
+        private IRubyEngine _engine;
         private IDictionary<object, object> _params;
 
         public string ControllerName { get; internal set; }
@@ -58,19 +36,6 @@ namespace IronRubyMvcLibrary.Controllers
         {
             get { return Constants.CONTROLLERCLASS_FORMAT.FormattedWith(ControllerName); }
         }
-
-//        [RubyConstructor]
-//        public static RubyController/*!*/ Create(RubyClass/*!*/ self)
-//        {
-//            return new RubyController();
-//        }
-//
-//        [RubyConstructor]
-//        public static RubyController Create(RubyClass/*!*/ self, string controllerName)
-//        {
-//            return new RubyController{ControllerName = controllerName};
-//        }
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
         public IDictionary<object, object> Params
@@ -110,29 +75,16 @@ namespace IronRubyMvcLibrary.Controllers
         internal void InternalInitialize(ControllerConfiguration config)
         {
             Initialize(config.Context);
-            SetMediator(config.Engine);
+            _engine = config.Engine;
             ControllerName = config.RubyClass.Name.Replace("Controller", string.Empty);
             RubyType = config.RubyClass;
         }
-
-        internal void SetMediator(RubyEngine engine)
-        {
-            if (engine == null) throw new ArgumentNullException("engine");
-            _engine = engine;
-        }
-
 
         protected override void Execute(RequestContext requestContext)
         {
             ActionInvoker = new RubyControllerActionInvoker(ControllerClassName, _engine);
             base.Execute(requestContext);
         }
-
-//        [NonAction]
-//        public object InvokeAction(Func<object> action)
-//        {
-//            return action();
-//        }
 
         [NonAction]
         public ActionResult RedirectToRoute(Hash values)
@@ -179,7 +131,7 @@ namespace IronRubyMvcLibrary.Controllers
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var vdd = new ViewDataDictionary();
-            vdd["__scriptRuntime"] = _engine.Runtime;
+            vdd["__scriptRuntime"] = ((RubyEngine)_engine).Runtime;
 
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;

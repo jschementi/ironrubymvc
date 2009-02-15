@@ -12,6 +12,6 @@ namespace IronRubyMvcLibrary.Controllers
     {
         public RequestContext Context { get; set; }
         public RubyClass RubyClass { get; set; }
-        public RubyEngine Engine { get; set; }
+        public IRubyEngine Engine { get; set; }
     }
 }

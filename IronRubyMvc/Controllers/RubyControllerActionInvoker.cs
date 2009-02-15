@@ -7,9 +7,9 @@ using IronRubyMvcLibrary.Core;
 
 namespace IronRubyMvcLibrary.Controllers
 {
-    internal class RubyControllerActionInvoker : ControllerActionInvoker
+    public class RubyControllerActionInvoker : ControllerActionInvoker
     {
-        public RubyControllerActionInvoker(string controllerName, RubyEngine engine)
+        public RubyControllerActionInvoker(string controllerName, IRubyEngine engine)
         {
             ControllerName = controllerName;
             RubyEngine = engine;
@@ -17,12 +17,12 @@ namespace IronRubyMvcLibrary.Controllers
 
         public string ControllerName { get; private set; }
 
-        public RubyEngine RubyEngine { get; private set; }
+        public IRubyEngine RubyEngine { get; private set; }
 
         protected override ControllerDescriptor GetControllerDescriptor(ControllerContext controllerContext)
         {
-            return new RubyControllerDescriptor(((RubyController) controllerContext.Controller).RubyType,
-                                                controllerContext) {RubyEngine = RubyEngine};
+            var rubyController = (RubyController) controllerContext.Controller;
+            return new RubyControllerDescriptor(rubyController.RubyType) {RubyEngine = RubyEngine};
         }
 
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,
@@ -30,5 +30,6 @@ namespace IronRubyMvcLibrary.Controllers
         {
             return controllerDescriptor.FindAction(controllerContext, actionName);
         }
+        
     }
 }

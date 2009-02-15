@@ -13,9 +13,9 @@ namespace IronRubyMvcLibrary.Controllers
     public class RubyControllerFactory : IControllerFactory
     {
         private readonly IControllerFactory _innerFactory;
-        private readonly RubyEngine _engine;
+        private readonly IRubyEngine _engine;
 
-        internal RubyControllerFactory(IControllerFactory innerFactory, RubyEngine engine)
+        internal RubyControllerFactory(IControllerFactory innerFactory, IRubyEngine engine)
         {
             _innerFactory = innerFactory;
             _engine = engine;
