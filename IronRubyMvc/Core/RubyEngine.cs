@@ -377,7 +377,20 @@ namespace IronRubyMvcLibrary.Core
         /// <returns></returns>
         public RubyClass GetRubyClass(string className)
         {
-            return GetGlobalVariable<RubyClass>(className);
+            var klass = GetGlobalVariable<RubyClass>(className);
+//            using (Context.ClassHierarchyLocker())
+//            {
+//                klass.ForEachClassVariable(true, (module, name, value) =>
+//                                                     {
+//                                                         var nm = name;
+//                                                         var mod = module;
+//                                                         var val = value;
+//
+//
+//                                                         return true;
+//                                                     });
+//            }
+            return klass;
         }
 
         /// <summary>

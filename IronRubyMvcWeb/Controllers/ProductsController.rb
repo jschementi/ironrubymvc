@@ -34,7 +34,10 @@ class ProductsController < Controller
     return_view nil, 'layout'
   end
   
-   
+  def return_view(view, layout)
+    fill_view_data
+    view view, layout
+  end
   
   def list
     @category = params[:id]
@@ -64,5 +67,9 @@ class ProductsController < Controller
     repository.submit_changes
     
     redirect_to_action 'list', {:id => category }
+  end
+  
+  def to_decimal(value)
+	  System::Convert::ToDecimal value
   end
 end
