@@ -98,6 +98,7 @@
     <Compile Include="Controllers\RubyActionDescriptorFixture.cs" />
     <Compile Include="Controllers\RubyControllerActionInvokerSpec.cs" />
     <Compile Include="Controllers\RubyControllerDescriptorSpec.cs" />
+    <Compile Include="Controllers\RubyControllerFactorySpec.cs" />
     <Compile Include="Controllers\RubyControllerSpec.cs" />
     <Compile Include="Core\AssemblyResourceReaderSpec.cs" />
     <Compile Include="Core\DefaultScriptRunnerSpec.cs" />
