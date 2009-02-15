@@ -1,29 +1,75 @@
 ﻿module IronRubyMvc
   
+  module Controllers
+    
+    module Filters
+      
+      module ClassMethods
+        
+        def before_filter(name, options, &b)
+          filter(name, options.merge(:when => :before), &b)     
+        end
+        
+        def after_filter(name, options, &b)
+          filter(name, options.merge(:when => :after), &b)
+        end
+        
+        def around_filter(name, options, &b)
+          filter(name, options.merge(:when => :around), &b)
+        end
+        
+        def filter(name, options, &b)
+          @action_filters ||= {}
+          options[:action] = b if block_given?
+          options[:action] ||= method(name.to_sym)
+          @action_filters[name.to_sym] = options
+        end
+        
+        def action_filters
+          @action_filters
+        end
+        
+      end
+      
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+      
+    end
+    
+    module Selectors
+      
+      module ClassMethods
+        
+        def action_selector(name, options, &b)
+          @action_selectors ||= {}
+          options[:action] = b if block_given?
+          options[:action] ||= method(name.to_sym)
+          @action_selectors[name.to_sym]
+        end
+        
+        def action_selectors
+          @action_selectors
+        end
+        
+      end
+      
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+    end
+    
+  end
+  
   #module Controllers
   
   class Controller < IronRubyMvcLibrary::Controllers::RubyController
     
+    include IronRubyMvc::Controllers::Filters
+    include IronRubyMvc::Controllers::Selectors    
     
-    
-    class << self
-      def before_filter(name, options, &b)
-        filter(name, options.merge(:type => :before), &b)     
-      end
+    def internal_initialize(context)
       
-      def after_filter(name, options, &b)
-        filter(name, options.merge(:type => :after), &b)
-      end
-      
-      def filter(name, options, &b)
-        @filters ||= {}
-        options[:condition] = b if block_given?
-        @filters[name.to_sym] = options
-      end
-      
-      def filters
-        @filters
-      end
     end
     
   end
