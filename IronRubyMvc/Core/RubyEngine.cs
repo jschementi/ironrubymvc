@@ -28,11 +28,11 @@ namespace IronRubyMvcLibrary.Core
         /// Initializes a new instance of the <see cref="RubyEngine"/> class.
         /// </summary>
         /// <param name="runtime">The runtime.</param>
-        /// <param name="vpp">The VPP.</param>
-        public RubyEngine(ScriptRuntime runtime, IPathProvider vpp)
+        /// <param name="pathProvider">The VPP.</param>
+        public RubyEngine(ScriptRuntime runtime, IPathProvider pathProvider)
         {
             Runtime = runtime;
-            PathProvider = vpp;
+            PathProvider = pathProvider;
             Initialize();
         }
 
@@ -45,7 +45,7 @@ namespace IronRubyMvcLibrary.Core
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
-        public RubyContext Context { get; private set; }
+        internal RubyContext Context { get; private set; }
         /// <summary>
         /// Gets the engine.
         /// </summary>
@@ -55,7 +55,7 @@ namespace IronRubyMvcLibrary.Core
         /// Gets the script runner.
         /// </summary>
         /// <value>The script runner.</value>
-        public IScriptRunner ScriptRunner { get; set; }
+        internal IScriptRunner ScriptRunner { get; set; }
         /// <summary>
         /// Gets the current scope.
         /// </summary>
@@ -78,7 +78,7 @@ namespace IronRubyMvcLibrary.Core
             Context = Ruby.GetExecutionContext(Engine);
             CurrentScope = Engine.CreateScope();
             Operations = Engine.CreateOperations();
-            ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope);
+            ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope, string.Empty, new FileReader(PathProvider));
             LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (RouteTable),
                             typeof (Controller), typeof (RubyController));
             SetModelAndControllersPath();
@@ -143,7 +143,11 @@ namespace IronRubyMvcLibrary.Core
         /// <param name="readerType">Type of the reader.</param>
         internal void RequireRubyFile(string path, ReaderType readerType)
         {
-            new DefaultScriptRunner(Engine, readerType).ExecuteFile(path);
+            new DefaultScriptRunner(
+                Engine, 
+                path, 
+                readerType == ReaderType.File ? new FileReader(PathProvider) : (IReader) new AssemblyResourceReader(typeof(IReader).Assembly)
+            ).Execute();
         }
 
         /// <summary>
@@ -179,11 +183,19 @@ namespace IronRubyMvcLibrary.Core
         /// <param name="controller">The controller.</param>
         /// <param name="actionName">Name of the action.</param>
         /// <returns>
-        /// 	<c>true</c> if [has controller action] [the specified controller]; otherwise, <c>false</c>.
+        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
         /// </returns>
         public bool HasControllerAction(RubyController controller, string actionName)
         {
-            return Operations.ContainsMember(controller, actionName.Underscore()) || Operations.ContainsMember(controller, actionName.Pascalize());
+            try
+            {
+                Operations.ContainsMember(controller, actionName.Underscore());
+                return true;
+            }
+            catch(NullReferenceException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -225,6 +237,8 @@ namespace IronRubyMvcLibrary.Core
         {
             Context.DefineReadOnlyGlobalVariable(variableName, value);
         }
+
+        #region Commented
 
 //        public bool VariableExists(string variable)
 //        {
@@ -278,6 +292,9 @@ namespace IronRubyMvcLibrary.Core
 //            return func;
 //        }
 
+        #endregion
+
+
         /// <summary>
         /// Gets the ruby class.
         /// </summary>
@@ -294,6 +311,7 @@ namespace IronRubyMvcLibrary.Core
         /// <typeparam name="T"></typeparam>
         /// <param name="name">The name.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public T GetGlobalVariable<T>(string name)
         {
             return Runtime.Globals.GetVariable<T>(name);
@@ -314,11 +332,12 @@ namespace IronRubyMvcLibrary.Core
         /// </summary>
         /// <param name="pathProvider">The Path provider.</param>
         /// <param name="routesPath">The routes path.</param>
-        public static void InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath)
+        public static RubyEngine InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath)
         {
             var engine = InitializeIronRuby(pathProvider);
             ProcessRubyRoutes(engine, pathProvider, routesPath);
             IntializeMvc(engine);
+            return engine;
         }
 
         private static void IntializeMvc(RubyEngine engine)

@@ -1,14 +1,18 @@
+#region Usings
+
 using System;
 using IronRuby;
-using IronRuby.Builtins;
 using IronRuby.Runtime;
 using IronRubyMvcLibrary.Core;
 using Microsoft.Scripting.Hosting;
 using Xunit;
 
+#endregion
+
 namespace IronRubyMvcLibrary.Tests.Core
 {
-    public abstract class with_ironruby_initialized<SystemUnderTest> : InstanceContextSpecification<SystemUnderTest> where SystemUnderTest : class
+    public abstract class with_ironruby_initialized<SystemUnderTest> : InstanceContextSpecification<SystemUnderTest>
+        where SystemUnderTest : class
     {
         protected static ScriptRuntime _scriptRuntime;
         protected RubyContext _context;
@@ -18,7 +22,7 @@ namespace IronRubyMvcLibrary.Tests.Core
         {
             if (_scriptRuntime == null)
             {
-                LanguageSetup rubySetup = Ruby.CreateRubySetup();
+                var rubySetup = Ruby.CreateRubySetup();
                 rubySetup.Options["InterpretedMode"] = true;
 
                 var runtimeSetup = new ScriptRuntimeSetup();
@@ -30,18 +34,17 @@ namespace IronRubyMvcLibrary.Tests.Core
             _engine = _scriptRuntime.GetRubyEngine();
             _context = Ruby.GetExecutionContext(_engine);
         }
-
-        
     }
 
-    [Concern(typeof(DefaultScriptRunner))]
+    [Concern(typeof (DefaultScriptRunner))]
     public class when_no_file_is_provided : with_ironruby_initialized<DefaultScriptRunner>
     {
         private Action _action;
+
         protected override DefaultScriptRunner CreateSut()
         {
             return new DefaultScriptRunner(_engine, string.Empty,
-                                          new AssemblyResourceReader(typeof(RubyExperiments).Assembly));
+                                           new AssemblyResourceReader(typeof (RubyExperiments).Assembly));
         }
 
         protected override void Because()
@@ -56,10 +59,11 @@ namespace IronRubyMvcLibrary.Tests.Core
         }
     }
 
-    [Concern(typeof(DefaultScriptRunner))]
+    [Concern(typeof (DefaultScriptRunner))]
     public class when_no_reader_is_provided : with_ironruby_initialized<DefaultScriptRunner>
     {
         private Action _action;
+
         protected override DefaultScriptRunner CreateSut()
         {
             return new DefaultScriptRunner(_engine, string.Empty, null);
@@ -85,7 +89,8 @@ namespace IronRubyMvcLibrary.Tests.Core
 
         protected override DefaultScriptRunner CreateSut()
         {
-            return new DefaultScriptRunner(_engine, string.Empty, new AssemblyResourceReader(typeof(RubyExperiments).Assembly));
+            return new DefaultScriptRunner(_engine, string.Empty,
+                                           new AssemblyResourceReader(typeof (RubyExperiments).Assembly));
         }
 
         protected override void Because()
@@ -101,14 +106,15 @@ namespace IronRubyMvcLibrary.Tests.Core
         }
     }
 
-    [Concern(typeof(DefaultScriptRunner))]
+    [Concern(typeof (DefaultScriptRunner))]
     public class when_a_piece_of_script_is_provided : with_ironruby_initialized<DefaultScriptRunner>
     {
         private string result;
 
         protected override DefaultScriptRunner CreateSut()
         {
-            return new DefaultScriptRunner(_engine, string.Empty, new AssemblyResourceReader(typeof(RubyExperiments).Assembly));
+            return new DefaultScriptRunner(_engine, string.Empty,
+                                           new AssemblyResourceReader(typeof (RubyExperiments).Assembly));
         }
 
         protected override void Because()

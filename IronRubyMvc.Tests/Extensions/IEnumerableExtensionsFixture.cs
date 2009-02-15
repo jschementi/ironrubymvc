@@ -1,7 +1,11 @@
+#region Usings
+
 using System.Collections;
 using System.Collections.Generic;
 using IronRubyMvcLibrary.Extensions;
 using Xunit;
+
+#endregion
 
 namespace IronRubyMvc.Tests.Extensions
 {
@@ -12,8 +16,8 @@ namespace IronRubyMvc.Tests.Extensions
         {
             IEnumerable<int> collection = new[] {1, 2, 3, 4, 5, 6, 7, 8};
 
-            int count=0;
-            int result = 0;
+            var count = 0;
+            var result = 0;
             collection.ForEach(item =>
                                    {
                                        count++;
@@ -27,15 +31,15 @@ namespace IronRubyMvc.Tests.Extensions
         [Fact]
         public void ShouldIterateOverACollection()
         {
-            IEnumerable collection = new[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+            IEnumerable collection = new[] {1, 2, 3, 4, 5, 6, 7, 8};
 
-            int count = 0;
-            int result = 0;
+            var count = 0;
+            var result = 0;
             collection.ForEach(item =>
-            {
-                count++;
-                result += (int)item;
-            });
+                                   {
+                                       count++;
+                                       result += (int) item;
+                                   });
 
             Assert.Equal(8, count);
             Assert.Equal(36, result);

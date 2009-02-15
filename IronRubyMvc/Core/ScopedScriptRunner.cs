@@ -15,11 +15,6 @@ namespace IronRubyMvcLibrary.Core
         private readonly ScriptScope _scope;
 
 
-        public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope)
-            : this(engine, scope, string.Empty, new FileReader())
-        {
-        }
-
         public ScopedScriptRunner(ScriptEngine engine, ScriptScope scope, string scriptPath, IReader reader)
         {
             _engine = engine;

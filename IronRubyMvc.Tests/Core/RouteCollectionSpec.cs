@@ -1,11 +1,13 @@
+#region Usings
+
 using System.Collections;
-using System.Collections.Generic;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRubyMvcLibrary.Core;
 using IronRubyMvcLibrary.Extensions;
 using Xunit;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Tests.Core
 {
@@ -13,10 +15,13 @@ namespace IronRubyMvcLibrary.Tests.Core
     public class when_a_value_is_mapped : InstanceContextSpecification<RubyRouteCollection>
     {
         private RouteCollection _routeCollection;
+
         protected override void EstablishContext()
         {
             var routes = new RouteCollection();
-            routes.Add("my_controller", new Route("my_controller", new MvcRouteHandler()){Constraints = new Hashtable().ToRouteDictionary()});
+            routes.Add("my_controller",
+                       new Route("my_controller", new MvcRouteHandler())
+                           {Constraints = new Hashtable().ToRouteDictionary()});
             _routeCollection = routes;
         }
 
@@ -33,19 +38,22 @@ namespace IronRubyMvcLibrary.Tests.Core
         [Observation]
         public void then_it_should_have_a_mapping()
         {
-            var obj = (Route)_routeCollection["my_controller"];
-            ((Route)Sut["my_controller"]).Url.ShouldBeEqualTo(obj.Url);
+            var obj = (Route) _routeCollection["my_controller"];
+            ((Route) Sut["my_controller"]).Url.ShouldBeEqualTo(obj.Url);
         }
     }
 
-    [Concern(typeof(RubyRouteCollection))]
+    [Concern(typeof (RubyRouteCollection))]
     public class when_more_values_are_mapped : InstanceContextSpecification<RubyRouteCollection>
     {
         private RouteCollection _routeCollection;
+
         protected override void EstablishContext()
         {
             var routes = new RouteCollection();
-            routes.Add("my_controller", new Route("my_controller", new MvcRouteHandler()) { Constraints = new Hashtable().ToRouteDictionary() });
+            routes.Add("my_controller",
+                       new Route("my_controller", new MvcRouteHandler())
+                           {Constraints = new Hashtable().ToRouteDictionary()});
             _routeCollection = routes;
         }
 
@@ -64,8 +72,8 @@ namespace IronRubyMvcLibrary.Tests.Core
         [Observation]
         public void then_it_should_have_a_mapping()
         {
-            var obj = (Route)_routeCollection["my_controller"];
-            ((Route)Sut["my_controller"]).Url.ShouldBeEqualTo(obj.Url);
+            var obj = (Route) _routeCollection["my_controller"];
+            ((Route) Sut["my_controller"]).Url.ShouldBeEqualTo(obj.Url);
         }
     }
 }

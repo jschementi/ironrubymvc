@@ -14,13 +14,7 @@ namespace IronRubyMvcLibrary.Core
         private readonly ScriptEngine _engine;
 
 
-        public DefaultScriptRunner(ScriptEngine engine, ReaderType readerType)
-            : this(
-                engine, string.Empty,
-                readerType == ReaderType.File ? new FileReader() : (IReader) new AssemblyResourceReader())
-        {
-        }
-
+       
         public DefaultScriptRunner(ScriptEngine engine, string scriptPath, IReader reader)
         {
             _engine = engine;

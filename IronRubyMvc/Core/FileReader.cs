@@ -15,8 +15,6 @@ namespace IronRubyMvcLibrary.Core
             _pathProvider = pathProvider;
         }
 
-        public FileReader() : this(new VirtualPathProvider()){}
-
         public override string Read(string filePath)
         {
             if (!_pathProvider.FileExists(filePath))

@@ -21,7 +21,7 @@ namespace IronRubyMvcLibrary.Tests
     {
         public ScriptRuntime CreateRuntime()
         {
-            LanguageSetup rubySetup = Ruby.CreateRubySetup();
+            var rubySetup = Ruby.CreateRubySetup();
             rubySetup.Options["InterpretedMode"] = true;
 
             var runtimeSetup = new ScriptRuntimeSetup();
@@ -83,8 +83,8 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldSetAndFetchGlobalVariables()
         {
-            string varName = "global_var";
-            string varValue = "my variable";
+            var varName = "global_var";
+            var varValue = "my variable";
             _context.DefineGlobalVariable(varName, varValue);
 
             _context.GetGlobalVariable(varName).ShouldBeEqualTo(varValue);
@@ -93,11 +93,11 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldExecuteScript()
         {
-            string script =
+            var script =
                 "class MyClass; def my_method; $text_var = \"Hello world\"; end; end; MyClass.new.my_method ";
             _context.DefineGlobalVariable("text_var", "String value");
 
-            ScriptSource scriptSource = _engine.CreateScriptSourceFromString(script, SourceCodeKind.AutoDetect);
+            var scriptSource = _engine.CreateScriptSourceFromString(script, SourceCodeKind.AutoDetect);
             scriptSource.Execute();
 
             "Hello world".ShouldBeEqualTo(_context.GetGlobalVariable("text_var").ToString());
@@ -106,9 +106,9 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldGetARubyClass()
         {
-            MethodBase method = MethodBase.GetCurrentMethod();
+            var method = MethodBase.GetCurrentMethod();
             AddClass(method);
-            string className = "{0}Class".FormattedWith(method.Name);
+            var className = "{0}Class".FormattedWith(method.Name);
             var rClass = _scriptRuntime.Globals.GetVariable<RubyClass>(className);
             rClass.ShouldNotBeNull();
             rClass.ShouldBeAnInstanceOf<RubyClass>();
@@ -118,7 +118,7 @@ namespace IronRubyMvcLibrary.Tests
             {
                 rClass.EnumerateMethods((module, symbolId, memberInfo) =>
                                             {
-                                                string message =
+                                                var message =
                                                     "Module: {0}, Name: {1}, memberInfoType: {2}".FormattedWith(
                                                         module.Name, symbolId, memberInfo.GetType().Name);
                                                 Console.WriteLine(message);
@@ -133,16 +133,16 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldGetMethodInfoThroughEnumerateMethods()
         {
-            MethodBase method = MethodBase.GetCurrentMethod();
+            var method = MethodBase.GetCurrentMethod();
             AddClass(method);
-            string className = "{0}Class".FormattedWith(method.Name);
+            var className = "{0}Class".FormattedWith(method.Name);
             var rClass = _scriptRuntime.Globals.GetVariable<RubyClass>(className);
             var methods = new Dictionary<string, RubyMethodInfo>();
             using (_context.ClassHierarchyLocker())
             {
                 rClass.EnumerateMethods((module, symbolId, memberInfo) =>
                                             {
-                                                string message =
+                                                var message =
                                                     "Module: {0}, Name: {1}, memberInfoType: {2}".FormattedWith(
                                                         module.Name, symbolId, memberInfo.GetType().Name);
                                                 Console.WriteLine(message);
@@ -151,7 +151,7 @@ namespace IronRubyMvcLibrary.Tests
                                             });
             }
 
-            RubyMethodInfo methodInfo = methods["my_method"];
+            var methodInfo = methods["my_method"];
             methodInfo.Method.ShouldNotBeNull();
             methodInfo.DefinitionName.ShouldBeEqualTo("my_method");
         }
@@ -159,15 +159,15 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldGetMethodInfoThroughGetMethods()
         {
-            MethodBase method = MethodBase.GetCurrentMethod();
+            var method = MethodBase.GetCurrentMethod();
             AddClass(method);
-            string className = "{0}Class".FormattedWith(method.Name);
+            var className = "{0}Class".FormattedWith(method.Name);
             var rClass = _scriptRuntime.Globals.GetVariable<RubyClass>(className);
             var methods = new Dictionary<string, RubyMethodInfo>();
 
             methods["my_method"] = (RubyMethodInfo) rClass.GetMethod("my_method");
 
-            RubyMethodInfo methodInfo = methods["my_method"];
+            var methodInfo = methods["my_method"];
             methodInfo.Method.ShouldNotBeNull();
             methodInfo.DefinitionName.ShouldBeEqualTo("my_method");
         }
@@ -175,17 +175,17 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldBeAbleToWorkWithScopedVariables()
         {
-            ScriptScope scope = _engine.CreateScope();
+            var scope = _engine.CreateScope();
             AddClass(scope);
-            string script =
+            var script =
                 "my_instance = TestClass.new" + Environment.NewLine +
                 "result1 = my_instance.add_is_expired 'first result'" + Environment.NewLine +
                 "result2 = my_instance.add_is_expired a_test_var" + Environment.NewLine + " ";
 
-            ObjectOperations operations = _engine.CreateOperations(scope);
+            var operations = _engine.CreateOperations(scope);
             _engine.Execute("a_test_var = 'My content'", scope);
 //            scope.SetVariable("a_test_var", "My content");
-            object scriptResult = _engine.Execute(script, scope);
+            var scriptResult = _engine.Execute(script, scope);
 
             _engine.Execute<string>("result1.to_clr_string", scope).ShouldBeEqualTo("first result is expired ");
             _engine.Execute<string>("result2.to_clr_string", scope).ShouldBeEqualTo("My content is expired ");
@@ -194,7 +194,7 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldBeAbleToGetClassName()
         {
-            ScriptScope scope = _engine.CreateScope();
+            var scope = _engine.CreateScope();
 
 
             AddClass(scope);
@@ -208,14 +208,14 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldBeAbleToCreateAnInstance()
         {
-            ScriptScope scope = _engine.CreateScope();
-            ObjectOperations operations = _engine.CreateOperations(scope);
+            var scope = _engine.CreateScope();
+            var operations = _engine.CreateOperations(scope);
             AddClass(scope);
             var klass = _scriptRuntime.Globals.GetVariable<RubyClass>("TestClass");
 //            var instance = operations.Call(klass);
 //            instance.ShouldNotBeNull();
 
-            object instanc2 = operations.CreateInstance(klass);
+            var instanc2 = operations.CreateInstance(klass);
             instanc2.ShouldNotBeNull();
             operations.ContainsMember(instanc2, "add_is_expired").ShouldBeTrue();
         }
@@ -223,15 +223,15 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldBeAbleToInvokeInstanceMethods()
         {
-            ScriptScope scope = _engine.CreateScope();
-            ObjectOperations operations = _engine.CreateOperations(scope);
+            var scope = _engine.CreateScope();
+            var operations = _engine.CreateOperations(scope);
             AddClass(scope);
             var klass = _scriptRuntime.Globals.GetVariable<RubyClass>("TestClass");
             //            var instance = operations.Call(klass);
             //            instance.ShouldNotBeNull();
 
-            object obj = operations.CreateInstance(klass);
-            object member = operations.GetMember(obj, "add_is_expired");
+            var obj = operations.CreateInstance(klass);
+            var member = operations.GetMember(obj, "add_is_expired");
             member.ShouldNotBeNull();
             member.ShouldBeAnInstanceOf<RubyMethod>();
             var method = (RubyMethod) member;
@@ -241,14 +241,14 @@ namespace IronRubyMvcLibrary.Tests
         [Fact]
         public void ShouldBeAbleToInvokeInstanceMethodsThatArePascalCased()
         {
-            ScriptScope scope = _engine.CreateScope();
-            ObjectOperations operations = _engine.CreateOperations(scope);
+            var scope = _engine.CreateScope();
+            var operations = _engine.CreateOperations(scope);
             AddClass(scope);
             var klass = _scriptRuntime.Globals.GetVariable<RubyClass>("TestClass");
             //            var instance = operations.Call(klass);
             //            instance.ShouldNotBeNull();
 
-            object obj = operations.CreateInstance(klass);
+            var obj = operations.CreateInstance(klass);
             var member = operations.GetMember<RubyMethod>(obj, "AddIsExpired".Underscore());
             member.ShouldNotBeNull();
             member.ShouldBeAnInstanceOf<RubyMethod>();
@@ -266,7 +266,7 @@ namespace IronRubyMvcLibrary.Tests
 
         private void AddClass(ScriptScope scope)
         {
-            string script =
+            var script =
                 "class TestClass" + Environment.NewLine +
                 "  def add_is_expired(value)" + Environment.NewLine +
                 "    \"#{value} is expired \"" + Environment.NewLine +
@@ -278,8 +278,8 @@ namespace IronRubyMvcLibrary.Tests
 
         private void AddClass(MethodBase method)
         {
-            string methodName = method.Name;
-            string script =
+            var methodName = method.Name;
+            var script =
                 "class {0}; def my_method; $text_var = \"{1}\"; end; def another_method; $text_var = 'from other method'; end; end "
                     .FormattedWith("{0}Class".FormattedWith(methodName), methodName);
             _context.DefineGlobalVariable("text_var", "String value");
