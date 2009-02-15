@@ -35,7 +35,6 @@ namespace IronRubyMvcLibrary.Controllers
             {
             }
 
-//            RubyEngine engine = RubyEngine.Create(_engine);
             result = _engine.LoadController(requestContext, controllerName);
 
             return result;
