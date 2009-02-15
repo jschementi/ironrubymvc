@@ -54,7 +54,10 @@ namespace IronRubyMvcLibrary.Tests.Controllers
 
         protected override RubyController CreateSut()
         {
-            return _rubyEngine.ConfigureController(_rubyClass, _requestContext);
+            var controller = _rubyEngine.ConfigureController(_rubyClass, _requestContext);
+            controller.ViewData().Add("test","testing");
+//                .ViewData.Add("test", "my value");
+            return controller;
         }
 
         protected override void Because()
@@ -240,6 +243,26 @@ namespace IronRubyMvcLibrary.Tests.Controllers
             _result.ShouldBeAnInstanceOf<Dictionary<object, object>>();
         }
         
+    }
+
+    [Concern(typeof(RubyController))]
+    public class when_asked_to_execute_an_action : when_a_controller_is_initialized
+    {
+        private Action _action;
+
+        protected override void Because()
+        {
+            _action = () => ((IController)Sut).Execute(new RequestContext(_httpContextMock.Object, new RouteData{Values = {{"action", "my_action"}}}));
+        }
+
+        [Observation]
+        public void should_not_throw()
+        {
+            _action.ShouldNotThrowAnyExceptions();
+        }
+
+        
+
     }
 
     [Concern(typeof(RubyController))]
