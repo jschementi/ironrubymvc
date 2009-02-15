@@ -3,8 +3,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -21,7 +21,6 @@ using RubyMethodDefinition = IronRuby.Runtime.RubyMethodAttribute;
 
 namespace IronRubyMvcLibrary.Controllers
 {
-
     public class RubyController : Controller
     {
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
@@ -37,38 +36,58 @@ namespace IronRubyMvcLibrary.Controllers
             get { return Constants.CONTROLLERCLASS_FORMAT.FormattedWith(ControllerName); }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
         public IDictionary<object, object> Params
         {
             get
             {
                 if (_params == null)
                 {
-                    HttpRequestBase request = ControllerContext.HttpContext.Request;
-                    _params =
-                        new Dictionary<object, object>(ControllerContext.RouteData.Values.Count +
-                                                       request.QueryString.Count + request.Form.Count);
-
-                    foreach (var item in ControllerContext.RouteData.Values)
-                    {
-                        SymbolId key = SymbolTable.StringToId(item.Key);
-                        _params[key] = item.Value;
-                    }
-
-                    foreach (string key in request.QueryString.Keys)
-                    {
-                        SymbolId symbolKey = SymbolTable.StringToId(key);
-                        _params[symbolKey] = request.QueryString[key];
-                    }
-
-                    foreach (string key in request.Form.Keys)
-                    {
-                        SymbolId symbolKey = SymbolTable.StringToId(key);
-                        _params[symbolKey] = request.Form[key];
-                    }
+                    PopulateParams();
                 }
 
                 return _params;
+            }
+        }
+
+        private void PopulateParams()
+        {
+            var request = ControllerContext.HttpContext.Request;
+            _params =
+                new Dictionary<object, object>(ControllerContext.RouteData.Values.Count +
+                                               request.QueryString.Count + request.Form.Count);
+
+            PopulateParamsWithRouteData();
+
+            PopulateParamsWithQueryStringData(request);
+
+            PopulateParamsWithFormData(request);
+        }
+
+        private void PopulateParamsWithFormData(HttpRequestBase request)
+        {
+            foreach (string key in request.Form.Keys)
+            {
+                var symbolKey = SymbolTable.StringToId(key);
+                _params[symbolKey] = request.Form[key];
+            }
+        }
+
+        private void PopulateParamsWithQueryStringData(HttpRequestBase request)
+        {
+            foreach (string key in request.QueryString.Keys)
+            {
+                var symbolKey = SymbolTable.StringToId(key);
+                _params[symbolKey] = request.QueryString[key];
+            }
+        }
+
+        private void PopulateParamsWithRouteData()
+        {
+            foreach (var item in ControllerContext.RouteData.Values)
+            {
+                var key = SymbolTable.StringToId(item.Key);
+                _params[key] = item.Value;
             }
         }
 
@@ -131,7 +150,7 @@ namespace IronRubyMvcLibrary.Controllers
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var vdd = new ViewDataDictionary();
-            vdd["__scriptRuntime"] = ((RubyEngine)_engine).Runtime;
+            vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
 
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;
