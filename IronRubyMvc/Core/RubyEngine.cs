@@ -18,11 +18,86 @@ using Microsoft.Scripting.Hosting;
 
 namespace IronRubyMvcLibrary.Core
 {
+    public interface IRubyEngine
+    {
+        /// <summary>
+        /// Loads the controller.
+        /// </summary>
+        /// <param name="requestContext">The request context.</param>
+        /// <param name="controllerName">Name of the controller.</param>
+        /// <returns></returns>
+        RubyController LoadController(RequestContext requestContext, string controllerName);
+
+        /// <summary>
+        /// Configures the controller.
+        /// </summary>
+        /// <param name="rubyClass">The ruby class.</param>
+        /// <param name="requestContext">The request context.</param>
+        /// <returns></returns>
+        RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
+
+        /// <summary>
+        /// Calls the method.
+        /// </summary>
+        /// <param name="receiver">The receiver.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        object CallMethod(object receiver, string message, params object[] args);
+
+        /// <summary>
+        /// Determines whether the specified controller as the action.
+        /// </summary>
+        /// <param name="controller">The controller.</param>
+        /// <param name="actionName">Name of the action.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
+        /// </returns>
+        bool HasControllerAction(RubyController controller, string actionName);
+
+        /// <summary>
+        /// Loads the assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        void LoadAssembly(Assembly assembly);
+
+        object ExecuteScript(string script);
+
+        /// <summary>
+        /// Defines the read only global variable.
+        /// </summary>
+        /// <param name="variableName">Name of the variable.</param>
+        /// <param name="value">The value.</param>
+        void DefineReadOnlyGlobalVariable(string variableName, object value);
+
+        /// <summary>
+        /// Gets the ruby class.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <returns></returns>
+        RubyClass GetRubyClass(string className);
+
+        /// <summary>
+        /// Gets the global variable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
+        T GetGlobalVariable<T>(string name);
+
+        /// <summary>
+        /// Loads the assemblies.
+        /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
+        void LoadAssemblies(params Type[] assemblies);
+    }
+
     /// <summary>
     /// A wrapper for ScriptEngine, Runtime and Context
     /// This class handles all the interaction with IronRuby
     /// </summary>
-    public class RubyEngine
+    public class RubyEngine : IRubyEngine
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="RubyEngine"/> class.
@@ -340,7 +415,7 @@ namespace IronRubyMvcLibrary.Core
             return engine;
         }
 
-        private static void IntializeMvc(RubyEngine engine)
+        private static void IntializeMvc(IRubyEngine engine)
         {
             var factory = new RubyControllerFactory(ControllerBuilder.Current.GetControllerFactory(), engine);
             ControllerBuilder.Current.SetControllerFactory(factory);

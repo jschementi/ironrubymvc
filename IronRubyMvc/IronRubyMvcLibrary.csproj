@@ -96,7 +96,6 @@
     <Compile Include="Controllers\RubyControllerDescriptor.cs" />
     <Compile Include="Controllers\RubyControllerFactory.cs" />
     <Compile Include="Core\RubyEngine.cs" />
-    <Compile Include="Controllers\RubyParameterDescriptor.cs" />
     <Compile Include="Core\VirtualPathProvider.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

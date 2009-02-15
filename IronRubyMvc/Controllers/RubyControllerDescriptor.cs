@@ -12,17 +12,10 @@ namespace IronRubyMvcLibrary.Controllers
 {
     public class RubyControllerDescriptor : ControllerDescriptor
     {
-        private readonly ControllerContext _context;
 
-        public RubyControllerDescriptor(RubyClass rubyClass, ControllerContext context)
+        public RubyControllerDescriptor(RubyClass rubyClass)
         {
             RubyControllerClass = rubyClass;
-            _context = context;
-        }
-
-        public ControllerContext Context
-        {
-            get { return _context; }
         }
 
         public override string ControllerName
@@ -30,7 +23,7 @@ namespace IronRubyMvcLibrary.Controllers
             get { return RubyControllerClass.Name; }
         }
 
-        internal RubyEngine RubyEngine { get; set; }
+        internal IRubyEngine RubyEngine { get; set; }
 
         public override Type ControllerType
         {
@@ -41,12 +34,9 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
         {
-            var hasControllerAction = RubyEngine.HasControllerAction((RubyController) controllerContext.Controller,
-                                                                   actionName);
+            var hasControllerAction = RubyEngine.HasControllerAction((RubyController) controllerContext.Controller, actionName);
 
-            if (!hasControllerAction) return null;
-
-            return RubyActionDescriptor.Create(actionName, this);
+            return !hasControllerAction ? null : new RubyActionDescriptor(actionName, this);
         }
 
         public override ActionDescriptor[] GetCanonicalActions()

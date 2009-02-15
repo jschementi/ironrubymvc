@@ -11,22 +11,17 @@ namespace IronRubyMvcLibrary.Controllers
     {
         private readonly string _actionName;
         private readonly ControllerDescriptor _controllerDescriptor;
-//        private readonly MethodInfo _methodInfo;
-//        private ParameterDescriptor[] _parametersCache;
 
         public RubyActionDescriptor(string actionName, ControllerDescriptor controllerDescriptor)
         {
             _actionName = actionName;
             _controllerDescriptor = controllerDescriptor;
-//            Action = action;
-//            _methodInfo = RubyController.InvokeActionMethod;
         }
 
-
-//        public MethodInfo MethodInfo
-//        {
-//            get { return _methodInfo; }
-//        }
+        public override ParameterDescriptor[] GetParameters()
+        {
+            return new ParameterDescriptor[0];
+        }
 
         public override string ActionName
         {
@@ -43,38 +38,21 @@ namespace IronRubyMvcLibrary.Controllers
         {
             get { return ((RubyControllerDescriptor) ControllerDescriptor); }
         }
-
-
-//        public Func<object> Action
-//        {
-//            get; private set;
-//        }
-
+        
         public override object Execute(ControllerContext controllerContext, IDictionary<string, object> parameters)
         {
-            return RubyControllerDescriptor.RubyEngine.CallMethod(controllerContext.Controller, ActionName);
+            var engine = RubyControllerDescriptor.RubyEngine;
+            return engine.CallMethod(controllerContext.Controller, ActionName);
         }
 
-        public override ParameterDescriptor[] GetParameters() //return an empty array for now
-        {
-            var parameters = new ParameterDescriptor[0]; //LazilyFetchParametersCollection();
-
-            // need to clone array so that user modifications aren't accidentally stored
-            return (ParameterDescriptor[]) parameters.Clone();
-        }
-
-//        private ParameterDescriptor[] LazilyFetchParametersCollection()
+//        public override ICollection<ActionSelector> GetSelectors()
 //        {
-//            return DescriptorUtil.LazilyFetchOrCreateDescriptors<ParameterInfo, ParameterDescriptor>(
-//                ref _parametersCache /* cacheLocation */,
-//                MethodInfo.GetParameters /* initializer */,
-//                parameterInfo => new RubyParameterDescriptor(parameterInfo, this) /* converter */);
+//            return base.GetSelectors();
 //        }
 
-
-        internal static RubyActionDescriptor Create(string actionName, ControllerDescriptor controllerDescriptor)
-        {
-            return new RubyActionDescriptor(actionName, controllerDescriptor);
-        }
+//        internal static RubyActionDescriptor Create(string actionName, ControllerDescriptor controllerDescriptor)
+//        {
+//            return new RubyActionDescriptor(actionName, controllerDescriptor);
+//        }
     }
 }
