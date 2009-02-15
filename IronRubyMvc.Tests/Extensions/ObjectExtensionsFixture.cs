@@ -1,5 +1,9 @@
+#region Usings
+
 using IronRubyMvcLibrary.Extensions;
 using Xunit;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Tests.Extensions
 {
@@ -28,6 +32,5 @@ namespace IronRubyMvcLibrary.Tests.Extensions
         {
             Assert.True(new object().IsNotNull());
         }
-
     }
 }

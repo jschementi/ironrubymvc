@@ -17,9 +17,9 @@ namespace IronRubyMvcLibrary.Core
             _assembly = assembly;
         }
 
-        public AssemblyResourceReader() : this(typeof (AssemblyResourceReader).Assembly)
-        {
-        }
+//        public AssemblyResourceReader() : this(typeof (AssemblyResourceReader).Assembly)
+//        {
+//        }
 
         public override string Read(string filePath)
         {

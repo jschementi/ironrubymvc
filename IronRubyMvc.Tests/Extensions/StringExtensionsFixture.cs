@@ -1,16 +1,19 @@
+#region Usings
+
 using System;
 using IronRubyMvcLibrary.Extensions;
 using Xunit;
+
+#endregion
 
 namespace IronRubyMvc.Tests.Extensions
 {
     public class StringExtensionsFixture
     {
-        
         [Fact]
         public void ShouldReturnTrue_ForNullValue_WhenAskedForNullOrBlank()
         {
-            Assert.True(((string)null).IsNullOrBlank());
+            Assert.True(((string) null).IsNullOrBlank());
         }
 
         [Fact]
@@ -37,7 +40,7 @@ namespace IronRubyMvc.Tests.Extensions
         [Fact]
         public void ShouldReturnFalse_ForNullValue_WhenAskedForNotNullOrBlank()
         {
-            Assert.False(((string)null).IsNotNullOrBlank());
+            Assert.False(((string) null).IsNotNullOrBlank());
         }
 
         [Fact]
@@ -66,7 +69,8 @@ namespace IronRubyMvc.Tests.Extensions
         {
             var expected = "This is the 1 and only Format test at " + DateTime.Now.ToShortDateString();
 
-            var actual = "This is the {0} and only {1} test at {2}".FormattedWith(1, "Format", DateTime.Now.ToShortDateString());
+            var actual = "This is the {0} and only {1} test at {2}".FormattedWith(1, "Format",
+                                                                                  DateTime.Now.ToShortDateString());
 
             Assert.Equal(expected, actual);
         }

@@ -1,9 +1,13 @@
+#region Usings
+
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Extensions;
 using Xunit;
+
+#endregion
 
 namespace IronRubyMvc.Tests.Extensions
 {
@@ -28,9 +32,9 @@ namespace IronRubyMvc.Tests.Extensions
         [Fact]
         public void ShouldBeAbleToConverToViewDataDictionary()
         {
-            var expected = new ViewDataDictionary { { "first", "first_action" }, { "second", "second action" } };
+            var expected = new ViewDataDictionary {{"first", "first_action"}, {"second", "second action"}};
 
-            var hash = new Hash(new Dictionary<object, object> { { "first", "first_action" }, { "second", "second action" } });
+            var hash = new Hash(new Dictionary<object, object> {{"first", "first_action"}, {"second", "second action"}});
 
             var actual = hash.ToViewDataDictionary();
 

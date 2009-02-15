@@ -1,11 +1,13 @@
-using IronRuby.Builtins;
+#region Usings
+
+using System;
 using IronRubyMvcLibrary.Core;
 using Xunit;
-using System;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Tests.Core
 {
-
     [Concern(typeof (ScopedScriptRunner))]
     public class when_a_file_is_provided_to_scoped : with_ironruby_initialized<ScopedScriptRunner>
     {
@@ -30,14 +32,15 @@ namespace IronRubyMvcLibrary.Tests.Core
         }
     }
 
-    [Concern(typeof(ScopedScriptRunner))]
+    [Concern(typeof (ScopedScriptRunner))]
     public class when_no_file_is_provided_to_scoped : with_ironruby_initialized<ScopedScriptRunner>
     {
         private Action _action;
+
         protected override ScopedScriptRunner CreateSut()
         {
             return new ScopedScriptRunner(_engine, _scriptRuntime.CreateScope(), string.Empty,
-                                          new AssemblyResourceReader(typeof(RubyExperiments).Assembly));
+                                          new AssemblyResourceReader(typeof (RubyExperiments).Assembly));
         }
 
         protected override void Because()
@@ -52,10 +55,11 @@ namespace IronRubyMvcLibrary.Tests.Core
         }
     }
 
-    [Concern(typeof(ScopedScriptRunner))]
+    [Concern(typeof (ScopedScriptRunner))]
     public class when_no_reader_is_provided_to_scoped : with_ironruby_initialized<ScopedScriptRunner>
     {
         private Action _action;
+
         protected override ScopedScriptRunner CreateSut()
         {
             return new ScopedScriptRunner(_engine, _engine.CreateScope(), string.Empty, null);
@@ -74,7 +78,7 @@ namespace IronRubyMvcLibrary.Tests.Core
     }
 
 
-    [Concern(typeof(ScopedScriptRunner))]
+    [Concern(typeof (ScopedScriptRunner))]
     public class when_a_script_is_provided_to_scoped : with_ironruby_initialized<ScopedScriptRunner>
     {
         private string result;
@@ -82,7 +86,7 @@ namespace IronRubyMvcLibrary.Tests.Core
         protected override ScopedScriptRunner CreateSut()
         {
             return new ScopedScriptRunner(_engine, _scriptRuntime.CreateScope(), string.Empty,
-                                          new AssemblyResourceReader(typeof(RubyExperiments).Assembly));
+                                          new AssemblyResourceReader(typeof (RubyExperiments).Assembly));
         }
 
         protected override void Because()
