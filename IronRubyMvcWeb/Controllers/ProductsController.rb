@@ -24,7 +24,7 @@ class BaseController < Controller
   end
 end
 
-class ProductsController < BaseController
+class ProductsController < Controller
   def index
     repository = ProductsRepository.new
     
@@ -33,6 +33,8 @@ class ProductsController < BaseController
     
     return_view nil, 'layout'
   end
+  
+   
   
   def list
     @category = params[:id]
