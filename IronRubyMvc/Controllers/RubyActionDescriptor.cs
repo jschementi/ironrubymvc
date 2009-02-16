@@ -45,10 +45,20 @@ namespace IronRubyMvcLibrary.Controllers
             return engine.CallMethod(controllerContext.Controller, ActionName);
         }
 
-//        public override ICollection<ActionSelector> GetSelectors()
-//        {
-//            return base.GetSelectors();
-//        }
+        public override ICollection<ActionSelector> GetSelectors()
+        {
+            var selectors = RubyControllerDescriptor.RubyEngine.CallMethod(
+                RubyControllerDescriptor.RubyControllerClass, "action_selectors");
+            return new ActionSelector[0];
+        }
+
+        public override FilterInfo GetFilters()
+        {
+            var filters = RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass,
+                                                                         "action_filters");
+
+            return new FilterInfo();
+        }
 
 //        internal static RubyActionDescriptor Create(string actionName, ControllerDescriptor controllerDescriptor)
 //        {

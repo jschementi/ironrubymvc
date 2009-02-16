@@ -6,6 +6,18 @@ class HomeModel
   end
 end
 
+module IronRubyMvc
+  
+  module Controllers
+    
+    module Filters
+      
+      module ClassMethods
+      end
+    end
+  end
+end
+
 class HomeController < Controller
 #  def initialize(context = nil)
 #    if(context != nil)
