@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\DelegateActionFilter.cs" />
     <Compile Include="Controllers\RubyActionDescriptorFixture.cs" />
     <Compile Include="Controllers\RubyControllerActionInvokerSpec.cs" />
     <Compile Include="Controllers\RubyControllerDescriptorSpec.cs" />

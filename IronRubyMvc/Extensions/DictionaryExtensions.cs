@@ -5,13 +5,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
+using IronRuby.Builtins;
+using IronRubyMvcLibrary.Controllers;
+using IronRubyMvcLibrary.Core;
+using Microsoft.Scripting;
 
 #endregion
 
 namespace IronRubyMvcLibrary.Extensions
 {
+    
     public static class DictionaryExtensions
     {
+        
+
         public static RouteValueDictionary ToRouteDictionary(this IDictionary dictionary)
         {
             var rvd = new RouteValueDictionary();
@@ -33,13 +40,24 @@ namespace IronRubyMvcLibrary.Extensions
             return vdd;
         }
 
-        public static ActionSelector[] ToActionSelectors(this IDictionary dictionary)
+        public static IEnumerable<ActionSelector> ToActionSelectors(this IDictionary dictionary)
         {
             var selectors = new List<ActionSelector>(dictionary.Keys.Count);
 
             dictionary.ForEach((key, value) => selectors.Add(c => true));
 
             return selectors.ToArray();
+        }
+
+        public static IEnumerable<RubyActionFilter> ToActionFilters(this IDictionary dictionary)
+        {
+            var filters = new List<RubyActionFilter>(dictionary.Keys.Count);
+            dictionary.ForEach((key, value) =>
+            {
+                var filterDescription = dictionary[key] as Hash;
+                filters.Add(new HashToActionFilterConverter(filterDescription).Convert());
+            });
+            return filters;
         }
 
         public static void ForEach(this IDictionary dictionary, Action<object, object> iterator)
