@@ -42,7 +42,7 @@ namespace IronRubyMvcLibrary.Controllers
         /// <param name="filterContext">The filter context.</param>
         public void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if ( AfterAction.IsNotNull() && CanExecute(filterContext))
+            if (AfterAction.IsNotNull() && CanExecute(filterContext))
                 AfterAction.Call(filterContext);
         }
 
@@ -80,8 +80,8 @@ namespace IronRubyMvcLibrary.Controllers
 
         private bool CanExecute(string actionName)
         {
-            return OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName) 
-                || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
+            return OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName)
+                   || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
         }
 
         #endregion
