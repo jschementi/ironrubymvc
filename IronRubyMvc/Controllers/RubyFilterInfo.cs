@@ -19,20 +19,36 @@ namespace IronRubyMvcLibrary.Controllers
 
         private void ParseFilters(IDictionary descriptions)
         {
-            var filters = descriptions.ToActionFilters();
+            var actionFilters = descriptions.ToActionFilters();
+            var authFilters = descriptions.ToAuthorizationFilters();
+            var errorFilters = descriptions.ToErrorFilters();
 
-            AddActionFilters(filters);
-            AddResultFilters(filters);
+            AddActionFilters(actionFilters);
+            AddResultFilters(actionFilters);
+            AddAuthorizationFilters(authFilters);
+            AddErrorFilters(errorFilters);
         }
 
         private void AddResultFilters(IEnumerable<RubyActionFilter> filters)
         {
             filters
                 .Select(filter => filter.BeforeResult.IsNotNull() || filter.AfterResult.IsNotNull())
-                .ForEach(filter => ActionFilters.Add(filter));
+                .ForEach(filter => ResultFilters.Add(filter));
         }
 
-        
+        private void AddAuthorizationFilters(IEnumerable<RubyAuthorizationFilter> filters)
+        {
+            filters
+                .Select(filter => filter.Authorize.IsNotNull())
+                .ForEach(filter => AuthorizationFilters.Add(filter));
+        }
+
+        private void AddErrorFilters(IEnumerable<RubyErrorFilter> filters)
+        {
+            filters
+                .Select(filter => filter.Error.IsNotNull())
+                .ForEach(filter => ExceptionFilters.Add(filter));
+        }
 
         private void AddActionFilters(IEnumerable<RubyActionFilter> filters)
         {
