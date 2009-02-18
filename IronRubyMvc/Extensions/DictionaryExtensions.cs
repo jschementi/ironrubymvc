@@ -49,13 +49,38 @@ namespace IronRubyMvcLibrary.Extensions
             return selectors.ToArray();
         }
 
+        public static IEnumerable<RubyAuthorizationFilter> ToAuthorizationFilters(this IDictionary dictionary)
+        {
+            var filters = new List<RubyAuthorizationFilter>(dictionary.Keys.Count);
+            dictionary.ForEach((key, value) =>
+            {
+                var filterDescription = dictionary[key] as Hash;
+                var authFilter = new HashToAuthorizationFilterConverter(filterDescription).Convert();
+                if(authFilter.IsNotNull()) filters.Add(authFilter);
+            });
+            return filters;
+        }
+
+        public static IEnumerable<RubyErrorFilter> ToErrorFilters(this IDictionary dictionary)
+        {
+            var filters = new List<RubyErrorFilter>(dictionary.Keys.Count);
+            dictionary.ForEach((key, value) =>
+            {
+                var filterDescription = dictionary[key] as Hash;
+                var authFilter = new HashToErrorFilterConverter(filterDescription).Convert();
+                if (authFilter.IsNotNull()) filters.Add(authFilter);
+            });
+            return filters;
+        }
+
         public static IEnumerable<RubyActionFilter> ToActionFilters(this IDictionary dictionary)
         {
             var filters = new List<RubyActionFilter>(dictionary.Keys.Count);
             dictionary.ForEach((key, value) =>
             {
                 var filterDescription = dictionary[key] as Hash;
-                filters.Add(new HashToActionFilterConverter(filterDescription).Convert());
+                var actionFilter = new HashToActionFilterConverter(filterDescription).Convert();
+                if(actionFilter.IsNotNull()) filters.Add(actionFilter);
             });
             return filters;
         }

@@ -12,9 +12,9 @@ namespace IronRubyMvcLibrary.Controllers
     {
         TTarget Convert();
     }
-    public class HashToActionFilterConverter : IConverter<RubyActionFilter>
+    public class HashToActionFilterConverter : HashConverter<RubyActionFilter>
     {
-        private readonly Hash _filterDescription;
+        
 
         private static readonly IEnumerable<SymbolId> _actionFilterDenominators = new[]
                                                                  {
@@ -34,52 +34,33 @@ namespace IronRubyMvcLibrary.Controllers
 
                                                                               };
 
-        private static readonly SymbolId whenKey = SymbolTable.StringToId("when");
-        private static readonly SymbolId authorizeKey = SymbolTable.StringToId("authorize");
-        private static readonly SymbolId errorKey = SymbolTable.StringToId("error");
+        
+        
+        
 
-        public HashToActionFilterConverter(Hash filterDescription)
+        public HashToActionFilterConverter(Hash filterDescription) : base(filterDescription)
         {
-            _filterDescription = filterDescription;
+            
         }
 
-        #region Implementation of IConverter<RubyActionFilter>
-
-        public RubyActionFilter Convert()
+        
+        protected override RubyActionFilter Build()
         {
-            if (!IsActionFilter(_filterDescription))
-                throw new InvalidDataException("The filter description is invalid.");
-
             return new RubyActionFilter
             {
-                BeforeAction = FindProc(_filterDescription, _actionWhen[When.BeforeAction]),
-                AfterAction = FindProc(_filterDescription, _actionWhen[When.AfterAction]),
-                BeforeResult = FindProc(_filterDescription, _actionWhen[When.BeforeResult]),
-                AfterResult = FindProc(_filterDescription, _actionWhen[When.AfterResult])
+                BeforeAction = FindProc(_actionWhen[When.BeforeAction]),
+                AfterAction = FindProc(_actionWhen[When.AfterAction]),
+                BeforeResult = FindProc(_actionWhen[When.BeforeResult]),
+                AfterResult = FindProc(_actionWhen[When.AfterResult])
             };
         }
 
-        #endregion
-
-        private static bool IsActionFilter(IDictionary<object, object> hash)
+        protected override bool IsFilter()
         {
-            var key = (SymbolId)hash[whenKey];
+            var key = (SymbolId)_filterDescription[whenKey];
             return _actionFilterDenominators.Contains(key);
         }
 
-        private static bool IsAuthorizeFilter(IDictionary<object, object> hash)
-        {
-            return authorizeKey == (SymbolId) hash[whenKey];
-        }
-
-        private static bool IsErrorFilter(IDictionary<object, object> hash)
-        {
-            return errorKey == (SymbolId) hash[whenKey];
-        }
-
-        private static Proc FindProc(IDictionary<object, object> hash, SymbolId key)
-        {
-            return hash.ContainsKey(key) ? (Proc)hash[key] : null;
-        }
+        
     }
 }
