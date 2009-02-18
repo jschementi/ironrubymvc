@@ -46,16 +46,17 @@ namespace IronRubyMvcLibrary.Controllers
             return filters;
         }
 
-        private static void AddControllerToFilterList<TFilter>(ControllerBase controller, IList<TFilter> filterList)
-            where TFilter : class
-        {
-            var controllerAsFilter = controller as TFilter;
-            if (controllerAsFilter != null)
-            {
-                filterList.Insert(0, controllerAsFilter);
-            }
-        }
+//        private static void AddControllerToFilterList<TFilter>(ControllerBase controller, IList<TFilter> filterList)
+//            where TFilter : class
+//        {
+//            var controllerAsFilter = controller as TFilter;
+//            if (controllerAsFilter != null)
+//            {
+//                filterList.Insert(0, controllerAsFilter);
+//            }
+//        }
 
+        
         public override bool InvokeAction(ControllerContext controllerContext, string actionName)
         {
             if (controllerContext == null)

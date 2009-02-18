@@ -35,6 +35,8 @@ namespace IronRubyMvcLibrary.Controllers
                                                                               };
 
         private static readonly SymbolId whenKey = SymbolTable.StringToId("when");
+        private static readonly SymbolId authorizeKey = SymbolTable.StringToId("authorize");
+        private static readonly SymbolId errorKey = SymbolTable.StringToId("error");
 
         public HashToActionFilterConverter(Hash filterDescription)
         {
@@ -63,6 +65,16 @@ namespace IronRubyMvcLibrary.Controllers
         {
             var key = (SymbolId)hash[whenKey];
             return _actionFilterDenominators.Contains(key);
+        }
+
+        private static bool IsAuthorizeFilter(IDictionary<object, object> hash)
+        {
+            return authorizeKey == (SymbolId) hash[whenKey];
+        }
+
+        private static bool IsErrorFilter(IDictionary<object, object> hash)
+        {
+            return errorKey == (SymbolId) hash[whenKey];
         }
 
         private static Proc FindProc(IDictionary<object, object> hash, SymbolId key)
