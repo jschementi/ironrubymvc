@@ -80,8 +80,8 @@ namespace IronRubyMvcLibrary.Controllers
 
         private bool CanExecute(string actionName)
         {
-            return OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName)
-                   || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
+            return OnlyForActions.IsNull() || OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName)
+                   || ExceptForActions.IsNull() || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
         }
 
         #endregion
