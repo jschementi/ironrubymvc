@@ -42,12 +42,16 @@
     <RootNamespace>IronRubyMvcLibrarySpecs</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Ruby Include="bacon_helper.rb" />
+    <Ruby Include="extensions\extensions.rb" />
+    <Ruby Include="extensions\string_extensions_spec.rb" />
     <Ruby Include="Rakefile.rb" />
     <Ruby Include="ruby_controller_spec.rb" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin" />
     <Folder Include="Debug" />
+    <Folder Include="extensions" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\IronRuby.dll" />

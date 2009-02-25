@@ -34,7 +34,7 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
         {
-            ((RubyEngine) RubyEngine).Operations.GetMemberNames(controllerContext.Controller);
+//            ((RubyEngine) RubyEngine).Operations.GetMemberNames(controllerContext.Controller);
             var hasControllerAction = RubyEngine.HasControllerAction((RubyController) controllerContext.Controller, actionName);
 
             return !hasControllerAction ? null : new RubyActionDescriptor(actionName, this);

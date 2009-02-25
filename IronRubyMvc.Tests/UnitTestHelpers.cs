@@ -28,21 +28,21 @@ namespace IronRubyMvcLibrary.Tests
 //            }
 //        }
 
-        public static MemoryStream ToMemoryStream(this string s)
-        {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            writer.Write(s);
-            writer.Flush();
-            stream.Position = 0;
-            return stream;
-        }
-
-        public static StreamReader ToStreamReader(this string s)
-        {
-            Stream stream = s.ToMemoryStream();
-            return new StreamReader(stream);
-        }
+//        public static MemoryStream ToMemoryStream(this string s)
+//        {
+//            var stream = new MemoryStream();
+//            var writer = new StreamWriter(stream);
+//            writer.Write(s);
+//            writer.Flush();
+//            stream.Position = 0;
+//            return stream;
+//        }
+//
+//        public static StreamReader ToStreamReader(this string s)
+//        {
+//            Stream stream = s.ToMemoryStream();
+//            return new StreamReader(stream);
+//        }
     }
 
     //found a bug with Moq and MarshallByRef. This is my work around.

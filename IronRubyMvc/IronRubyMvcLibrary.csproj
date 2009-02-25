@@ -20,13 +20,15 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\IronRubyMvcLibrarySpecs\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules>-Microsoft.Design#CA2210</CodeAnalysisRules>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -79,8 +81,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ControllerConfiguration.cs" />
+    <Compile Include="Controllers\HashConverter.cs" />
     <Compile Include="Controllers\HashToActionFilterConverter.cs" />
+    <Compile Include="Controllers\HashToAuthorizationFilterConverter.cs" />
+    <Compile Include="Controllers\HashToErrorFilterConverter.cs" />
     <Compile Include="Controllers\RubyActionFilter.cs" />
+    <Compile Include="Controllers\RubyAuthorizationFilter.cs" />
+    <Compile Include="Controllers\RubyErrorFilter.cs" />
     <Compile Include="Controllers\RubyFilterInfo.cs" />
     <Compile Include="Core\DefaultScriptRunner.cs" />
     <Compile Include="Core\AssemblyResourceReader.cs" />
