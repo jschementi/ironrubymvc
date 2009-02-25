@@ -4,19 +4,19 @@ describe "StringExtensions" do
   
   describe "when asking for null or blank" do
     it "should return true for a null value" do
-      StringExtensions.is_null_or_blank(nil).should == true
+      StringExtensions.is_null_or_blank(nil).should.be.true?
     end
     
     it "should return true for an empty value" do
-      StringExtensions.is_null_or_blank("").should == true
+      StringExtensions.is_null_or_blank("").should.be.true?
     end
     
     it "should return true when the string contains only spaces" do
-      StringExtensions.is_null_or_blank("      ").should == true
+      StringExtensions.is_null_or_blank("      ").should.be.true?
     end
     
     it "should return false when the string contains a value" do
-      StringExtensions.is_null_or_blank("a string value").should == false
+      StringExtensions.is_null_or_blank("a string value").should.be.false?
     end
         
   end
@@ -24,19 +24,19 @@ describe "StringExtensions" do
   describe "when asking for not null or blank" do
     
     it "should return false when value is null" do
-      StringExtensions.is_not_null_or_blank(nil).should == false
+      StringExtensions.is_not_null_or_blank(nil).should.be.false?
     end
     
     it "should return false for an empty value" do
-      StringExtensions.is_not_null_or_blank("").should == false
+      StringExtensions.is_not_null_or_blank("").should.be.false?
     end
     
     it "should return false when the string contains only spaces" do
-      StringExtensions.is_not_null_or_blank("      ").should == false
+      StringExtensions.is_not_null_or_blank("      ").should.be.false?
     end
     
     it "should return true when the string contains a value" do
-      StringExtensions.is_not_null_or_blank("a string value").should == true
+      StringExtensions.is_not_null_or_blank("a string value").should.be.true?
     end
     
   end
@@ -51,15 +51,5 @@ describe "StringExtensions" do
     end
     
   end
-  
-#  [Fact]
-#  public void ShouldFormatAStringProperly()
-#  {
-#    var expected = "This is the 1 and only Format test at " + DateTime.Now.ToShortDateString();
-#    
-#    var actual = "This is the {0} and only {1} test at {2}".FormattedWith(1, "Format",
-#      DateTime.Now.ToShortDateString());
-#    
-#    Assert.Equal(expected, actual);
-#  }
+
 end

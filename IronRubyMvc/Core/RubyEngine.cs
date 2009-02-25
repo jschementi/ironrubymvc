@@ -438,7 +438,7 @@ namespace IronRubyMvcLibrary.Core
         private static RubyEngine InitializeIronRuby(IPathProvider vpp)
         {
             var rubySetup = Ruby.CreateRubySetup();
-//            rubySetup.Options["InterpretedMode"] = true;
+            rubySetup.Options["InterpretedMode"] = true;
 
             var runtimeSetup = new ScriptRuntimeSetup();
             runtimeSetup.LanguageSetups.Add(rubySetup);

@@ -17,7 +17,7 @@ namespace IronRubyMvcLibrary.Controllers
 
         #region Implementation of IConverter<RubyActionFilter>
 
-        public TToConvert Convert()
+        public virtual TToConvert Convert()
         {
             return !IsFilter() ? null : Build();
         }
