@@ -7,18 +7,13 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Core;
-using Microsoft.Scripting;
 
 #endregion
 
 namespace IronRubyMvcLibrary.Extensions
 {
-    
     public static class DictionaryExtensions
     {
-        
-
         public static RouteValueDictionary ToRouteDictionary(this IDictionary dictionary)
         {
             var rvd = new RouteValueDictionary();
@@ -53,11 +48,12 @@ namespace IronRubyMvcLibrary.Extensions
         {
             var filters = new List<RubyAuthorizationFilter>(dictionary.Keys.Count);
             dictionary.ForEach((key, value) =>
-            {
-                var filterDescription = dictionary[key] as Hash;
-                var authFilter = new HashToAuthorizationFilterConverter(filterDescription).Convert();
-                if(authFilter.IsNotNull()) filters.Add(authFilter);
-            });
+                                   {
+                                       var filterDescription = dictionary[key] as Hash;
+                                       var authFilter =
+                                           new HashToAuthorizationFilterConverter(filterDescription).Convert();
+                                       if (authFilter.IsNotNull()) filters.Add(authFilter);
+                                   });
             return filters;
         }
 
@@ -65,11 +61,11 @@ namespace IronRubyMvcLibrary.Extensions
         {
             var filters = new List<RubyErrorFilter>(dictionary.Keys.Count);
             dictionary.ForEach((key, value) =>
-            {
-                var filterDescription = dictionary[key] as Hash;
-                var authFilter = new HashToErrorFilterConverter(filterDescription).Convert();
-                if (authFilter.IsNotNull()) filters.Add(authFilter);
-            });
+                                   {
+                                       var filterDescription = dictionary[key] as Hash;
+                                       var authFilter = new HashToErrorFilterConverter(filterDescription).Convert();
+                                       if (authFilter.IsNotNull()) filters.Add(authFilter);
+                                   });
             return filters;
         }
 
@@ -77,11 +73,11 @@ namespace IronRubyMvcLibrary.Extensions
         {
             var filters = new List<RubyActionFilter>(dictionary.Keys.Count);
             dictionary.ForEach((key, value) =>
-            {
-                var filterDescription = dictionary[key] as Hash;
-                var actionFilter = new HashToActionFilterConverter(filterDescription).Convert();
-                if(actionFilter.IsNotNull()) filters.Add(actionFilter);
-            });
+                                   {
+                                       var filterDescription = dictionary[key] as Hash;
+                                       var actionFilter = new HashToActionFilterConverter(filterDescription).Convert();
+                                       if (actionFilter.IsNotNull()) filters.Add(actionFilter);
+                                   });
             return filters;
         }
 
