@@ -13,12 +13,12 @@ namespace IronRubyMvcLibrary.Extensions
     internal static class FilterInfoExtensions 
     {
 
-        public static FilterInfo AddControllerFilters(this FilterInfo filterInfo, IDictionary filterDescriptions)
+        public static FilterInfo AddControllerFilters(this FilterInfo filterInfo, IDictionary filterDescriptions, RubyEngine engine)
         {
-            filterDescriptions.ToActionFilters().ForEach(filter => filterInfo.ActionFilters.Add(filter));
-            filterDescriptions.ToAuthorizationFilters().ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
-            filterDescriptions.ToExceptionFilters().ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
-            filterDescriptions.ToResultFilters().ForEach(filter => filterInfo.ResultFilters.Add(filter));
+            filterDescriptions.ToActionFilters(engine).ForEach(filter => filterInfo.ActionFilters.Add(filter));
+            filterDescriptions.ToAuthorizationFilters(engine).ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
+            filterDescriptions.ToExceptionFilters(engine).ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
+            filterDescriptions.ToResultFilters(engine).ForEach(filter => filterInfo.ResultFilters.Add(filter));
             return filterInfo;
         }
         
