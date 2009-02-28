@@ -22,7 +22,7 @@ namespace IronRubyMvcLibrary.Core
                 return string.Empty;
             }
 
-            using (Stream stream = _pathProvider.Open(filePath))
+            using (var stream = _pathProvider.Open(filePath))
             {
                 using (TextReader reader = new StreamReader(stream))
                 {

@@ -27,6 +27,7 @@ namespace IronRubyMvcLibrary.Core
         /// <param name="controllerName">Name of the controller.</param>
         /// <returns></returns>
         RubyController LoadController(RequestContext requestContext, string controllerName);
+        TFilter LoadFilter<TFilter>(string filterName);
 
         /// <summary>
         /// Configures the controller.
@@ -165,7 +166,7 @@ namespace IronRubyMvcLibrary.Core
             ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope, string.Empty, new FileReader(PathProvider));
             LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (RouteTable),
                             typeof (Controller), typeof (RubyController));
-            SetModelAndControllersPath();
+            AddLoadPaths();
             DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
             RequireControllerFile();
         }
@@ -197,6 +198,18 @@ namespace IronRubyMvcLibrary.Core
             return controller;
         }
 
+        public TFilter LoadFilter<TFilter>(string filterName)
+        {
+            var filterFilePath = GetFilterFilePath(filterName);
+            if(filterFilePath.IsNullOrBlank()) return default(TFilter);
+
+            ScriptRunner.ExecuteFile(filterFilePath);
+
+            var filterClass = GetRubyClass(filterName.Pascalize());
+
+            return CreateInstance<TFilter>(filterClass);
+        }
+
         /// <summary>
         /// Gets the name of the controller class.
         /// </summary>
@@ -216,6 +229,17 @@ namespace IronRubyMvcLibrary.Core
                 return fileName;
 
             fileName = Constants.CONTROLLER_UNDERSCORE_PATH_FORMAT.FormattedWith(controllerName.Underscore());
+
+            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
+        }
+
+        internal string GetFilterFilePath(string filterName)
+        {
+            var fileName = Constants.FILTERS_PASCAL_PATH_FORMAT.FormattedWith(filterName.Pascalize());
+            if (PathProvider.FileExists(fileName))
+                return fileName;
+
+            fileName = Constants.FILTERS_UNDERSCORE_PATH_FORMAT.FormattedWith(filterName.Underscore());
 
             return PathProvider.FileExists(fileName) ? fileName : string.Empty;
         }
@@ -310,12 +334,13 @@ namespace IronRubyMvcLibrary.Core
         /// <summary>
         /// Sets the model and controllers path.
         /// </summary>
-        public void SetModelAndControllersPath()
+        public void AddLoadPaths()
         {
             var controllersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.CONTROLLERS);
             var modelsDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.MODELS);
+            var filtersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.FILTERS);
 
-            Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir});
+            Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir, filtersDir});
         }
 
         /// <summary>
