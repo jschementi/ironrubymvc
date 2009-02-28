@@ -54,7 +54,7 @@ namespace IronRubyMvcLibrary.Controllers
             var rubyType = ((RubyController) controllerContext.Controller).RubyType;
             var controllerFilters = (Hash) RubyEngine.CallMethod(rubyType, "action_filters");
 
-            return new FilterInfo().AddControllerFilters(controllerFilters);;
+            return new FilterInfo().AddControllerFilters(controllerFilters, RubyEngine);;
         }
     }
 }

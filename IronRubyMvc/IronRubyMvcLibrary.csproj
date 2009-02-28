@@ -81,11 +81,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ControllerConfiguration.cs" />
-    <Compile Include="Controllers\HashConverter.cs" />
-    <Compile Include="Controllers\HashToActionFilterConverter.cs" />
-    <Compile Include="Controllers\HashToAuthorizationFilterConverter.cs" />
-    <Compile Include="Controllers\HashToExceptionFilterConverter.cs" />
-    <Compile Include="Controllers\HashToResultFilterConverter.cs" />
+    <Compile Include="Helpers\HashConverter.cs" />
+    <Compile Include="Helpers\HashToActionFilterConverter.cs" />
+    <Compile Include="Helpers\HashToAuthorizationFilterConverter.cs" />
+    <Compile Include="Helpers\HashToExceptionFilterConverter.cs" />
+    <Compile Include="Helpers\HashToResultFilterConverter.cs" />
     <Compile Include="Controllers\RubyActionFilter.cs" />
     <Compile Include="Controllers\RubyAuthorizationFilter.cs" />
     <Compile Include="Controllers\RailsStyleActionFilter.cs" />
