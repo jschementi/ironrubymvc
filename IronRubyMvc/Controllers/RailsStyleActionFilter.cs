@@ -16,8 +16,8 @@ namespace IronRubyMvcLibrary.Controllers
     /// </summary>
     public class RailsStyleActionFilter : RubyActionFilter
     {
-        public IEnumerable<string> OnlyForActions { get; set; }
-        public IEnumerable<string> ExceptForActions { get; set; }
+//        public IEnumerable<string> OnlyForActions { get; set; }
+//        public IEnumerable<string> ExceptForActions { get; set; }
         public Proc BeforeAction { get; set; }
         public Proc AfterAction { get; set; }
        
@@ -29,7 +29,7 @@ namespace IronRubyMvcLibrary.Controllers
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (BeforeAction.IsNotNull() && CanExecute(filterContext))
+            if (BeforeAction.IsNotNull())// && CanExecute(filterContext))
                 BeforeAction.Call(filterContext);
         }
 
@@ -39,7 +39,7 @@ namespace IronRubyMvcLibrary.Controllers
         /// <param name="filterContext">The filter context.</param>
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (AfterAction.IsNotNull() && CanExecute(filterContext))
+            if (AfterAction.IsNotNull())// && CanExecute(filterContext))
                 AfterAction.Call(filterContext);
         }
 
@@ -47,26 +47,26 @@ namespace IronRubyMvcLibrary.Controllers
 
        
 
-        #region Implementation of IRubyControllerFilter
-
-        private bool CanExecute(ActionExecutingContext context)
-        {
-            var actionName = context.ActionDescriptor.ActionName;
-            return CanExecute(actionName);
-        }
-
-        private bool CanExecute(ActionExecutedContext context)
-        {
-            var actionName = context.ActionDescriptor.ActionName;
-            return CanExecute(actionName);
-        }
-
-        private bool CanExecute(string actionName)
-        {
-            return (OnlyForActions.IsNull() || OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName))
-                   || ExceptForActions.IsNull() || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
-        }
-
-        #endregion
+//        #region Implementation of IRubyControllerFilter
+//
+//        private bool CanExecute(ActionExecutingContext context)
+//        {
+//            var actionName = context.ActionDescriptor.ActionName;
+//            return CanExecute(actionName);
+//        }
+//
+//        private bool CanExecute(ActionExecutedContext context)
+//        {
+//            var actionName = context.ActionDescriptor.ActionName;
+//            return CanExecute(actionName);
+//        }
+//
+//        private bool CanExecute(string actionName)
+//        {
+//            return (OnlyForActions.IsNull() || OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName))
+//                   || ExceptForActions.IsNull() || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
+//        }
+//
+//        #endregion
     }
 }
