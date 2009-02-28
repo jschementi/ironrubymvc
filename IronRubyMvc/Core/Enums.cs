@@ -6,7 +6,7 @@
         AssemblyResource
     }
 
-    public enum When
+    public enum OnExecuting
     {
         BeforeAction,
         AfterAction,

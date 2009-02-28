@@ -14,7 +14,7 @@ namespace IronRubyMvcLibrary.Controllers
     /// Implements <see cref="IActionFilter"/> and <see cref="IResultFilter"/>
     /// This class hooks the ruby defined filters with
     /// </summary>
-    public class RubyRailsStyleActionFilter : IActionFilter
+    public class RailsStyleActionFilter : RubyActionFilter
     {
         public IEnumerable<string> OnlyForActions { get; set; }
         public IEnumerable<string> ExceptForActions { get; set; }
@@ -27,7 +27,7 @@ namespace IronRubyMvcLibrary.Controllers
         /// Called before the action executes
         /// </summary>
         /// <param name="filterContext">The filter context.</param>
-        public virtual void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (BeforeAction.IsNotNull() && CanExecute(filterContext))
                 BeforeAction.Call(filterContext);
@@ -37,7 +37,7 @@ namespace IronRubyMvcLibrary.Controllers
         /// Called after an action executed
         /// </summary>
         /// <param name="filterContext">The filter context.</param>
-        public virtual void OnActionExecuted(ActionExecutedContext filterContext)
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             if (AfterAction.IsNotNull() && CanExecute(filterContext))
                 AfterAction.Call(filterContext);
@@ -63,7 +63,7 @@ namespace IronRubyMvcLibrary.Controllers
 
         private bool CanExecute(string actionName)
         {
-            return OnlyForActions.IsNull() || OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName)
+            return (OnlyForActions.IsNull() || OnlyForActions.IsEmpty() || OnlyForActions.Contains(actionName))
                    || ExceptForActions.IsNull() || ExceptForActions.IsEmpty() || ExceptForActions.DoesNotContain(actionName);
         }
 

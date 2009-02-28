@@ -14,3 +14,5 @@ _ReSharper.IronRubyMvc/
 IronRubyMvc/.DS_Store
 IronRubyMvc/Controllers/._RubyController.cs
 IronRubyMvc/Controllers/._RubyControllerActionInvoker.cs
+IronRubyMvcLibrarySpecs/bin/*.*.CodeAnalysisLog.xml
+IronRubyMvcLibrarySpecs/bin/*.*.lastcodeanalysissucceeded

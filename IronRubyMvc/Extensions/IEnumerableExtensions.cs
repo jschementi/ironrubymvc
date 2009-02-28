@@ -27,6 +27,7 @@ namespace IronRubyMvcLibrary.Extensions
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
         public static bool IsEmpty<T>(this IEnumerable<T> collection)
         {
             foreach (var o in collection)
@@ -36,6 +37,7 @@ namespace IronRubyMvcLibrary.Extensions
             return true;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
         public static bool IsEmpty(this IEnumerable collection)
         {
             foreach (var o in collection)

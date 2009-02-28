@@ -1,16 +1,20 @@
+#region Usings
+
 using System.Web.Mvc;
 using IronRuby.Builtins;
+using IronRubyMvcLibrary.Controllers;
 using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting;
 
-namespace IronRubyMvcLibrary.Controllers
+#endregion
+
+namespace IronRubyMvcLibrary.Helpers
 {
     /// <summary>
     /// Converts a ruby hash to a <see cref="IExceptionFilter"/>
     /// </summary>
-    public class HashToExceptionFilterConverter : HashConverter<RubyExceptionFilter>
+    public class HashToExceptionFilterConverter : HashConverter<RailsStyleExceptionFilter>
     {
-
         private static readonly SymbolId errorKey = SymbolTable.StringToId("error");
 
         /// <summary>
@@ -25,17 +29,17 @@ namespace IronRubyMvcLibrary.Controllers
         {
         }
 
-        #region Overrides of HashConverter<RubyExceptionFilter>
+        #region Overrides of HashConverter<RailsStyleExceptionFilter>
 
-        protected override RubyExceptionFilter Build()
+        protected override RailsStyleExceptionFilter Build()
         {
             var error = FindProc(errorKey);
-            return error.IsNull() ? null : new RubyExceptionFilter {Error = error};
+            return error.IsNull() ? null : new RailsStyleExceptionFilter {Error = error};
         }
 
         protected override bool IsFilter()
         {
-            return errorKey == (SymbolId)FilterDescription[whenKey];
+            return errorKey == (SymbolId) FilterDescription[whenKey];
         }
 
         #endregion

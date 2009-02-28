@@ -47,15 +47,15 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override ICollection<ActionSelector> GetSelectors()
         {
-            var selectors = RubyControllerDescriptor.RubyEngine.CallMethod(
-                RubyControllerDescriptor.RubyControllerClass, "action_selectors");
+//            var selectors = RubyControllerDescriptor.RubyEngine.CallMethod(
+//                RubyControllerDescriptor.RubyControllerClass, "action_selectors");
             return new ActionSelector[0];
         }
 
         public override FilterInfo GetFilters()
         {
-            var filters = RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass,
-                                                                         "action_filters");
+//            var filters = RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass,
+//                                                                         "action_filters");
 
             return new FilterInfo();
         }

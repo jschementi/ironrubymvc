@@ -37,6 +37,15 @@ namespace IronRubyMvcLibrary.Core
         RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
 
         /// <summary>
+        /// Creates the instance.
+        /// </summary>
+        /// <typeparam name="TTarget">The type of the target.</typeparam>
+        /// <param name="rubyClass">The ruby class.</param>
+        /// <param name="args">The args.</param>
+        /// <returns></returns>
+        TTarget CreateInstance<TTarget>(RubyClass rubyClass, params object[] args);
+
+        /// <summary>
         /// Calls the method.
         /// </summary>
         /// <param name="receiver">The receiver.</param>
@@ -239,6 +248,12 @@ namespace IronRubyMvcLibrary.Core
 //                       new ControllerConfiguration {Context = requestContext, Engine = this, RubyClass = rubyClass});
             return controller;
         }
+
+        public TTarget CreateInstance<TTarget>(RubyClass rubyClass, params object[] args)
+        {
+            return (TTarget) Operations.CreateInstance(rubyClass, args);
+        }
+
 
         /// <summary>
         /// Calls the method.
