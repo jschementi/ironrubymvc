@@ -53,6 +53,7 @@ namespace IronRubyMvcLibrary.Extensions
         {
             var filters = new List<TITarget>(dictionary.Keys.Count);
             var converter = new TConverter();
+            var processedActionFilters = new List<object>();
             dictionary.ForEach((key, value) =>
                                    {
                                        var filter = dictionary[key];
@@ -60,18 +61,21 @@ namespace IronRubyMvcLibrary.Extensions
                                        var filterDescription = filter as Hash;
                                        if (filterDescription.IsNotNull())
                                        {
-                                           var authFilter = converter.Convert(filterDescription);
-                                           if (authFilter.IsNotNull()) filters.Add(authFilter);
+                                           var rubyFilter = converter.Convert(filterDescription);
+                                           if (rubyFilter.IsNotNull()) filters.Add(rubyFilter);
                                        }
-                                       else if (filter is RubyClass)
+                                       else if (filter is MutableString)
                                        {
-                                           filters.Add(engine.CreateInstance<TITarget>(filter as RubyClass));
+                                           var filterName = filter.ToString();
+                                           filters.Add(engine.LoadFilter<TITarget>(filterName));
+                                           processedActionFilters.Add(key);
                                        }
                                        else if (filter is TITarget)
                                        {
                                            filters.Add(filter as TITarget);
                                        }
                                    });
+            processedActionFilters.ForEach(name => dictionary.Remove(name));
             return filters;
         }
 

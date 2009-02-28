@@ -1,5 +1,7 @@
 ﻿#require "HomeModel"
 
+
+
 class HomeModel
   def salutation
     "ASP.NET MVC <3 IronRuby!!!"
@@ -24,12 +26,14 @@ class HomeController < Controller
   #        super.Initialize(context)
   #    end
   #  end
-
+  
   before_action :my_before do |context|
     $before_counter ||= 0
     $before_counter += 1
     context.request_context.http_context.response.write("Hello world")
   end
+  
+  filter :index, 'MyFilter'
   
   def index
     view nil, 'layout', HomeModel.new

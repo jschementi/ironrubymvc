@@ -91,8 +91,8 @@
   class Controller < IronRubyMvcLibrary::Controllers::RubyController
  
     
-    include IronRubyMvc::Controllers::Filters
-    include IronRubyMvc::Controllers::Selectors   
+    include Controllers::Filters
+    include Controllers::Selectors   
     
     def fill_view_data
       instance_variables.each { |varname| view_data.add(varname[1..-1], instance_variable_get(varname.to_sym)) }
@@ -111,4 +111,9 @@
   
 end
 
+#alias longer namespaces for convenience
 Controller = IronRubyMvc::Controller
+ActionFilter = IronRubyMvcLibrary::Controllers::RubyActionFilter
+AuthorizationFilter = IronRubyMvcLibrary::Controllers::RubyAuthorizationFilter
+ExceptionFilter = IronRubyMvcLibrary::Controllers::RubyExceptionFilter
+ResultFilter = IronRubyMvcLibrary::Controllers::RubyResultFilter

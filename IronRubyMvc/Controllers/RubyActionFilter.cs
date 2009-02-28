@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using IronRuby.Builtins;
 
 namespace IronRubyMvcLibrary.Controllers
 {
@@ -6,8 +7,14 @@ namespace IronRubyMvcLibrary.Controllers
     {
         #region Implementation of IActionFilter
 
-        public abstract void OnActionExecuting(ActionExecutingContext filterContext);
-        public abstract void OnActionExecuted(ActionExecutedContext filterContext);
+        public virtual void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            throw new NotImplementedError();
+        }
+        public virtual void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            throw new NotImplementedError();
+        }
 
         #endregion
 

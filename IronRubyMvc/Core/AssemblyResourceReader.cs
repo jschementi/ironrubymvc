@@ -23,7 +23,7 @@ namespace IronRubyMvcLibrary.Core
 
         public override string Read(string filePath)
         {
-            using (Stream stream = _assembly.GetManifestResourceStream(filePath))
+            using (var stream = _assembly.GetManifestResourceStream(filePath))
                 if (stream.IsNotNull())
                     using (var reader = new StreamReader(stream))
                         return reader.ReadToEnd();
