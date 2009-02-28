@@ -85,10 +85,12 @@
     <Compile Include="Controllers\HashToActionFilterConverter.cs" />
     <Compile Include="Controllers\HashToAuthorizationFilterConverter.cs" />
     <Compile Include="Controllers\HashToErrorFilterConverter.cs" />
+    <Compile Include="Controllers\HashToResultFilterConverter.cs" />
     <Compile Include="Controllers\RubyActionFilter.cs" />
     <Compile Include="Controllers\RubyAuthorizationFilter.cs" />
-    <Compile Include="Controllers\RubyErrorFilter.cs" />
+    <Compile Include="Controllers\RubyExceptionFilter.cs" />
     <Compile Include="Controllers\RubyFilterInfo.cs" />
+    <Compile Include="Controllers\RubyResultFilter.cs" />
     <Compile Include="Core\DefaultScriptRunner.cs" />
     <Compile Include="Core\AssemblyResourceReader.cs" />
     <Compile Include="Core\Constants.cs" />

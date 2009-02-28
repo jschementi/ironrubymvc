@@ -10,9 +10,10 @@ namespace IronRubyMvcLibrary.Controllers
 {
     public interface IConverter<TTarget>
     {
+        TTarget Convert(Hash filterDescriptions);
         TTarget Convert();
     }
-    public class HashToActionFilterConverter : HashConverter<RubyActionFilter>
+    public class HashToActionFilterConverter : HashConverter<RubyRailsStyleActionFilter>
     {
         
 
@@ -20,23 +21,19 @@ namespace IronRubyMvcLibrary.Controllers
                                                                  {
                                                                      SymbolTable.StringToId("before"),
                                                                      SymbolTable.StringToId("after"),
-                                                                     SymbolTable.StringToId("around"),
-                                                                     SymbolTable.StringToId("before_result"),
-                                                                     SymbolTable.StringToId("after_result")
+                                                                     SymbolTable.StringToId("around")
                                                                  };
 
         private static readonly IDictionary<When, SymbolId> _actionWhen = new Dictionary<When, SymbolId>
                                                                               {
                                                                                   {When.BeforeAction, SymbolTable.StringToId("before")},
-                                                                                  {When.AfterAction, SymbolTable.StringToId("after")},
-                                                                                  {When.BeforeResult, SymbolTable.StringToId("before_result")},
-                                                                                  {When.AfterResult, SymbolTable.StringToId("after_result")},
-
+                                                                                  {When.AfterAction, SymbolTable.StringToId("after")}
                                                                               };
 
-        
-        
-        
+
+        public HashToActionFilterConverter()
+        {
+        }
 
         public HashToActionFilterConverter(Hash filterDescription) : base(filterDescription)
         {
@@ -44,20 +41,22 @@ namespace IronRubyMvcLibrary.Controllers
         }
 
         
-        protected override RubyActionFilter Build()
+        protected override RubyRailsStyleActionFilter Build()
         {
-            return new RubyActionFilter
-            {
-                BeforeAction = FindProc(_actionWhen[When.BeforeAction]),
-                AfterAction = FindProc(_actionWhen[When.AfterAction]),
-                BeforeResult = FindProc(_actionWhen[When.BeforeResult]),
-                AfterResult = FindProc(_actionWhen[When.AfterResult])
-            };
+            var beforeAction = FindProc(_actionWhen[When.BeforeAction]);
+            var afterAction = FindProc(_actionWhen[When.AfterAction]);
+            if(beforeAction.IsNull() && afterAction.IsNull()) return null;
+
+            return new RubyRailsStyleActionFilter
+                       {
+                           BeforeAction = beforeAction,
+                           AfterAction = afterAction
+                       };
         }
 
         protected override bool IsFilter()
         {
-            var key = (SymbolId)_filterDescription[whenKey];
+            var key = (SymbolId)FilterDescription[whenKey];
             return _actionFilterDenominators.Contains(key);
         }
 
