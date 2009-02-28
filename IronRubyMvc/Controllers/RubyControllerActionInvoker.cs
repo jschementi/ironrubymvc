@@ -3,6 +3,7 @@
 using System.Web.Mvc;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Core;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
@@ -51,10 +52,9 @@ namespace IronRubyMvcLibrary.Controllers
         protected override FilterInfo GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
             var rubyType = ((RubyController) controllerContext.Controller).RubyType;
-            var actionFilters = (Hash) RubyEngine.CallMethod(rubyType, "action_filters");
-            var filters = new RubyFilterInfo(actionFilters);
+            var controllerFilters = (Hash) RubyEngine.CallMethod(rubyType, "action_filters");
 
-            return filters;
+            return new FilterInfo().AddControllerFilters(controllerFilters);;
         }
     }
 }

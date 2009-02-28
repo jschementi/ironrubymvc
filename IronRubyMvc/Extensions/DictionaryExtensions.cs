@@ -44,41 +44,53 @@ namespace IronRubyMvcLibrary.Extensions
             return selectors.ToArray();
         }
 
-        public static IEnumerable<RubyAuthorizationFilter> ToAuthorizationFilters(this IDictionary dictionary)
+        public static IEnumerable<TITarget> ToFilters<TITarget, TTarget, TConverter>(this IDictionary dictionary)
+            where TITarget : class
+            where TTarget : class, TITarget
+            where TConverter : HashConverter<TTarget>, new()
         {
-            var filters = new List<RubyAuthorizationFilter>(dictionary.Keys.Count);
+            var filters = new List<TITarget>(dictionary.Keys.Count);
+            var converter = new TConverter();
             dictionary.ForEach((key, value) =>
-                                   {
-                                       var filterDescription = dictionary[key] as Hash;
-                                       var authFilter =
-                                           new HashToAuthorizationFilterConverter(filterDescription).Convert();
-                                       if (authFilter.IsNotNull()) filters.Add(authFilter);
-                                   });
+            {
+                var filter = dictionary[key];
+                if (filter.IsNull()) return;
+                var filterDescription = filter as Hash;
+                if (filterDescription.IsNotNull())
+                {
+                    var authFilter = converter.Convert(filterDescription);
+                    if (authFilter.IsNotNull()) filters.Add(authFilter);
+                }
+                else if (filter is TITarget)
+                {
+                    filters.Add(filter as TITarget);
+                }
+
+            });
             return filters;
         }
 
-        public static IEnumerable<RubyErrorFilter> ToErrorFilters(this IDictionary dictionary)
+        public static IEnumerable<IAuthorizationFilter> ToAuthorizationFilters(this IDictionary dictionary)
         {
-            var filters = new List<RubyErrorFilter>(dictionary.Keys.Count);
-            dictionary.ForEach((key, value) =>
-                                   {
-                                       var filterDescription = dictionary[key] as Hash;
-                                       var authFilter = new HashToErrorFilterConverter(filterDescription).Convert();
-                                       if (authFilter.IsNotNull()) filters.Add(authFilter);
-                                   });
-            return filters;
+            return
+                dictionary.ToFilters<IAuthorizationFilter, RubyAuthorizationFilter, HashToAuthorizationFilterConverter>();
         }
 
-        public static IEnumerable<RubyActionFilter> ToActionFilters(this IDictionary dictionary)
+        public static IEnumerable<IExceptionFilter> ToExceptionFilters(this IDictionary dictionary)
         {
-            var filters = new List<RubyActionFilter>(dictionary.Keys.Count);
-            dictionary.ForEach((key, value) =>
-                                   {
-                                       var filterDescription = dictionary[key] as Hash;
-                                       var actionFilter = new HashToActionFilterConverter(filterDescription).Convert();
-                                       if (actionFilter.IsNotNull()) filters.Add(actionFilter);
-                                   });
-            return filters;
+            return
+                dictionary.ToFilters<IExceptionFilter, RubyExceptionFilter, HashToExceptionFilterConverter>();
+        }
+
+        public static IEnumerable<IActionFilter> ToActionFilters(this IDictionary dictionary)
+        {
+            return
+                dictionary.ToFilters<IActionFilter, RubyRailsStyleActionFilter, HashToActionFilterConverter>();
+        }
+
+        public static IEnumerable<IResultFilter> ToResultFilters(this IDictionary dictionary)
+        {
+            return dictionary.ToFilters<IResultFilter, RubyResultFilter, HashToResultFilterConverter>();
         }
 
         public static void ForEach(this IDictionary dictionary, Action<object, object> iterator)

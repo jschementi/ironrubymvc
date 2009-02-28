@@ -8,7 +8,7 @@ using IronRubyMvcLibrary.Extensions;
 
 namespace IronRubyMvcLibrary.Controllers
 {
-    public class RubyErrorFilter : IExceptionFilter
+    public class RubyExceptionFilter : IExceptionFilter
     {
         public Proc Error { get; set; }
 
