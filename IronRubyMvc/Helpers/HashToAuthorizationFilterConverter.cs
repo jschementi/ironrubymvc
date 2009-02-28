@@ -1,14 +1,15 @@
 #region Usings
 
 using IronRuby.Builtins;
+using IronRubyMvcLibrary.Controllers;
 using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace IronRubyMvcLibrary.Helpers
 {
-    public class HashToAuthorizationFilterConverter : HashConverter<RubyAuthorizationFilter>
+    public class HashToAuthorizationFilterConverter : HashConverter<RailsStyleAuthorizationFilter>
     {
         private static readonly SymbolId authorizeKey = SymbolTable.StringToId("authorize");
 
@@ -20,10 +21,10 @@ namespace IronRubyMvcLibrary.Controllers
         {
         }
 
-        protected override RubyAuthorizationFilter Build()
+        protected override RailsStyleAuthorizationFilter Build()
         {
             var authorize = FindProc(authorizeKey);
-            return authorize.IsNull() ? null : new RubyAuthorizationFilter {Authorize = authorize};
+            return authorize.IsNull() ? null : new RailsStyleAuthorizationFilter {Authorize = authorize};
         }
 
         protected override bool IsFilter()

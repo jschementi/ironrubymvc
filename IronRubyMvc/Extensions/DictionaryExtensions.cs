@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Controllers;
+using IronRubyMvcLibrary.Helpers;
 
 #endregion
 
@@ -52,45 +53,45 @@ namespace IronRubyMvcLibrary.Extensions
             var filters = new List<TITarget>(dictionary.Keys.Count);
             var converter = new TConverter();
             dictionary.ForEach((key, value) =>
-            {
-                var filter = dictionary[key];
-                if (filter.IsNull()) return;
-                var filterDescription = filter as Hash;
-                if (filterDescription.IsNotNull())
-                {
-                    var authFilter = converter.Convert(filterDescription);
-                    if (authFilter.IsNotNull()) filters.Add(authFilter);
-                }
-                else if (filter is TITarget)
-                {
-                    filters.Add(filter as TITarget);
-                }
-
-            });
+                                   {
+                                       var filter = dictionary[key];
+                                       if (filter.IsNull()) return;
+                                       var filterDescription = filter as Hash;
+                                       if (filterDescription.IsNotNull())
+                                       {
+                                           var authFilter = converter.Convert(filterDescription);
+                                           if (authFilter.IsNotNull()) filters.Add(authFilter);
+                                       }
+                                       else if (filter is TITarget)
+                                       {
+                                           filters.Add(filter as TITarget);
+                                       }
+                                   });
             return filters;
         }
 
         public static IEnumerable<IAuthorizationFilter> ToAuthorizationFilters(this IDictionary dictionary)
         {
             return
-                dictionary.ToFilters<IAuthorizationFilter, RubyAuthorizationFilter, HashToAuthorizationFilterConverter>();
+                dictionary.ToFilters
+                    <IAuthorizationFilter, RailsStyleAuthorizationFilter, HashToAuthorizationFilterConverter>();
         }
 
         public static IEnumerable<IExceptionFilter> ToExceptionFilters(this IDictionary dictionary)
         {
             return
-                dictionary.ToFilters<IExceptionFilter, RubyExceptionFilter, HashToExceptionFilterConverter>();
+                dictionary.ToFilters<IExceptionFilter, RailsStyleExceptionFilter, HashToExceptionFilterConverter>();
         }
 
         public static IEnumerable<IActionFilter> ToActionFilters(this IDictionary dictionary)
         {
             return
-                dictionary.ToFilters<IActionFilter, RubyRailsStyleActionFilter, HashToActionFilterConverter>();
+                dictionary.ToFilters<IActionFilter, RailsStyleActionFilter, HashToActionFilterConverter>();
         }
 
         public static IEnumerable<IResultFilter> ToResultFilters(this IDictionary dictionary)
         {
-            return dictionary.ToFilters<IResultFilter, RubyResultFilter, HashToResultFilterConverter>();
+            return dictionary.ToFilters<IResultFilter, RailsStyleResultFilter, HashToResultFilterConverter>();
         }
 
         public static void ForEach(this IDictionary dictionary, Action<object, object> iterator)

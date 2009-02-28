@@ -1,17 +1,20 @@
-using System.Collections.Generic;
-using System.IO;
+#region Usings
+
+using System.Diagnostics.CodeAnalysis;
 using IronRuby.Builtins;
 using Microsoft.Scripting;
 
-namespace IronRubyMvcLibrary.Controllers
+#endregion
+
+namespace IronRubyMvcLibrary.Helpers
 {
     public abstract class HashConverter<TToConvert> : IConverter<TToConvert> where TToConvert : class
     {
-        protected static readonly SymbolId whenKey = SymbolTable.StringToId("when");
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "when")] protected static readonly SymbolId whenKey = SymbolTable.StringToId("when");
 
-        public Hash FilterDescription { get; set; }
-
-        protected HashConverter() : this(null){}
+        protected HashConverter() : this(null)
+        {
+        }
 
         protected HashConverter(Hash filterDescription)
         {
@@ -33,13 +36,15 @@ namespace IronRubyMvcLibrary.Controllers
 
         #endregion
 
+        public Hash FilterDescription { get; private set; }
+
         protected abstract TToConvert Build();
 
         protected abstract bool IsFilter();
 
         protected Proc FindProc(SymbolId key)
         {
-            return FilterDescription.ContainsKey(key) ? (Proc)FilterDescription[key] : null;
+            return FilterDescription.ContainsKey(key) ? (Proc) FilterDescription[key] : null;
         }
     }
 }

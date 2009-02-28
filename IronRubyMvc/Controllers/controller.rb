@@ -44,13 +44,13 @@
         
 
         def filter(name, options={})
-          @@action_filters ||= {}
-          @@action_filters[name.to_sym] = options
+          @action_filters ||= {}
+          @action_filters[name.to_sym] = options
         end
 
         def action_filters
-          @@action_filters ||= {}
-          @@action_filters
+          @action_filters ||= {}
+          @action_filters
         end
         
       end
@@ -66,15 +66,15 @@
       module ClassMethods
         
         def action_selector(name, options={}, &b)
-          @@action_selectors ||= {}
+          @action_selectors ||= {}
           options[:action] = b if block_given?
           options[:action] ||= name.to_sym #class.instance_method(name.to_sym)
-          @@action_selectors[name.to_sym] = options
+          @action_selectors[name.to_sym] = options
         end
         
         def action_selectors
-          @@action_selectors ||= {}
-          @@action_selectors
+          @action_selectors ||= {}
+          @action_selectors
         end
         
       end
