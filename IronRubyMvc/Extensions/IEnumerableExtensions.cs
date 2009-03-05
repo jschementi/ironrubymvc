@@ -121,7 +121,7 @@ namespace IronRubyMvcLibrary.Extensions
                 if (description.IsNull()) return;
 
                 var key = description[SymbolConstants.Name].ToString();
-                if (new string[] { "controller", null, string.Empty, actionName }.DoesNotContain(key)) return; // Note: mind the ! in the beginning
+                if (new string[] { "controller", null, string.Empty, actionName }.DoesNotContain(key)) return; 
 
                 var filter = converter.Convert(filterDescription as Hash, engine);
                 if (filter.IsNotNull())
