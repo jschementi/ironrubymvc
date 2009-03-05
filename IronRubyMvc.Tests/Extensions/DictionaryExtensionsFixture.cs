@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Xunit;
 
 #endregion

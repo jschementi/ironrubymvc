@@ -1,15 +1,13 @@
 ﻿#region Usings
 
-using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using IronRubyMvcLibrary.Extensions;
-using IronRubyMvcLibrary.ViewEngine;
+using System.Web.Mvc.IronRuby.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.ViewEngine
+namespace System.Web.Mvc.IronRuby.ViewEngine
 {
     public class RubyTemplate
     {
@@ -43,7 +41,7 @@ namespace IronRubyMvcLibrary.ViewEngine
 
         public void ToScript(string methodName, StringBuilder builder)
         {
-            string contents = _template;
+            var contents = _template;
 
             builder.AppendLine();
             _requires.ForEach(require => builder.AppendLine("require '{0}'".FormattedWith(require)));
@@ -52,15 +50,15 @@ namespace IronRubyMvcLibrary.ViewEngine
                 builder.AppendLine("def " + methodName);
 
             var scriptBlocks = new Regex("<%.*?%>", RegexOptions.Compiled | RegexOptions.Singleline);
-            MatchCollection matches = scriptBlocks.Matches(contents);
+            var matches = scriptBlocks.Matches(contents);
 
-            int currentIndex = 0;
-            int blockBeginIndex = 0;
+            var currentIndex = 0;
+            var blockBeginIndex = 0;
 
             foreach (Match match in matches)
             {
                 blockBeginIndex = match.Index;
-                RubyScriptBlock block =
+                var block =
                     RubyScriptBlock.Parse(contents.Substring(currentIndex, blockBeginIndex - currentIndex));
 
                 if (!String.IsNullOrEmpty(block.Contents))
@@ -73,7 +71,7 @@ namespace IronRubyMvcLibrary.ViewEngine
 
             if (currentIndex < contents.Length - 1)
             {
-                RubyScriptBlock endBlock = RubyScriptBlock.Parse(contents.Substring(currentIndex));
+                var endBlock = RubyScriptBlock.Parse(contents.Substring(currentIndex));
                 builder.Append(endBlock.Contents);
             }
 

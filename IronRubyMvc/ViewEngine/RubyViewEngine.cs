@@ -1,13 +1,10 @@
 ﻿#region Usings
 
-using System;
 using System.IO;
-using System.Web.Mvc;
-using IronRubyMvcLibrary.ViewEngine;
 
 #endregion
 
-namespace IronRubyMvcLibrary.ViewEngine
+namespace System.Web.Mvc.IronRuby.ViewEngine
 {
     public class RubyViewEngine : VirtualPathProviderViewEngine
     {
@@ -34,7 +31,7 @@ namespace IronRubyMvcLibrary.ViewEngine
 
         private string GetContents(string path)
         {
-            using (Stream stream = VirtualPathProvider.GetFile(path).Open())
+            using (var stream = VirtualPathProvider.GetFile(path).Open())
             using (var reader = new StreamReader(stream))
                 return reader.ReadToEnd();
         }

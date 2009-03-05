@@ -4,13 +4,13 @@
 #region Usings
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Extensions
+namespace System.Web.Mvc.IronRuby.Extensions
 {
     public static class Inflector
     {
@@ -81,8 +81,8 @@ namespace IronRubyMvcLibrary.Extensions
 
         private static readonly List<Rule> _plurals = new List<Rule>
                                                           {
-                                                              
-    };
+                                                          };
+
         private static readonly List<Rule> _singulars = new List<Rule>();
         private static readonly List<string> _uncountables = new List<string>();
 
@@ -119,11 +119,11 @@ namespace IronRubyMvcLibrary.Extensions
 
         private static string ApplyRules(IList<Rule> rules, string word)
         {
-            string result = word;
+            var result = word;
 
             if (!_uncountables.Contains(word.ToUpperInvariant()))
             {
-                for (int i = rules.Count - 1; i >= 0; i--)
+                for (var i = rules.Count - 1; i >= 0; i--)
                 {
                     if ((result = rules[i].Apply(word)) != null)
                     {
@@ -156,7 +156,7 @@ namespace IronRubyMvcLibrary.Extensions
             return Uncapitalize(Pascalize(lowercaseAndUnderscoredWord));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
             Justification = "Lower case is required")]
         public static string Underscore(this string pascalCasedWord)
         {
@@ -166,14 +166,14 @@ namespace IronRubyMvcLibrary.Extensions
                     "$1_$2"), @"[-\s]", "_").ToLowerInvariant();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
             Justification = "Lower case is required.")]
         public static string Capitalize(this string word)
         {
             return word.Substring(0, 1).ToUpperInvariant() + word.Substring(1).ToLowerInvariant();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase",
             Justification = "Lower case is required.")]
         public static string Uncapitalize(this string word)
         {
@@ -182,8 +182,8 @@ namespace IronRubyMvcLibrary.Extensions
 
         public static string Ordinalize(this string number)
         {
-            int n = int.Parse(number, CultureInfo.InvariantCulture);
-            int nMod100 = n%100;
+            var n = int.Parse(number, CultureInfo.InvariantCulture);
+            var nMod100 = n%100;
 
             if (nMod100 >= 11 && nMod100 <= 13)
             {

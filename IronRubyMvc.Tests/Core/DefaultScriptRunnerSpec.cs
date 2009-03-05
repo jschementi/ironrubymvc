@@ -1,15 +1,16 @@
 #region Usings
 
 using System;
+using System.Web.Mvc.IronRuby.Core;
 using IronRuby;
 using IronRuby.Runtime;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Core;
 using Microsoft.Scripting.Hosting;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     public abstract class with_ironruby_initialized<SystemUnderTest> : InstanceContextSpecification<SystemUnderTest>
         where SystemUnderTest : class

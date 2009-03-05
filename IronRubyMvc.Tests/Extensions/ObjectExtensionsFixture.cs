@@ -1,11 +1,11 @@
 #region Usings
 
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Extensions
+namespace System.Web.Mvc.IronRuby.Tests.Extensions
 {
     public class ObjectExtensionsFixture
     {

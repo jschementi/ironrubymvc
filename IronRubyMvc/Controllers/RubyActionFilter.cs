@@ -1,10 +1,10 @@
 #region Usings
 
-using System.Web.Mvc;
+
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public abstract class RubyActionFilter : IActionFilter
     {

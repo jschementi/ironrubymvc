@@ -1,13 +1,12 @@
 #region Usings
 
 using System.Collections.Generic;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyActionDescriptor : ActionDescriptor
     {
@@ -18,11 +17,6 @@ namespace IronRubyMvcLibrary.Controllers
         {
             _actionName = actionName;
             _controllerDescriptor = controllerDescriptor;
-        }
-
-        public override ParameterDescriptor[] GetParameters()
-        {
-            return new ParameterDescriptor[0];
         }
 
         public override string ActionName
@@ -40,7 +34,12 @@ namespace IronRubyMvcLibrary.Controllers
         {
             get { return ((RubyControllerDescriptor) ControllerDescriptor); }
         }
-        
+
+        public override ParameterDescriptor[] GetParameters()
+        {
+            return new ParameterDescriptor[0];
+        }
+
         public override object Execute(ControllerContext controllerContext, IDictionary<string, object> parameters)
         {
             var engine = RubyControllerDescriptor.RubyEngine;
@@ -56,9 +55,9 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override FilterInfo GetFilters()
         {
-            var filters = (RubyArray)RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass, "action_filters");
+            var filters = (Hash) RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass, "action_filters");
 
-            var info = filters.ToFilterInfo(ActionName, RubyControllerDescriptor.RubyEngine);
+            var info = filters.ToFilterInfo(ActionName);
             return info;
         }
 

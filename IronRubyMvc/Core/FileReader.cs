@@ -4,7 +4,7 @@ using System.IO;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class FileReader : Reader
     {

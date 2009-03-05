@@ -1,13 +1,12 @@
 ﻿#region Usings
 
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Helpers
+namespace System.Web.Mvc.IronRuby.Helpers
 {
     public class RubyUrlHelper : UrlHelper
     {

@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Extensions;
 using Microsoft.Scripting;
 using Moq.Mvc;
 using Xunit;
@@ -16,7 +17,7 @@ using System;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Controllers
+namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
     [Concern(typeof (RubyController))]
     public class when_a_controller_is_initialized : with_ironruby_and_an_engine_initialized<RubyController>

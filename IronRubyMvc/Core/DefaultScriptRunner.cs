@@ -1,26 +1,25 @@
 #region Usings
 
-using System;
-using System.Web.Hosting;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class DefaultScriptRunner : IScriptRunner
     {
         private readonly ScriptEngine _engine;
 
 
-       
         public DefaultScriptRunner(ScriptEngine engine, string scriptPath, IReader reader)
         {
             _engine = engine;
             ScriptPath = scriptPath;
             Reader = reader;
         }
+
+        #region IScriptRunner Members
 
         public string ScriptPath { get; private set; }
 
@@ -48,5 +47,6 @@ namespace IronRubyMvcLibrary.Core
             return _engine.Execute(script);
         }
 
+        #endregion
     }
 }

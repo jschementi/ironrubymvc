@@ -4,17 +4,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Tests.Core;
+using System.Web.Mvc.IronRuby.Tests.Core;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Tests.Core;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Tests.Core;
 using Moq.Mvc;
 using Rhino.Mocks;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Controllers
+namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
     public abstract class with_ironruby_and_an_engine_initialized<SystemUnderTest> :
         with_ironruby_initialized<SystemUnderTest> where SystemUnderTest : class

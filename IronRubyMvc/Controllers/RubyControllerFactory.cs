@@ -1,19 +1,16 @@
 ﻿#region Usings
 
-using System;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Core;
-using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyControllerFactory : IControllerFactory
     {
-        private readonly IControllerFactory _innerFactory;
         private readonly IRubyEngine _engine;
+        private readonly IControllerFactory _innerFactory;
 
         internal RubyControllerFactory(IControllerFactory innerFactory, IRubyEngine engine)
         {

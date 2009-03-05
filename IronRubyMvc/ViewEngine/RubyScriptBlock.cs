@@ -2,12 +2,11 @@
 
 #region Usings
 
-using System;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.ViewEngine
+namespace System.Web.Mvc.IronRuby.ViewEngine
 {
     internal class RubyScriptBlock
     {
@@ -15,7 +14,7 @@ namespace IronRubyMvcLibrary.ViewEngine
 
         private RubyScriptBlock(string block)
         {
-            bool ignoreNewLine = ignoreNextNewLine;
+            var ignoreNewLine = ignoreNextNewLine;
 
             if (String.IsNullOrEmpty(block))
             {
@@ -23,7 +22,7 @@ namespace IronRubyMvcLibrary.ViewEngine
                 return;
             }
 
-            int endOffset = 4;
+            var endOffset = 4;
             if (block.EndsWith("-%>", StringComparison.OrdinalIgnoreCase))
             {
                 endOffset = 5;
@@ -36,11 +35,11 @@ namespace IronRubyMvcLibrary.ViewEngine
 
             if (block.StartsWith("<%=", StringComparison.OrdinalIgnoreCase))
             {
-                int outputLength = block.Length - endOffset - 1;
+                var outputLength = block.Length - endOffset - 1;
                 if (outputLength < 1)
                     throw new InvalidOperationException("Started a '<%=' block without ending it.");
 
-                string output = block.Substring(3, outputLength).Trim();
+                var output = block.Substring(3, outputLength).Trim();
                 Contents = "response.Write({0})".FormattedWith(output).Trim();
                 return;
             }

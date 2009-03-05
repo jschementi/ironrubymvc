@@ -1,12 +1,13 @@
 #region Usings
 
 using System;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Core;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     [Concern(typeof (AssemblyResourceReader))]
     public class when_reading_a_resource_and_an_existing_path_is_given :

@@ -1,12 +1,12 @@
 #region Usings
 
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Core;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     internal class ControllerConfiguration
     {

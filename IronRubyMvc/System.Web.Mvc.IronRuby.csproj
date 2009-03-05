@@ -8,8 +8,8 @@
     <ProjectGuid>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>IronRubyMvcLibrary</RootNamespace>
-    <AssemblyName>IronRubyMvcLibrary</AssemblyName>
+    <RootNamespace>System.Web.Mvc.IronRuby</RootNamespace>
+    <AssemblyName>System.Web.Mvc.IronRuby</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
@@ -61,6 +61,7 @@
       <HintPath>..\dependencies\Microsoft.Scripting.ExtensionAttribute.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -82,19 +83,10 @@
   <ItemGroup>
     <Compile Include="Controllers\ControllerConfiguration.cs" />
     <Compile Include="Core\IRubyEngine.cs" />
-    <Compile Include="Helpers\HashConverter.cs" />
-    <Compile Include="Helpers\HashToActionFilterConverter.cs" />
-    <Compile Include="Helpers\HashToAuthorizationFilterConverter.cs" />
-    <Compile Include="Helpers\HashToExceptionFilterConverter.cs" />
-    <Compile Include="Helpers\HashToResultFilterConverter.cs" />
     <Compile Include="Controllers\RubyActionFilter.cs" />
     <Compile Include="Controllers\RubyAuthorizationFilter.cs" />
-    <Compile Include="Controllers\RailsStyleActionFilter.cs" />
-    <Compile Include="Controllers\RailsStyleAuthorizationFilter.cs" />
-    <Compile Include="Controllers\RailsStyleExceptionFilter.cs" />
     <Compile Include="Controllers\RubyExceptionFilter.cs" />
     <Compile Include="Controllers\RubyResultFilter.cs" />
-    <Compile Include="Controllers\RailsStyleResultFilter.cs" />
     <Compile Include="Core\DefaultScriptRunner.cs" />
     <Compile Include="Core\AssemblyResourceReader.cs" />
     <Compile Include="Core\Constants.cs" />
@@ -104,6 +96,7 @@
     <Compile Include="Core\IReader.cs" />
     <Compile Include="Core\Reader.cs" />
     <Compile Include="Core\RubyMvcApplication.cs" />
+    <Compile Include="Core\RubyRouteCollection.cs" />
     <Compile Include="Core\ScopedScriptRunner.cs" />
     <Compile Include="Core\IScriptRunner.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
@@ -113,6 +106,7 @@
     <Compile Include="Controllers\RubyControllerFactory.cs" />
     <Compile Include="Core\RubyEngine.cs" />
     <Compile Include="Core\VirtualPathProvider.cs" />
+    <Compile Include="Extensions\FilterInfoExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
@@ -122,10 +116,8 @@
     <Compile Include="Extensions\Inflector.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
     <Compile Include="Helpers\RubyUrlHelper.cs" />
-    <Compile Include="Helpers\SymbolConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Routing\RubyRouteCollection.cs" />
-    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Extensions\IDictionaryExtensions.cs" />
     <Compile Include="ViewEngine\RubyScriptBlock.cs">
       <SubType>Code</SubType>
     </Compile>

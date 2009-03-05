@@ -1,13 +1,14 @@
 ﻿#region Usings
 
 using System;
-using IronRubyMvcLibrary.Extensions;
-using IronRubyMvcLibrary.ViewEngine;
+using System.Web.Mvc.IronRuby.Extensions;
+using System.Web.Mvc.IronRuby.ViewEngine;
+using System.Web.Mvc.IronRuby.ViewEngine;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests
+namespace System.Web.Mvc.IronRuby.Tests
 {
     public class RubyTemplateTests
     {

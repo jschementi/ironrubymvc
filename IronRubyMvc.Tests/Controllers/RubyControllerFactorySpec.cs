@@ -1,13 +1,15 @@
 using System;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
 using Moq;
 using Moq.Mvc;
 using Xunit;
 
-namespace IronRubyMvcLibrary.Tests.Controllers
+namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
     [Concern(typeof (RubyControllerFactory))]
     public class when_a_ruby_controller_needs_to_be_resolved : InstanceContextSpecification<RubyControllerFactory>

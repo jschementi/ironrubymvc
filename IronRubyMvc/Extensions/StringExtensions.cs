@@ -1,6 +1,10 @@
+#region Usings
+
 using System.Globalization;
 
-namespace IronRubyMvcLibrary.Extensions
+#endregion
+
+namespace System.Web.Mvc.IronRuby.Extensions
 {
     /// <summary>
     /// Contains the extension methods for <see cref="string"/>

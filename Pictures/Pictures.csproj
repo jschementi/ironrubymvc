@@ -119,9 +119,9 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IronRubyMvc\IronRubyMvcLibrary.csproj">
+    <ProjectReference Include="..\IronRubyMvc\System.Web.Mvc.IronRuby.csproj">
       <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
-      <Name>IronRubyMvcLibrary</Name>
+      <Name>System.Web.Mvc.IronRuby</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

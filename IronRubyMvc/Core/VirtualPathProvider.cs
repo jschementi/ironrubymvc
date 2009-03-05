@@ -5,7 +5,7 @@ using System.Web.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     //Wraps the VirtualPathProvider so that testing is a bit easier
     public class VirtualPathProvider : IPathProvider

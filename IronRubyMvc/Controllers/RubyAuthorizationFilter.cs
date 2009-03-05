@@ -1,6 +1,4 @@
-using System.Web.Mvc;
-
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public abstract class RubyAuthorizationFilter : IAuthorizationFilter
     {

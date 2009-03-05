@@ -1,18 +1,14 @@
 #region Usings
 
-using System;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyControllerDescriptor : ControllerDescriptor
     {
-
         public RubyControllerDescriptor(RubyClass rubyClass)
         {
             RubyControllerClass = rubyClass;

@@ -1,12 +1,10 @@
 #region Usings
 
-using System;
-using System.Web;
-using IronRubyMvcLibrary.Extensions;
+
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class RubyMvcApplication : HttpApplication
     {
@@ -16,7 +14,6 @@ namespace IronRubyMvcLibrary.Core
         protected virtual void Application_Start(object sender, EventArgs e)
         {
             RubyEngine.InitializeIronRubyMvc(new VirtualPathProvider(), "~/routes.rb");
-            
         }
 
 //        protected virtual void Application_BeginRequest(object sender, EventArgs e)

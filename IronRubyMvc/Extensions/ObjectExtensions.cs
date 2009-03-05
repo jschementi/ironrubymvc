@@ -1,4 +1,4 @@
-namespace IronRubyMvcLibrary.Extensions
+namespace System.Web.Mvc.IronRuby.Extensions
 {
     /// <summary>
     /// Contains the extension methods for <see cref="object" />

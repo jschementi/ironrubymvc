@@ -1,11 +1,10 @@
 #region Usings
 
-using System;
 using System.Threading;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Helpers
+namespace System.Web.Mvc.IronRuby.Helpers
 {
     internal static class DescriptorUtil
     {
@@ -13,22 +12,22 @@ namespace IronRubyMvcLibrary.Helpers
             ref TDescriptor[] cacheLocation, Func<TReflection[]> initializer, Func<TReflection, TDescriptor> converter)
         {
             // did we already calculate this once?
-            TDescriptor[] existingCache = Interlocked.CompareExchange(ref cacheLocation, null, null);
+            var existingCache = Interlocked.CompareExchange(ref cacheLocation, null, null);
             if (existingCache != null)
             {
                 return existingCache;
             }
 
-            TReflection[] memberInfos = initializer();
+            var memberInfos = initializer();
             var descriptors = new TDescriptor[memberInfos.Length];
-            int i = 0;
+            var i = 0;
             foreach (var memberInfo in memberInfos)
             {
-                TDescriptor descriptor = converter(memberInfo);
+                var descriptor = converter(memberInfo);
                 if (descriptor != null) descriptors[i++] = descriptor;
             }
             //memberInfos.Select(converter).Where(descriptor => descriptor != null).ToArray();
-            TDescriptor[] updatedCache = Interlocked.CompareExchange(ref cacheLocation, descriptors, null);
+            var updatedCache = Interlocked.CompareExchange(ref cacheLocation, descriptors, null);
             return updatedCache ?? descriptors;
         }
     }

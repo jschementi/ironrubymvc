@@ -2,11 +2,11 @@
 
 using System.IO;
 using System.Reflection;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class AssemblyResourceReader : Reader
     {
