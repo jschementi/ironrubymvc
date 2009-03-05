@@ -106,6 +106,7 @@
     <Compile Include="Controllers\RubyControllerFactory.cs" />
     <Compile Include="Core\RubyEngine.cs" />
     <Compile Include="Core\VirtualPathProvider.cs" />
+    <Compile Include="Core\VirtualPathStreamContentProvider.cs" />
     <Compile Include="Extensions\FilterInfoExtensions.cs" />
     <Compile Include="Extensions\IEnumerableExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

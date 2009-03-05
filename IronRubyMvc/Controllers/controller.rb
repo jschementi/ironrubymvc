@@ -71,39 +71,49 @@
       
       module ClassMethods
         
-        def before_action(name, &b)
-          filter(name, RubyProcActionFilter.new(b, nil)) 
+        def before_action(name, method_name=nil, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcActionFilter.new(impl || b, nil)) 
         end
 
-        def after_action(name, &b)
-          filter(name, RubyProcActionFilter.new(nil, b)) 
+        def after_action(name, method_name=nil, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcActionFilter.new(nil, impl || b))
         end
 
         def around_action(name, options={}, &b)
           options[:before] ||= b if block_given?
           options[:after] ||= b if block_given?
+          options[:before] ||= create_from_name(options[:before]) if options[:before].is_a?(Symbol) or options[:before].is_a?(String)
+          options[:after] ||= create_from_name(options[:after]) if options[:after].is_a?(Symbol) or options[:after].is_a?(String)
           filter(name, RubyProcActionFilter.new(options[:before], options[:after]))
         end
         
-        def authorized_action(name, &b)
-          filter(name, RubyProcAuthorizationFilter.new(&b))
+        def authorized_action(name, method_name=nil, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcAuthorizationFilter.new(impl || b))
         end
         
-        def exception_action(name, &b)
-          filter(name, RubyProcExceptionFilter.new(&b))
+        def exception_action(name, method_name=nil, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcExceptionFilter.new(b))
         end
         
-        def before_result(name, options={}, &b)
-          filter(name, RubyProcResultFilter.new(&b))
+        def before_result(name, method_name=nil, options={}, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcResultFilter.new(b))
         end
         
-        def after_result(name, options={}, &b)
-          filter(name, RubyProcResultFilter.new(nil, &b))
+        def after_result(name, method_name=nil, options={}, &b)
+          impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
+          filter(name, RubyProcResultFilter.new(nil, b))
         end
         
-        def around_result(name, options={}, &b)
+        def around_result(name, method_name=nil, options={}, &b)
           options[:before] ||= b if block_given?
           options[:after] ||= b if block_given?
+          options[:before] ||= create_from_name(options[:before]) if options[:before].is_a?(Symbol) or options[:before].is_a?(String)
+          options[:after] ||= create_from_name(options[:after]) if options[:after].is_a?(Symbol) or options[:after].is_a?(String)
           filter(name, RubyProcResultFilter.new(options[:before], options[:after])) 
         end
 
@@ -112,8 +122,9 @@
           klass = nil
           klass = name.new if name.is_a? Class
           klass = options.new if options.is_a? Class
+          klass = Object.const_get(options.to_s.split('_').map {|word| word = word.capitalize }.join('')) if options.is_a?(Symbol) or options.is_a?(String)
           klass ||= options
-          name = :controller if name.nil? or name.is_a?(Class)
+          name = :controller if name.nil? or name.is_a?(Class)          
           @action_filters[name.to_sym] ||= []
           @action_filters[name.to_sym] << klass          
         end
@@ -122,6 +133,11 @@
           @action_filters ||= []
           @action_filters
         end
+        
+        private
+          def create_from_name(name)
+            lambda {|context| context.controller.send(name.to_sym, context) } 
+          end 
         
       end
       

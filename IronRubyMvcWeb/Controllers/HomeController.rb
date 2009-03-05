@@ -23,9 +23,15 @@ class HomeController < Controller
     context.request_context.http_context.response.write("Hello world<br />")
   end
   
+  before_action :index, :method_filter
+  
   filter :index, MyFilter
   
   def index
     view(nil, 'layout', HomeModel.new)
+  end
+  
+  def method_filter(context)
+    context.request_context.http_context.response.write("From method filter<br />")
   end
 end
