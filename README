@@ -22,6 +22,12 @@ class YourController < Controller
      # do some filtering stuff here
    end
    
+   around_result :index do |context|
+     # do some result filtering stuff here
+   end
+   
+   before_action :index, :method_filter
+      
    authorized_action :some_other_action do |context|
      # do some authorization checking work here
    end
@@ -38,6 +44,10 @@ class YourController < Controller
    
    def some_other_action
      # index action
+   end
+   
+   def method_filter
+    # do some filter stuff here
    end
 
 end

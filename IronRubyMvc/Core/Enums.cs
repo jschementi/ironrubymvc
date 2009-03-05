@@ -6,11 +6,4 @@
         AssemblyResource
     }
 
-    public enum OnExecuting
-    {
-        BeforeAction,
-        AfterAction,
-        BeforeResult,
-        AfterResult
-    }
 }
