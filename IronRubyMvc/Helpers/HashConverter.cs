@@ -2,43 +2,74 @@
 
 using System.Diagnostics.CodeAnalysis;
 using IronRuby.Builtins;
+using IronRubyMvcLibrary.Core;
+using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting;
 
 #endregion
 
 namespace IronRubyMvcLibrary.Helpers
 {
-    public abstract class HashConverter<TToConvert> : IConverter<TToConvert> where TToConvert : class
+    public abstract class HashConverter<TIToConvert> : IConverter<TIToConvert> 
+        where TIToConvert : class
     {
-        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "when")] protected static readonly SymbolId whenKey = SymbolTable.StringToId("when");
+        protected IRubyEngine _rubyEngine;
 
-        protected HashConverter() : this(null)
+        protected HashConverter(){}
+
+        protected HashConverter(IRubyEngine rubyEngine) 
         {
+            _rubyEngine = rubyEngine;
         }
 
-        protected HashConverter(Hash filterDescription)
+        protected HashConverter(IRubyEngine rubyEngine, Hash filterDescription) : this(rubyEngine)
         {
-            FilterDescription = filterDescription;
+            NamedFilterDescription = filterDescription;
         }
 
         #region Implementation of IConverter<TToConvert>
 
-        public virtual TToConvert Convert(Hash filterDescription)
+        public virtual TIToConvert Convert(Hash filterDescription)
         {
-            FilterDescription = filterDescription;
+            NamedFilterDescription = filterDescription;
             return Convert();
         }
 
-        public virtual TToConvert Convert()
+        public virtual TIToConvert Convert(Hash filterDescription, IRubyEngine engine)
         {
-            return !IsFilter() ? null : Build();
+            _rubyEngine = engine;
+            return Convert(filterDescription);
+        }
+
+        public virtual TIToConvert Convert()
+        {
+            if (NamedFilterDescription.IsNull()) return null;
+            var description = NamedFilterDescription[SymbolConstants.Options];
+
+            if(description is Hash)
+            {
+                FilterDescription = description as Hash;
+                
+                return IsFilter() ? Build() : null;
+            }
+            if(description is RubyClass)
+            {
+                return _rubyEngine.CreateInstance<TIToConvert>(description as RubyClass, false);
+            }
+            if (FilterDescription is TIToConvert)
+            {
+                return FilterDescription as TIToConvert;
+            }
+
+            return null; // out of luck
         }
 
         #endregion
 
+        public Hash NamedFilterDescription { get; private set; }
         public Hash FilterDescription { get; private set; }
 
-        protected abstract TToConvert Build();
+        protected abstract TIToConvert Build();
 
         protected abstract bool IsFilter();
 

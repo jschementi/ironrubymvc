@@ -1,6 +1,7 @@
 #region Usings
 
 using System.Collections.Generic;
+using System.Web.Mvc;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Controllers;
 using IronRubyMvcLibrary.Core;
@@ -11,28 +12,19 @@ using Microsoft.Scripting;
 
 namespace IronRubyMvcLibrary.Helpers
 {
-    public class HashToResultFilterConverter : HashConverter<RailsStyleResultFilter>
+    public class HashToResultFilterConverter : HashConverter<IResultFilter>
     {
-        private static readonly IEnumerable<SymbolId> _actionFilterDenominators = new[]
+        private static readonly IEnumerable<SymbolId> _resultFilterDenominators = new[]
                                                                                       {
-                                                                                          SymbolTable.StringToId(
-                                                                                              "before_result"),
-                                                                                          SymbolTable.StringToId(
-                                                                                              "after_result")
+                                                                                          SymbolConstants.BeforeResult,
+                                                                                          SymbolConstants.AfterResult,
+                                                                                          SymbolConstants.Class
                                                                                       };
 
-        private static readonly IDictionary<OnExecuting, SymbolId> _actionWhen = new Dictionary<OnExecuting, SymbolId>
+        private static readonly IDictionary<OnExecuting, SymbolId> _resultWhen = new Dictionary<OnExecuting, SymbolId>
                                                                                      {
-                                                                                         {
-                                                                                             OnExecuting.BeforeResult,
-                                                                                             SymbolTable.StringToId(
-                                                                                             "before_result")
-                                                                                             },
-                                                                                         {
-                                                                                             OnExecuting.AfterResult,
-                                                                                             SymbolTable.StringToId(
-                                                                                             "after_result")
-                                                                                             },
+                                                                                         { OnExecuting.BeforeResult, SymbolConstants.BeforeResult },
+                                                                                         { OnExecuting.AfterResult, SymbolConstants.AfterResult },
                                                                                      };
 
 
@@ -40,29 +32,36 @@ namespace IronRubyMvcLibrary.Helpers
         {
         }
 
-        public HashToResultFilterConverter(Hash filterDescription)
-            : base(filterDescription)
+
+        public HashToResultFilterConverter(IRubyEngine rubyEngine) : base(rubyEngine)
         {
         }
 
-
-        protected override RailsStyleResultFilter Build()
+        public HashToResultFilterConverter(IRubyEngine rubyEngine, Hash filterDescription) : base(rubyEngine, filterDescription)
         {
-            var beforeResult = FindProc(_actionWhen[OnExecuting.BeforeResult]);
-            var afterResult = FindProc(_actionWhen[OnExecuting.AfterResult]);
-            if (beforeResult.IsNull() && afterResult.IsNull()) return null;
+        }
 
-            return new RailsStyleResultFilter
-                       {
-                           BeforeResult = beforeResult,
-                           AfterResult = afterResult
-                       };
+        protected override IResultFilter Build()
+        {
+            var beforeResult = FindProc(_resultWhen[OnExecuting.BeforeResult]);
+            var afterResult = FindProc(_resultWhen[OnExecuting.AfterResult]);
+            if (beforeResult.IsNotNull() && afterResult.IsNotNull())
+            {
+                return new RailsStyleResultFilter
+                           {
+                               BeforeResult = beforeResult,
+                               AfterResult = afterResult
+                           };
+            }
+
+            var filterClass = FilterDescription[SymbolConstants.Class] as RubyClass;
+            return filterClass.IsNotNull() ? _rubyEngine.CreateInstance<IResultFilter>(filterClass, false) : null;
         }
 
         protected override bool IsFilter()
         {
-            var key = (SymbolId) FilterDescription[whenKey];
-            return _actionFilterDenominators.Contains(key);
+            var key = (SymbolId) FilterDescription[SymbolConstants.When];
+            return _resultFilterDenominators.Contains(key);
         }
     }
 }

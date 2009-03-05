@@ -1,6 +1,7 @@
 #region Usings
 
 using System.Collections.Generic;
+using System.Web.Mvc;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Controllers;
 using IronRubyMvcLibrary.Core;
@@ -11,64 +12,60 @@ using Microsoft.Scripting;
 
 namespace IronRubyMvcLibrary.Helpers
 {
-    public interface IConverter<TTarget>
+    public interface IConverter<TITarget>
     {
-        TTarget Convert(Hash filterDescription);
-        TTarget Convert();
+        TITarget Convert(Hash filterDescription);
+        TITarget Convert();
     }
 
-    public class HashToActionFilterConverter : HashConverter<RailsStyleActionFilter>
+    public class HashToActionFilterConverter : HashConverter<IActionFilter>
     {
         private static readonly IEnumerable<SymbolId> _actionFilterDenominators = new[]
                                                                                       {
-                                                                                          SymbolTable.StringToId(
-                                                                                              "before"),
-                                                                                          SymbolTable.StringToId("after")
-                                                                                          ,
-                                                                                          SymbolTable.StringToId(
-                                                                                              "around")
+                                                                                          SymbolConstants.Before,
+                                                                                          SymbolConstants.After,
+                                                                                          SymbolConstants.Around, 
+                                                                                          SymbolConstants.Class
                                                                                       };
 
         private static readonly IDictionary<OnExecuting, SymbolId> _actionWhen = new Dictionary<OnExecuting, SymbolId>
                                                                                      {
-                                                                                         {
-                                                                                             OnExecuting.BeforeAction,
-                                                                                             SymbolTable.StringToId(
-                                                                                             "before")
-                                                                                             },
-                                                                                         {
-                                                                                             OnExecuting.AfterAction,
-                                                                                             SymbolTable.StringToId(
-                                                                                             "after")
-                                                                                             }
+                                                                                         {OnExecuting.BeforeAction, SymbolConstants.Before},
+                                                                                         {OnExecuting.AfterAction, SymbolConstants.After}
                                                                                      };
-
 
         public HashToActionFilterConverter()
         {
         }
 
-        public HashToActionFilterConverter(Hash filterDescription) : base(filterDescription)
+        public HashToActionFilterConverter(IRubyEngine rubyEngine) : base(rubyEngine)
         {
         }
 
+        public HashToActionFilterConverter(IRubyEngine rubyEngine, Hash filterDescription) : base(rubyEngine, filterDescription)
+        {
+        }
 
-        protected override RailsStyleActionFilter Build()
+        protected override IActionFilter Build()
         {
             var beforeAction = FindProc(_actionWhen[OnExecuting.BeforeAction]);
             var afterAction = FindProc(_actionWhen[OnExecuting.AfterAction]);
-            if (beforeAction.IsNull() && afterAction.IsNull()) return null;
 
-            return new RailsStyleActionFilter
-                       {
-                           BeforeAction = beforeAction,
-                           AfterAction = afterAction
-                       };
+            if(beforeAction.IsNotNull() || afterAction.IsNotNull())
+            {
+                return new RailsStyleActionFilter
+                           {
+                               BeforeAction = beforeAction,
+                               AfterAction = afterAction
+                           };
+            }
+            var filterClass = FilterDescription[SymbolConstants.Class] as RubyClass;
+            return filterClass.IsNotNull() ? _rubyEngine.CreateInstance<IActionFilter>(filterClass, false) : null;
         }
 
         protected override bool IsFilter()
         {
-            var key = (SymbolId) FilterDescription[whenKey];
+            var key = (SymbolId) FilterDescription[SymbolConstants.When];
             return _actionFilterDenominators.Contains(key);
         }
     }

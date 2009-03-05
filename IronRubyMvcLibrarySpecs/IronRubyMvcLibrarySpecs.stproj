@@ -56,6 +56,7 @@
     <Folder Include="Debug" />
     <Folder Include="extensions" />
     <Folder Include="lib" />
+    <Folder Include="rake" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\IronRuby.dll" />

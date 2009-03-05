@@ -16,3 +16,7 @@ IronRubyMvc/Controllers/._RubyController.cs
 IronRubyMvc/Controllers/._RubyControllerActionInvoker.cs
 IronRubyMvcLibrarySpecs/bin/*.*.CodeAnalysisLog.xml
 IronRubyMvcLibrarySpecs/bin/*.*.lastcodeanalysissucceeded
+IronRubyMvc/Controllers/._controller.rb
+IronRubyMvc/Core/._RubyEngine.cs
+dependencies/IronRuby.Tests.exe
+dependencies/IronRuby.Tests.pdb

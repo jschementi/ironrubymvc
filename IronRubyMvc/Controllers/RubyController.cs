@@ -27,6 +27,16 @@ namespace IronRubyMvcLibrary.Controllers
 
         private IRubyEngine _engine;
         private IDictionary<object, object> _params;
+        private static RubyArray _filters = new RubyArray();
+        public static RubyArray Filters
+        {
+            get
+            {
+                if(_filters == null)
+                    _filters = new RubyArray();
+                return _filters;
+            }
+        }
 
         public string ControllerName { get; internal set; }
         public RubyClass RubyType { get; private set; }
@@ -147,7 +157,7 @@ namespace IronRubyMvcLibrary.Controllers
             return View(viewName, null /* masterName */, model);
         }
 
-        protected override ViewResult View(string viewName, string masterName, object model)
+        public new ViewResult View(string viewName, string masterName, object model)
         {
             var vdd = new ViewDataDictionary();
             vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
