@@ -1,6 +1,6 @@
 ﻿#require "HomeModel"
 
-
+require 'MyFilter'
 
 class HomeModel
   def salutation
@@ -8,17 +8,7 @@ class HomeModel
   end
 end
 
-module IronRubyMvc
-  
-  module Controllers
-    
-    module Filters
-      
-      module ClassMethods
-      end
-    end
-  end
-end
+
 
 class HomeController < Controller
   #  def initialize(context = nil)
@@ -27,15 +17,15 @@ class HomeController < Controller
   #    end
   #  end
   
-  before_action :my_before do |context|
+  before_action :index do |context|
     $before_counter ||= 0
     $before_counter += 1
     context.request_context.http_context.response.write("Hello world")
   end
   
-  filter :index, 'MyFilter'
+  filter :index, MyFilter
   
   def index
-    view nil, 'layout', HomeModel.new
+    view(nil, 'layout', HomeModel.new)
   end
 end

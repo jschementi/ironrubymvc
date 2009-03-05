@@ -52,3 +52,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "IronRubyMvcLibrary.Core.RubyEngine.#LoadFilter`1(IronRuby.Builtins.RubyClass)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "IronRubyMvcLibrary.Core.IRubyEngine.#LoadFilter`1(System.String)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope = "member", Target = "IronRubyMvcLibrary.Core.RubyEngine.#LoadFilter`1(System.String)")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope = "namespace", Target = "IronRubyMvcLibrary.Core.TestSupport")]

@@ -17,10 +17,8 @@ describe "IEnumerableExtensions" do
   
   it "should iterate over an untyped collection" do
     counter, result = 0, 0
-    iterator = System::Action.of(System::Object).new do |item|
-      counter += 1
-      result += item
-    end
+    proc = Proc.new {|item| counter += 1; result += item }
+    iterator = Workarounds.wrap_proc(proc)
     IEnumerableExtensions.for_each(@collection, iterator)
     counter.should.be 8
     result.should.be 36

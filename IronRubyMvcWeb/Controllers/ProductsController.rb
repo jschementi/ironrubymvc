@@ -5,6 +5,8 @@ require 'IronRubyMvcWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
 include IronRubyMvcWeb::Models
 include IronRubyMvcWeb::Models::Northwind
 
+require 'MyProductFilter'
+
 class ProductsRepository < IronRubyRepository 
 end
 
@@ -25,6 +27,9 @@ class BaseController < Controller
 end
 
 class ProductsController < Controller
+  
+  filter :index, MyProductFilter
+  
   def index
     repository = ProductsRepository.new
     

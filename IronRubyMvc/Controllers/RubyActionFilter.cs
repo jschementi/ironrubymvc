@@ -1,5 +1,8 @@
+#region Usings
+
 using System.Web.Mvc;
-using IronRuby.Builtins;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Controllers
 {
@@ -9,15 +12,14 @@ namespace IronRubyMvcLibrary.Controllers
 
         public virtual void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            throw new NotImplementedError();
+            // Intentionally left blank to allow for a better overriding experience
         }
+
         public virtual void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            throw new NotImplementedError();
+            // Intentionally left blank to allow for a better overriding experience
         }
 
         #endregion
-
-        
     }
 }

@@ -1,7 +1,9 @@
 #region Usings
 
+using System.Web.Mvc;
 using IronRuby.Builtins;
 using IronRubyMvcLibrary.Controllers;
+using IronRubyMvcLibrary.Core;
 using IronRubyMvcLibrary.Extensions;
 using Microsoft.Scripting;
 
@@ -9,27 +11,32 @@ using Microsoft.Scripting;
 
 namespace IronRubyMvcLibrary.Helpers
 {
-    public class HashToAuthorizationFilterConverter : HashConverter<RailsStyleAuthorizationFilter>
+    public class HashToAuthorizationFilterConverter : HashConverter<IAuthorizationFilter>
     {
-        private static readonly SymbolId authorizeKey = SymbolTable.StringToId("authorize");
-
         public HashToAuthorizationFilterConverter()
         {
         }
 
-        public HashToAuthorizationFilterConverter(Hash filterDescription) : base(filterDescription)
+        public HashToAuthorizationFilterConverter(IRubyEngine rubyEngine) : base(rubyEngine)
         {
         }
 
-        protected override RailsStyleAuthorizationFilter Build()
+        public HashToAuthorizationFilterConverter(IRubyEngine rubyEngine, Hash filterDescription) : base(rubyEngine, filterDescription)
         {
-            var authorize = FindProc(authorizeKey);
-            return authorize.IsNull() ? null : new RailsStyleAuthorizationFilter {Authorize = authorize};
+        }
+
+        protected override IAuthorizationFilter Build()
+        {
+            var authorize = FindProc(SymbolConstants.Authorize);
+            if(authorize.IsNotNull()) return new RailsStyleAuthorizationFilter {Authorize = authorize};
+
+            var filterClass = FilterDescription[SymbolConstants.Class] as RubyClass;
+            return filterClass.IsNotNull() ? _rubyEngine.CreateInstance<IAuthorizationFilter>(filterClass, false) : null;
         }
 
         protected override bool IsFilter()
         {
-            return authorizeKey == (SymbolId) FilterDescription[whenKey];
+            return SymbolConstants.Authorize == (SymbolId)FilterDescription[SymbolConstants.When];
         }
     }
 }

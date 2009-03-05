@@ -2,6 +2,8 @@
 
 using System.Collections.Generic;
 using System.Web.Mvc;
+using IronRuby.Builtins;
+using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
@@ -54,10 +56,10 @@ namespace IronRubyMvcLibrary.Controllers
 
         public override FilterInfo GetFilters()
         {
-//            var filters = RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass,
-//                                                                         "action_filters");
+            var filters = (RubyArray)RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass, "action_filters");
 
-            return new FilterInfo();
+            var info = filters.ToFilterInfo(ActionName, RubyControllerDescriptor.RubyEngine);
+            return info;
         }
 
 //        internal static RubyActionDescriptor Create(string actionName, ControllerDescriptor controllerDescriptor)

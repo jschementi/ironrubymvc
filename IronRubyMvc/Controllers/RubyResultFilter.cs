@@ -1,4 +1,8 @@
+#region Usings
+
 using System.Web.Mvc;
+
+#endregion
 
 namespace IronRubyMvcLibrary.Controllers
 {
@@ -6,8 +10,15 @@ namespace IronRubyMvcLibrary.Controllers
     {
         #region Implementation of IResultFilter
 
-        public abstract void OnResultExecuting(ResultExecutingContext filterContext);
-        public abstract void OnResultExecuted(ResultExecutedContext filterContext);
+        public virtual void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            // Intentionally left blank to allow for a better overriding experience
+        }
+
+        public virtual void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            // Intentionally left blank to allow for a better overriding experience
+        }
 
         #endregion
     }

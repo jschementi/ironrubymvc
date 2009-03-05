@@ -123,6 +123,7 @@
     <None Include="Controllers\HomeController.rb" />
     <None Include="Controllers\ProductsController.rb" />
     <None Include="Filters\MyFilter.rb" />
+    <Content Include="Filters\MyProductFilter.rb" />
     <None Include="Models\Helpers\model.rb" />
     <None Include="Models\HomeModel.rb" />
     <None Include="Models\Northwind\Northwind.dbml.layout">

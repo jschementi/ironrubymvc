@@ -52,9 +52,10 @@ namespace IronRubyMvcLibrary.Controllers
         protected override FilterInfo GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
             var rubyType = ((RubyController) controllerContext.Controller).RubyType;
-            var controllerFilters = (Hash) RubyEngine.CallMethod(rubyType, "action_filters");
-
-            return new FilterInfo().AddControllerFilters(controllerFilters, RubyEngine);;
+            var controllerFilters = (RubyArray) RubyEngine.CallMethod(rubyType, "action_filters");
+            
+            var info = controllerFilters.ToFilterInfo(actionDescriptor.ActionName, RubyEngine);
+            return info;
         }
     }
 }

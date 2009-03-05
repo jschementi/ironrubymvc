@@ -6,6 +6,10 @@
       
       module ClassMethods
         
+        def self.reset_action_filters
+          @action_filters = []
+        end
+        
         def before_action(name, options={}, &b)
           options[:before] ||= b if block_given?
           options[:before] ||= name.to_sym 
@@ -15,7 +19,7 @@
         def after_action(name, options={}, &b)
           options[:after] ||= b if block_given?
           options[:after] ||= name.to_sym
-          filter(name, options.merge(:when => :after))
+          filter("", options.merge(:when => :after))
         end
 
         def around_action(name, options={}, &b)
@@ -44,12 +48,13 @@
         
 
         def filter(name, options={})
-          @action_filters ||= {}
-          @action_filters[name.to_sym] = options
+          @action_filters ||= []
+          name = :controller if name.nil?
+          @action_filters << { :name => name.to_sym, :options => options } 
         end
 
         def action_filters
-          @action_filters ||= {}
+          @action_filters ||= []
           @action_filters
         end
         
@@ -66,14 +71,14 @@
       module ClassMethods
         
         def action_selector(name, options={}, &b)
-          @action_selectors ||= {}
+          @action_selectors ||= []
           options[:action] = b if block_given?
           options[:action] ||= name.to_sym #class.instance_method(name.to_sym)
-          @action_selectors[name.to_sym] = options
+          @action_selectors << { :name => name.to_sym, :options => options }
         end
         
         def action_selectors
-          @action_selectors ||= {}
+          @action_selectors ||= []
           @action_selectors
         end
         
