@@ -1,13 +1,14 @@
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Extensions;
 using Moq.Mvc;
 using Xunit;
 
-namespace IronRubyMvcLibrary.Tests.Controllers
+namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
 
     [Concern(typeof (RubyControllerDescriptor))]

@@ -20,3 +20,4 @@ IronRubyMvc/Controllers/._controller.rb
 IronRubyMvc/Core/._RubyEngine.cs
 dependencies/IronRuby.Tests.exe
 dependencies/IronRuby.Tests.pdb
+IronRubyMvcLibrarySpecs/bin/*.*

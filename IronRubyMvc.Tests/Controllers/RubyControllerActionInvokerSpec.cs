@@ -1,12 +1,13 @@
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Extensions;
 using Moq.Mvc;
 using Xunit;
 
-namespace IronRubyMvcLibrary.Tests.Controllers
+namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
     [Concern(typeof (RubyControllerActionInvoker))]
     public class when_the_action_invoker_is_initialized : with_ironruby_and_an_engine_initialized<RubyControllerActionInvoker>

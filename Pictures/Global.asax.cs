@@ -1,6 +1,6 @@
 ﻿#region Usings
 
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Core;
 
 #endregion
 

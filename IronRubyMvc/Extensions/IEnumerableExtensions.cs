@@ -1,18 +1,12 @@
 #region Usings
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Web.Mvc;
-using IronRuby.Builtins;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Helpers;
-using Microsoft.Scripting;
+using System.Diagnostics.CodeAnalysis;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Extensions
+namespace System.Web.Mvc.IronRuby.Extensions
 {
     public static class IEnumerableExtensions
     {
@@ -32,7 +26,7 @@ namespace IronRubyMvcLibrary.Extensions
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
+        [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
         public static bool IsEmpty<T>(this IEnumerable<T> collection)
         {
             foreach (var o in collection)
@@ -42,7 +36,7 @@ namespace IronRubyMvcLibrary.Extensions
             return true;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
+        [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
         public static bool IsEmpty(this IEnumerable collection)
         {
             foreach (var o in collection)
@@ -52,11 +46,11 @@ namespace IronRubyMvcLibrary.Extensions
             return true;
         }
 
-        public static bool Contains<T>(this IEnumerable<T> collection, T value) 
+        public static bool Contains<T>(this IEnumerable<T> collection, T value)
         {
             foreach (var t in collection)
             {
-                if((t.IsNull() && value.IsNull()) || (t.IsNotNull() && t.Equals(value))) return true;
+                if ((t.IsNull() && value.IsNull()) || (t.IsNotNull() && t.Equals(value))) return true;
             }
             return false;
         }
@@ -71,7 +65,7 @@ namespace IronRubyMvcLibrary.Extensions
             return !collection.Contains(value);
         }
 
-        public static bool Contains(this IEnumerable collection, object value) 
+        public static bool Contains(this IEnumerable collection, object value)
         {
             foreach (var t in collection)
             {
@@ -79,12 +73,12 @@ namespace IronRubyMvcLibrary.Extensions
             }
             return false;
         }
-        
+
         public static IEnumerable<TSource> Select<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
         {
             foreach (var source in collection)
             {
-                if(predicate(source)) yield return source;
+                if (predicate(source)) yield return source;
             }
         }
 
@@ -96,70 +90,27 @@ namespace IronRubyMvcLibrary.Extensions
             }
         }
 
-        internal static FilterInfo ToFilterInfo(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
+        internal static FilterInfo ToFilterInfo(this IDictionary<object, object> filterDescriptions, string actionName)
         {
             var filterInfo = new FilterInfo();
 
-            filterDescriptions.ToActionFilters(actionName, engine).ForEach(filter => filterInfo.ActionFilters.Add(filter));
-            filterDescriptions.ToAuthorizationFilters(actionName, engine).ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
-            filterDescriptions.ToExceptionFilters(actionName, engine).ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
-            filterDescriptions.ToResultFilters(actionName, engine).ForEach(filter => filterInfo.ResultFilters.Add(filter));
+            filterDescriptions.ToActionFilters(actionName).ForEach(filter => filterInfo.ActionFilters.Add(filter));
+            filterDescriptions.ToAuthorizationFilters(actionName).ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
+            filterDescriptions.ToExceptionFilters(actionName).ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
+            filterDescriptions.ToResultFilters(actionName).ForEach(filter => filterInfo.ResultFilters.Add(filter));
 
             return filterInfo;
         }
 
-        private static IEnumerable<TITarget> ToFilters<TITarget, TConverter>(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
-            where TITarget : class
-            where TConverter : HashConverter<TITarget>, new()
+        internal static IEnumerable<TTarget> Cast<TTarget>(this IEnumerable collection) where TTarget : class
         {
-            var filters = new List<TITarget>();
-            var converter = new TConverter();
-
-            filterDescriptions.ForEach(filterDescription =>
-            {
-                var description = filterDescription as Hash;
-                if (description.IsNull()) return;
-
-                var key = description[SymbolConstants.Name].ToString();
-                if (new string[] { "controller", null, string.Empty, actionName }.DoesNotContain(key)) return; 
-
-                var filter = converter.Convert(filterDescription as Hash, engine);
-                if (filter.IsNotNull())
-                    filters.Add(filter);
-
-            });
-            return filters;
+            var result = new List<TTarget>();
+            collection.ForEach(item =>
+                                   {
+                                       var filter = item as TTarget;
+                                       if (filter.IsNotNull()) result.Add(filter);
+                                   });
+            return result;
         }
-
-        private static IEnumerable<IAuthorizationFilter> ToAuthorizationFilters(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
-        {
-            return filterDescriptions.ToFilters<IAuthorizationFilter, HashToAuthorizationFilterConverter>(actionName, engine);
-        }
-
-        private static IEnumerable<IExceptionFilter> ToExceptionFilters(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
-        {
-            return filterDescriptions.ToFilters<IExceptionFilter, HashToExceptionFilterConverter>(actionName, engine);
-        }
-
-        private static IEnumerable<IActionFilter> ToActionFilters(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
-        {
-            return filterDescriptions.ToFilters<IActionFilter, HashToActionFilterConverter>(actionName, engine);
-        }
-
-        private static IEnumerable<IResultFilter> ToResultFilters(this IEnumerable filterDescriptions, string actionName, IRubyEngine engine)
-        {
-            return filterDescriptions.ToFilters<IResultFilter, HashToResultFilterConverter>(actionName, engine);
-        }
-
-        internal static IEnumerable<ActionSelector> ToActionSelectors(this IEnumerable selectorDescriptions)
-        {
-            var selectors = new List<ActionSelector>();
-
-            selectorDescriptions.ForEach(selector => selectors.Add(c => true));
-
-            return selectors;
-        }
-
-        
     }
 }

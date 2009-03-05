@@ -1,13 +1,12 @@
 ﻿#region Usings
 
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     /// <summary>
     /// Takes care of invoking controller actions, their filters and returning the result.
@@ -52,9 +51,9 @@ namespace IronRubyMvcLibrary.Controllers
         protected override FilterInfo GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
             var rubyType = ((RubyController) controllerContext.Controller).RubyType;
-            var controllerFilters = (RubyArray) RubyEngine.CallMethod(rubyType, "action_filters");
-            
-            var info = controllerFilters.ToFilterInfo(actionDescriptor.ActionName, RubyEngine);
+            var controllerFilters = (Hash) RubyEngine.CallMethod(rubyType, "action_filters");
+
+            var info = controllerFilters.ToFilterInfo("controller").MergedWith(actionDescriptor.GetFilters());
             return info;
         }
     }

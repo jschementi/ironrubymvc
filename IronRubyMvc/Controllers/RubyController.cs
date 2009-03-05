@@ -1,17 +1,14 @@
 ﻿#region Usings
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Extensions;
+using System.Web.Mvc.IronRuby.Helpers;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Extensions;
-using IronRubyMvcLibrary.Helpers;
 using Microsoft.Scripting;
 using RubyModuleDefinition = IronRuby.Runtime.RubyModuleAttribute;
 using RubyClassDefinition = IronRuby.Runtime.RubyClassAttribute;
@@ -19,20 +16,21 @@ using RubyMethodDefinition = IronRuby.Runtime.RubyMethodAttribute;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Controllers
+namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyController : Controller
     {
+        private static RubyArray _filters = new RubyArray();
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
 
         private IRubyEngine _engine;
         private IDictionary<object, object> _params;
-        private static RubyArray _filters = new RubyArray();
+
         public static RubyArray Filters
         {
             get
             {
-                if(_filters == null)
+                if (_filters == null)
                     _filters = new RubyArray();
                 return _filters;
             }

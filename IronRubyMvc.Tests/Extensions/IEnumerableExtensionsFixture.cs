@@ -2,7 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Xunit;
 
 #endregion

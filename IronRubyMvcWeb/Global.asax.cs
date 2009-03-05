@@ -2,8 +2,8 @@
 
 using System;
 using System.Web;
-using IronRubyMvcLibrary;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
 
 #endregion
 

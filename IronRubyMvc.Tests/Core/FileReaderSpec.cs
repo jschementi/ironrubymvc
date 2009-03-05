@@ -2,12 +2,13 @@
 
 using System;
 using System.IO;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Core;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     [Concern(typeof (FileReader))]
     public class when_reading_a_file_and_an_existing_path_is_given : InstanceContextSpecification<FileReader>

@@ -1,17 +1,14 @@
 ﻿#region Usings
 
-using System;
 using System.IO;
 using System.Text;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Helpers;
 using IronRuby;
-using IronRuby.Runtime;
-using IronRubyMvcLibrary.Helpers;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.ViewEngine
+namespace System.Web.Mvc.IronRuby.ViewEngine
 {
     public class RubyView : IView
     {
@@ -42,11 +39,11 @@ namespace IronRubyMvcLibrary.ViewEngine
 
         public void Render(ViewContext context, TextWriter writer)
         {
-            ScriptRuntime runtime = context.ViewData["__scriptRuntime"] as ScriptRuntime;
-            ScriptEngine rubyEngine = Ruby.GetEngine(runtime);
-            RubyContext rubyContext = Ruby.GetExecutionContext(runtime);
+            var runtime = context.ViewData["__scriptRuntime"] as ScriptRuntime;
+            var rubyEngine = Ruby.GetEngine(runtime);
+            var rubyContext = Ruby.GetExecutionContext(runtime);
 
-            ScriptScope scope = runtime.CreateScope();
+            var scope = runtime.CreateScope();
             scope.SetVariable("view_data", context.ViewData);
             scope.SetVariable("model", context.ViewData.Model);
             scope.SetVariable("context", context);
@@ -77,7 +74,7 @@ namespace IronRubyMvcLibrary.ViewEngine
 
             try
             {
-                ScriptSource source = rubyEngine.CreateScriptSourceFromString(script.ToString());
+                var source = rubyEngine.CreateScriptSourceFromString(script.ToString());
                 source.Execute(scope);
             }
             catch (Exception e)
@@ -93,7 +90,7 @@ namespace IronRubyMvcLibrary.ViewEngine
         {
             try
             {
-                ScriptSource source = engine.CreateScriptSourceFromString(_helpers);
+                var source = engine.CreateScriptSourceFromString(_helpers);
                 source.Execute(scope);
             }
             catch (Exception e)

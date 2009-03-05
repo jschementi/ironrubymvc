@@ -1,7 +1,7 @@
 #region Usings
 
 using System;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Xunit;
 
 #endregion

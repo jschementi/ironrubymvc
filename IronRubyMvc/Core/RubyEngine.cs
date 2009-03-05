@@ -1,24 +1,21 @@
 #region Usings
 
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
-using System.Web;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Extensions;
+using System.Web.Mvc.IronRuby.ViewEngine;
 using System.Web.Routing;
 using IronRuby;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Extensions;
-using IronRubyMvcLibrary.ViewEngine;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
-
     /// <summary>
     /// A wrapper for ScriptEngine, Runtime and Context
     /// This class handles all the interaction with IronRuby
@@ -42,54 +39,44 @@ namespace IronRubyMvcLibrary.Core
         /// </summary>
         /// <value>The runtime.</value>
         internal ScriptRuntime Runtime { get; set; }
+
         /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
         internal RubyContext Context { get; private set; }
+
         /// <summary>
         /// Gets the engine.
         /// </summary>
         /// <value>The engine.</value>
         internal ScriptEngine Engine { get; private set; }
+
         /// <summary>
         /// Gets the script runner.
         /// </summary>
         /// <value>The script runner.</value>
         internal IScriptRunner ScriptRunner { get; set; }
+
         /// <summary>
         /// Gets the current scope.
         /// </summary>
         /// <value>The current scope.</value>
         internal ScriptScope CurrentScope { get; private set; }
+
         /// <summary>
         /// Gets the operations.
         /// </summary>
         /// <value>The operations.</value>
         internal ObjectOperations Operations { get; private set; }
+
         /// <summary>
         /// Gets the path provider.
         /// </summary>
         /// <value>The path provider.</value>
         internal IPathProvider PathProvider { get; private set; }
 
-        private void Initialize()
-        {
-            Engine = Ruby.GetEngine(Runtime);
-            Context = Ruby.GetExecutionContext(Engine);
-            CurrentScope = Engine.CreateScope();
-            Operations = Engine.CreateOperations();
-            ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope, string.Empty, new FileReader(PathProvider));
-            LoadAssemblies(typeof(object), typeof(Uri), typeof(HttpResponseBase), typeof(RouteTable), typeof(Controller), typeof(RubyController));
-            AddLoadPaths();
-            DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
-            RequireControllerFile();
-        }
-
-        private void RequireControllerFile()
-        {
-            RequireRubyFile(Constants.RUBYCONTROLLER_FILE, ReaderType.AssemblyResource);
-        }
+        #region IRubyEngine Members
 
         /// <summary>
         /// Loads the controller.
@@ -101,7 +88,7 @@ namespace IronRubyMvcLibrary.Core
         {
             var controllerFilePath = GetControllerFilePath(controllerName);
             var controllerClassName = GetControllerClassName(controllerName);
-            
+
             // Remove the current controller from the classes cache so it's completely renewed.
             if (Runtime.Globals.ContainsVariable(controllerClassName)) Runtime.Globals.RemoveVariable(controllerClassName);
 
@@ -118,54 +105,6 @@ namespace IronRubyMvcLibrary.Core
 
 
         /// <summary>
-        /// Gets the name of the controller class.
-        /// </summary>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <returns></returns>
-        public static string GetControllerClassName(string controllerName)
-        {
-            return (controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
-                        ? controllerName
-                        : Constants.CONTROLLERCLASS_FORMAT.FormattedWith(controllerName)).Pascalize();
-        }
-
-        internal string GetControllerFilePath(string controllerName)
-        {
-            var fileName = Constants.CONTROLLER_PASCAL_PATH_FORMAT.FormattedWith(controllerName.Pascalize());
-            if (PathProvider.FileExists(fileName))
-                return fileName;
-
-            fileName = Constants.CONTROLLER_UNDERSCORE_PATH_FORMAT.FormattedWith(controllerName.Underscore());
-
-            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
-        }
-
-        internal string GetFilterFilePath(string filterName)
-        {
-            var fileName = Constants.FILTERS_PASCAL_PATH_FORMAT.FormattedWith(filterName.Pascalize());
-            if (PathProvider.FileExists(fileName))
-                return fileName;
-
-            fileName = Constants.FILTERS_UNDERSCORE_PATH_FORMAT.FormattedWith(filterName.Underscore());
-
-            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
-        }
-
-        /// <summary>
-        /// Requires the ruby file.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="readerType">Type of the reader.</param>
-        internal void RequireRubyFile(string path, ReaderType readerType)
-        {
-            new DefaultScriptRunner(
-                Engine, 
-                path, 
-                readerType == ReaderType.File ? new FileReader(PathProvider) : (IReader) new AssemblyResourceReader(typeof(IReader).Assembly)
-            ).Execute();
-        }
-
-        /// <summary>
         /// Configures the controller.
         /// </summary>
         /// <param name="rubyClass">The ruby class.</param>
@@ -174,7 +113,7 @@ namespace IronRubyMvcLibrary.Core
         public RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext)
         {
             var controller = (RubyController) Operations.CreateInstance(rubyClass);
-            controller.InternalInitialize(new ControllerConfiguration { Context = requestContext, Engine = this, RubyClass = rubyClass });
+            controller.InternalInitialize(new ControllerConfiguration {Context = requestContext, Engine = this, RubyClass = rubyClass});
             return controller;
         }
 
@@ -217,7 +156,7 @@ namespace IronRubyMvcLibrary.Core
                 Operations.ContainsMember(controller, actionName.Underscore());
                 return true;
             }
-            catch(NullReferenceException)
+            catch (NullReferenceException)
             {
                 return false;
             }
@@ -238,18 +177,6 @@ namespace IronRubyMvcLibrary.Core
         }
 
         /// <summary>
-        /// Sets the model and controllers path.
-        /// </summary>
-        public void AddLoadPaths()
-        {
-            var controllersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.CONTROLLERS);
-            var modelsDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.MODELS);
-            var filtersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.FILTERS);
-
-            Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir, filtersDir});
-        }
-
-        /// <summary>
         /// Defines the read only global variable.
         /// </summary>
         /// <param name="variableName">Name of the variable.</param>
@@ -258,6 +185,40 @@ namespace IronRubyMvcLibrary.Core
         {
             Context.DefineReadOnlyGlobalVariable(variableName, value);
         }
+
+        /// <summary>
+        /// Gets the ruby class.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        /// <returns></returns>
+        public RubyClass GetRubyClass(string className)
+        {
+            var klass = GetGlobalVariable<RubyClass>(className);
+            return klass;
+        }
+
+        /// <summary>
+        /// Gets the global variable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        [SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
+        public T GetGlobalVariable<T>(string name)
+        {
+            return Runtime.Globals.GetVariable<T>(name);
+        }
+
+        /// <summary>
+        /// Loads the assemblies.
+        /// </summary>
+        /// <param name="assemblies">The assemblies.</param>
+        public void LoadAssemblies(params Type[] assemblies)
+        {
+            assemblies.ForEach(type => LoadAssembly(type.Assembly));
+        }
+
+        #endregion
 
         #region Commented
 
@@ -315,37 +276,82 @@ namespace IronRubyMvcLibrary.Core
 
         #endregion
 
-
-        /// <summary>
-        /// Gets the ruby class.
-        /// </summary>
-        /// <param name="className">Name of the class.</param>
-        /// <returns></returns>
-        public RubyClass GetRubyClass(string className)
+        private void Initialize()
         {
-            var klass = GetGlobalVariable<RubyClass>(className);
-            return klass;
+            Engine = Ruby.GetEngine(Runtime);
+            Context = Ruby.GetExecutionContext(Engine);
+            CurrentScope = Engine.CreateScope();
+            Operations = Engine.CreateOperations();
+            ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope, string.Empty, new FileReader(PathProvider));
+            LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (RouteTable), typeof (Controller), typeof (RubyController));
+            AddLoadPaths();
+            DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
+            RequireControllerFile();
+        }
+
+        private void RequireControllerFile()
+        {
+            RequireRubyFile(Constants.RUBYCONTROLLER_FILE, ReaderType.AssemblyResource);
         }
 
         /// <summary>
-        /// Gets the global variable.
+        /// Gets the name of the controller class.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name">The name.</param>
+        /// <param name="controllerName">Name of the controller.</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public T GetGlobalVariable<T>(string name)
+        public static string GetControllerClassName(string controllerName)
         {
-            return Runtime.Globals.GetVariable<T>(name);
+            return (controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
+                        ? controllerName
+                        : Constants.CONTROLLERCLASS_FORMAT.FormattedWith(controllerName)).Pascalize();
+        }
+
+        internal string GetControllerFilePath(string controllerName)
+        {
+            var fileName = Constants.CONTROLLER_PASCAL_PATH_FORMAT.FormattedWith(controllerName.Pascalize());
+            if (PathProvider.FileExists(fileName))
+                return fileName;
+
+            fileName = Constants.CONTROLLER_UNDERSCORE_PATH_FORMAT.FormattedWith(controllerName.Underscore());
+
+            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
+        }
+
+        internal string GetFilterFilePath(string filterName)
+        {
+            var fileName = Constants.FILTERS_PASCAL_PATH_FORMAT.FormattedWith(filterName.Pascalize());
+            if (PathProvider.FileExists(fileName))
+                return fileName;
+
+            fileName = Constants.FILTERS_UNDERSCORE_PATH_FORMAT.FormattedWith(filterName.Underscore());
+
+            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
         }
 
         /// <summary>
-        /// Loads the assemblies.
+        /// Requires the ruby file.
         /// </summary>
-        /// <param name="assemblies">The assemblies.</param>
-        public void LoadAssemblies(params Type[] assemblies)
+        /// <param name="path">The path.</param>
+        /// <param name="readerType">Type of the reader.</param>
+        internal void RequireRubyFile(string path, ReaderType readerType)
         {
-            assemblies.ForEach(type => LoadAssembly(type.Assembly));
+            new DefaultScriptRunner(
+                Engine,
+                path,
+                readerType == ReaderType.File ? new FileReader(PathProvider) : (IReader) new AssemblyResourceReader(typeof (IReader).Assembly)
+                ).Execute();
+        }
+
+        /// <summary>
+        /// Sets the model and controllers path.
+        /// </summary>
+        public void AddLoadPaths()
+        {
+            var controllersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.CONTROLLERS);
+            var modelsDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.MODELS);
+            var filtersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.FILTERS);
+
+            Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir, filtersDir});
         }
 
 

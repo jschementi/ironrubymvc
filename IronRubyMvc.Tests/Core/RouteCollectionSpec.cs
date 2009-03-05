@@ -2,14 +2,15 @@
 
 using System.Collections;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Extensions;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     [Concern(typeof (RubyRouteCollection))]
     public class when_a_value_is_mapped : InstanceContextSpecification<RubyRouteCollection>

@@ -1,13 +1,12 @@
 ﻿#region Usings
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
 using IronRuby.Builtins;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Helpers
+namespace System.Web.Mvc.IronRuby.Helpers
 {
     public class HashWrapper : CustomTypeDescriptor
     {
@@ -21,7 +20,7 @@ namespace IronRubyMvcLibrary.Helpers
         public override PropertyDescriptorCollection GetProperties()
         {
             var descriptors = new PropertyDescriptor[Object.Count];
-            int i = 0;
+            var i = 0;
             foreach (var entry in Object)
             {
                 descriptors[i++] =

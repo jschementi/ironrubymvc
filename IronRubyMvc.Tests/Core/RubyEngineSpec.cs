@@ -5,18 +5,21 @@ using System.IO;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.ViewEngine;
 using System.Web.Routing;
 using IronRuby.Builtins;
-using IronRubyMvcLibrary.Controllers;
-using IronRubyMvcLibrary.Core;
-using IronRubyMvcLibrary.Extensions;
-using IronRubyMvcLibrary.ViewEngine;
+using System.Web.Mvc.IronRuby.Controllers;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Extensions;
+using System.Web.Mvc.IronRuby.ViewEngine;
 using Moq;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     [Concern(typeof (RubyEngine))]
     public class when_asked_for_controller_class_name : StaticContextSpecification

@@ -1,13 +1,11 @@
 #region Usings
 
-using System;
-using System.Web.Hosting;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Microsoft.Scripting.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class ScopedScriptRunner : IScriptRunner
     {

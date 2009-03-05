@@ -6,7 +6,7 @@ using System.Web.Hosting;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests
+namespace System.Web.Mvc.IronRuby.Tests
 {
     public static class UnitTestHelpers
     {

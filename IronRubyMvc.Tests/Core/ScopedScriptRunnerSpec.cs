@@ -1,12 +1,13 @@
 #region Usings
 
 using System;
-using IronRubyMvcLibrary.Core;
+using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Core;
 using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests.Core
+namespace System.Web.Mvc.IronRuby.Tests.Core
 {
     [Concern(typeof (ScopedScriptRunner))]
     public class when_a_file_is_provided_to_scoped : with_ironruby_initialized<ScopedScriptRunner>

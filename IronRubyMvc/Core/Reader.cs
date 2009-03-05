@@ -1,4 +1,4 @@
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public abstract class Reader : IReader
     {

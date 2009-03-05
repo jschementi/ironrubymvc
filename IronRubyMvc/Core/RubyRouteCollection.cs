@@ -1,13 +1,12 @@
-﻿#region Usings
+#region Usings
 
 using System.Collections;
-using System.Web.Mvc;
+using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Routing;
-using IronRubyMvcLibrary.Extensions;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     public class RubyRouteCollection
     {
@@ -16,6 +15,11 @@ namespace IronRubyMvcLibrary.Core
         public RubyRouteCollection(RouteCollection routes)
         {
             this.routes = routes;
+        }
+
+        public RouteBase this[string name]
+        {
+            get { return routes[name]; }
         }
 
         public void MapRoute(string name, string url)
@@ -35,11 +39,6 @@ namespace IronRubyMvcLibrary.Core
                                      Defaults = defaults.ToRouteDictionary(),
                                      Constraints = constraints.ToRouteDictionary()
                                  });
-        }
-
-        public RouteBase this[string name]
-        {
-            get { return routes[name]; }
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace IronRubyMvcLibrary.Core
+namespace System.Web.Mvc.IronRuby.Core
 {
     internal class Constants
     {
@@ -10,17 +10,18 @@ namespace IronRubyMvcLibrary.Core
 
         public const string CONTROLLERS = "Controllers";
 
+        public const string FILTERS = "Filters";
+        public const string FILTERS_PASCAL_PATH_FORMAT = @"~\Filters\{0}.rb";
+        public const string FILTERS_UNDERSCORE_PATH_FORMAT = @"~\Filters\{0}.rb";
+
         public const string GET_ACTIONMETHOD_SCRIPT =
             @"controller = {0}.new
 controller.Initialize $request_context
 controller.method :{1}";
 
         public const string MODELS = "Models";
-        public const string FILTERS = "Filters";
-        public const string FILTERS_PASCAL_PATH_FORMAT = @"~\Filters\{0}.rb";
-        public const string FILTERS_UNDERSCORE_PATH_FORMAT = @"~\Filters\{0}.rb";
         public const string REQUEST_CONTEXT_VARIABLE = "request_context";
-        public const string RUBYCONTROLLER_FILE = "IronRubyMvcLibrary.Controllers.controller.rb";
+        public const string RUBYCONTROLLER_FILE = "System.Web.Mvc.IronRuby.Controllers.controller.rb";
         public const string SCRIPT_RUNTIME_VARIABLE = "script_runtime";
     }
 }

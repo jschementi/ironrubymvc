@@ -7,7 +7,7 @@ using IronRuby;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
 using IronRuby.Runtime.Calls;
-using IronRubyMvcLibrary.Extensions;
+using System.Web.Mvc.IronRuby.Extensions;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 using Microsoft.Scripting.Runtime;
@@ -15,7 +15,7 @@ using Xunit;
 
 #endregion
 
-namespace IronRubyMvcLibrary.Tests
+namespace System.Web.Mvc.IronRuby.Tests
 {
     public class RubyRuntime
     {
