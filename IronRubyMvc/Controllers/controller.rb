@@ -30,7 +30,7 @@
           filter(name, options.merge(:when => :around))
         end
         
-        def authorize_action(name, options={}, &b)
+        def authorized_action(name, options={}, &b)
           filter(name, options.merge(:when => :authorize), &b)
         end
         
@@ -49,7 +49,8 @@
 
         def filter(name, options={})
           @action_filters ||= []
-          name = :controller if name.nil?
+          options = name if name.is_a? Class
+          name = :controller if name.nil? || name.is_a?(Class)
           @action_filters << { :name => name.to_sym, :options => options } 
         end
 

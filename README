@@ -11,3 +11,47 @@ Running IronRubyMvcWeb:
 Running Pictures:
 1. Start cassini against Pictures
 2. ruby Pictures\server\app.rb
+
+
+We now have full support for filters. You can create filters in a number of ways.
+
+class YourController < Controller
+
+   # before_action, after_action, around_action, before_result, after_result, authorized_action, exception_action all work
+   before_action :index do |context|
+     # do some filtering stuff here
+   end
+   
+   authorized_action :some_other_action do |context|
+     # do some authorization checking work here
+   end
+   
+   filter :index, YourFilter
+   filter :some_other_action, DifferentYourFilter
+   
+   # executes for each action
+   filter YourControllerFilter 
+   
+   def index
+     # index action
+   end
+   
+   def some_other_action
+     # index action
+   end
+
+end
+
+You can define the following types of filters:
+ActionFilter, ResultFilter, AuthorizationFilter, ExceptionFilter
+
+class YourFilter < ActionFilter
+
+  def on_action_executing(context)
+    # Do some filter work here
+  end
+  
+  def on_action_executed(context)
+    # Do some filter work here
+  end
+end

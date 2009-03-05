@@ -6,6 +6,7 @@ include IronRubyMvcWeb::Models
 include IronRubyMvcWeb::Models::Northwind
 
 require 'MyProductFilter'
+require 'MyControllerFilter'
 
 class ProductsRepository < IronRubyRepository 
 end
@@ -29,6 +30,7 @@ end
 class ProductsController < Controller
   
   filter :index, MyProductFilter
+  filter MyControllerFilter
   
   def index
     repository = ProductsRepository.new

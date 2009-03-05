@@ -20,7 +20,7 @@ class HomeController < Controller
   before_action :index do |context|
     $before_counter ||= 0
     $before_counter += 1
-    context.request_context.http_context.response.write("Hello world")
+    context.request_context.http_context.response.write("Hello world<br />")
   end
   
   filter :index, MyFilter
