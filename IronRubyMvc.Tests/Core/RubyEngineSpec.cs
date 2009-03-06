@@ -69,7 +69,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
         [Observation]
         public void routes_should_be_a_ruby_route_collection()
         {
-            _engine.Context.GetGlobalVariable("routes").ShouldBeAnInstanceOf<RubyRouteCollection>();
+            _engine.Context.GetGlobalVariable("routes").ShouldBeAnInstanceOf<RubyRoutes>();
         }
 
         [Observation]

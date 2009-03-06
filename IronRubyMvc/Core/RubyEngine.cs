@@ -113,18 +113,6 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
-        public TTarget CreateInstance<TTarget>(RubyClass rubyClass, bool throwError, params object[] args) where TTarget : class
-        {
-            var result = Operations.CreateInstance(rubyClass, args);
-            return throwError ? (TTarget) result : result as TTarget;
-        }
-
-        public TTarget CreateInstance<TTarget>(RubyClass rubyClass, params object[] args)
-        {
-            return (TTarget) Operations.CreateInstance(rubyClass, args);
-        }
-
-
         /// <summary>
         /// Calls the method.
         /// </summary>
@@ -216,62 +204,6 @@ namespace System.Web.Mvc.IronRuby.Core
 
         #endregion
 
-        #region Commented
-
-//        public bool VariableExists(string variable)
-//        {
-//            return GetGlobalVariableName(variable).IsNotNullOrBlank();
-//        }
-
-//        public string GetGlobalVariableName(string nameProposal)
-//        {
-//            foreach (var variableName in Runtime.Globals.GetVariableNames())
-//            {
-//                if (String.Equals(variableName, nameProposal, StringComparison.OrdinalIgnoreCase))
-//                    return variableName;
-//            }
-//            return String.Empty;
-//        }
-
-//        public bool MethodExists(string methodName, RubyClass rubyClass)
-//        {
-//            return GetMethodName(methodName, rubyClass).IsNotNullOrBlank();
-//        }
-
-//        public string GetMethodName(string methodName, RubyClass rubyClass)
-//        {
-//            string result = String.Empty;
-//
-//            using (Context.ClassHierarchyLocker())
-//            {
-//                rubyClass.EnumerateMethods((_, symbolId, __) =>
-//                                               {
-//                                                   if (String.Equals(symbolId, methodName,
-//                                                                     StringComparison.OrdinalIgnoreCase))
-//                                                   {
-//                                                       result = symbolId;
-//                                                       return true;
-//                                                   }
-//
-//                                                   return false;
-//                                               });
-//            }
-//            return result;
-//        }
-
-//        public IList<string> GetMethodNames(RubyClass rubyClass)
-//        {
-//            return Operations.GetMemberNames(rubyClass);
-//        }
-
-//        public Func<object> GetDelegate(object obj)
-//        {
-//            Func<object> func = () => Engine.Operations.Call(obj);
-//            return func;
-//        }
-
-        #endregion
-
         private void Initialize()
         {
             Engine = Ruby.GetEngine(Runtime);
@@ -294,7 +226,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="controllerName">Name of the controller.</param>
         /// <returns></returns>
-        public static string GetControllerClassName(string controllerName)
+        private static string GetControllerClassName(string controllerName)
         {
             return (controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
                         ? controllerName
@@ -374,7 +306,7 @@ namespace System.Web.Mvc.IronRuby.Core
         private static void ProcessRubyRoutes(RubyEngine engine, IPathProvider vpp, string routesPath)
         {
             if (!vpp.FileExists(routesPath)) return;
-            var routeCollection = new RubyRouteCollection(RouteTable.Routes);
+            var routeCollection = new RubyRoutes(RouteTable.Routes);
             engine.DefineReadOnlyGlobalVariable("routes", routeCollection);
             engine.RequireRubyFile(routesPath, ReaderType.File);
         }

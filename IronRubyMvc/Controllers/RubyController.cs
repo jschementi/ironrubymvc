@@ -10,9 +10,6 @@ using System.Web.Mvc.IronRuby.Helpers;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using Microsoft.Scripting;
-using RubyModuleDefinition = IronRuby.Runtime.RubyModuleAttribute;
-using RubyClassDefinition = IronRuby.Runtime.RubyClassAttribute;
-using RubyMethodDefinition = IronRuby.Runtime.RubyMethodAttribute;
 
 #endregion
 
@@ -20,21 +17,9 @@ namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyController : Controller
     {
-        private static RubyArray _filters = new RubyArray();
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
-
         private IRubyEngine _engine;
         private IDictionary<object, object> _params;
-
-        public static RubyArray Filters
-        {
-            get
-            {
-                if (_filters == null)
-                    _filters = new RubyArray();
-                return _filters;
-            }
-        }
 
         public string ControllerName { get; internal set; }
         public RubyClass RubyType { get; private set; }

@@ -92,7 +92,7 @@
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enums.cs" />
     <Compile Include="Core\RubyMvcApplication.cs" />
-    <Compile Include="Core\RubyRouteCollection.cs" />
+    <Compile Include="Core\RubyRoutes.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
     <Compile Include="Controllers\RubyController.cs" />
     <Compile Include="Controllers\RubyControllerActionInvoker.cs" />

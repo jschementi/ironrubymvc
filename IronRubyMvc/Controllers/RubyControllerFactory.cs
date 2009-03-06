@@ -22,19 +22,17 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public IController CreateController(RequestContext requestContext, string controllerName)
         {
-            IController result;
 
             try
             {
                 return _innerFactory.CreateController(requestContext, controllerName);
             }
-            catch
+            catch(InvalidOperationException)
             {
             }
 
-            result = _engine.LoadController(requestContext, controllerName);
+            return _engine.LoadController(requestContext, controllerName);
 
-            return result;
         }
 
         public void ReleaseController(IController controller)

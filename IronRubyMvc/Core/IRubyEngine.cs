@@ -29,25 +29,6 @@ namespace System.Web.Mvc.IronRuby.Core
         RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
 
         /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <typeparam name="TTarget">The type of the target.</typeparam>
-        /// <param name="rubyClass">The ruby class.</param>
-        /// <param name="args">The args.</param>
-        /// <returns></returns>
-        TTarget CreateInstance<TTarget>(RubyClass rubyClass, params object[] args);
-
-        /// <summary>
-        /// Creates the instance.
-        /// </summary>
-        /// <typeparam name="TTarget">The type of the target.</typeparam>
-        /// <param name="rubyClass">The ruby class.</param>
-        /// <param name="throwError">if set to <c>true</c> [throw error].</param>
-        /// <param name="args">The args.</param>
-        /// <returns></returns>
-        TTarget CreateInstance<TTarget>(RubyClass rubyClass, bool throwError, params object[] args) where TTarget : class;
-
-        /// <summary>
         /// Calls the method.
         /// </summary>
         /// <param name="receiver">The receiver.</param>
@@ -72,6 +53,11 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="assembly">The assembly.</param>
         void LoadAssembly(Assembly assembly);
 
+        /// <summary>
+        /// Executes the script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <returns></returns>
         object ExecuteScript(string script);
 
         /// <summary>

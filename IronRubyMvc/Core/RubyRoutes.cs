@@ -8,11 +8,11 @@ using System.Web.Routing;
 
 namespace System.Web.Mvc.IronRuby.Core
 {
-    public class RubyRouteCollection
+    public class RubyRoutes
     {
         private readonly RouteCollection routes;
 
-        public RubyRouteCollection(RouteCollection routes)
+        public RubyRoutes(RouteCollection routes)
         {
             this.routes = routes;
         }
