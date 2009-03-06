@@ -12,8 +12,8 @@ using Xunit;
 
 namespace System.Web.Mvc.IronRuby.Tests.Core
 {
-    [Concern(typeof (RubyRouteCollection))]
-    public class when_a_value_is_mapped : InstanceContextSpecification<RubyRouteCollection>
+    [Concern(typeof (RubyRoutes))]
+    public class when_a_value_is_mapped : InstanceContextSpecification<RubyRoutes>
     {
         private RouteCollection _routeCollection;
 
@@ -26,9 +26,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
             _routeCollection = routes;
         }
 
-        protected override RubyRouteCollection CreateSut()
+        protected override RubyRoutes CreateSut()
         {
-            return new RubyRouteCollection(new RouteCollection());
+            return new RubyRoutes(new RouteCollection());
         }
 
         protected override void Because()
@@ -44,8 +44,8 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
         }
     }
 
-    [Concern(typeof (RubyRouteCollection))]
-    public class when_more_values_are_mapped : InstanceContextSpecification<RubyRouteCollection>
+    [Concern(typeof (RubyRoutes))]
+    public class when_more_values_are_mapped : InstanceContextSpecification<RubyRoutes>
     {
         private RouteCollection _routeCollection;
 
@@ -58,9 +58,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
             _routeCollection = routes;
         }
 
-        protected override RubyRouteCollection CreateSut()
+        protected override RubyRoutes CreateSut()
         {
-            return new RubyRouteCollection(new RouteCollection());
+            return new RubyRoutes(new RouteCollection());
         }
 
         protected override void Because()

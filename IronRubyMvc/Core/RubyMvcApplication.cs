@@ -11,19 +11,16 @@ namespace System.Web.Mvc.IronRuby.Core
 //        private bool _isFirstRequest;
 //        private bool _hasBeenReset;
 
-        protected virtual void Application_Start(object sender, EventArgs e)
+        protected void Application_Start(object sender, EventArgs e)
         {
             RubyEngine.InitializeIronRubyMvc(new VirtualPathProvider(), "~/routes.rb");
+            OnStart();
         }
 
-//        protected virtual void Application_BeginRequest(object sender, EventArgs e)
-//        {
-//            var rubyEngine = Application["___RubyEngine"] as IRubyEngine;
-//            if(rubyEngine.IsNotNull() && !_isFirstRequest && !_hasBeenReset)
-//            {
-//                rubyEngine.ResetEngine();
-//                _hasBeenReset = true;
-//            }
-//        }
+        protected virtual void OnStart()
+        {
+            // override this to provide start behavior
+        }
+
     }
 }

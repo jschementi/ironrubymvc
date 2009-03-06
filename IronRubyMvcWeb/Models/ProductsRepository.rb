@@ -1,4 +1,4 @@
-﻿require 'helpers/model'
+require 'helpers/model'
 
 class ProductsRepository < IronRubyRepository
 end
