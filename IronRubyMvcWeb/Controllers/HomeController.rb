@@ -1,4 +1,4 @@
-﻿#require "HomeModel"
+#require "HomeModel"
 
 require 'MyFilter'
 

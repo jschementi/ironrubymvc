@@ -3,6 +3,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.ViewEngine;
@@ -10,6 +11,7 @@ using System.Web.Routing;
 using IronRuby;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
+using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 
 #endregion
@@ -53,12 +55,6 @@ namespace System.Web.Mvc.IronRuby.Core
         internal ScriptEngine Engine { get; private set; }
 
         /// <summary>
-        /// Gets the script runner.
-        /// </summary>
-        /// <value>The script runner.</value>
-        internal IScriptRunner ScriptRunner { get; set; }
-
-        /// <summary>
         /// Gets the current scope.
         /// </summary>
         /// <value>The current scope.</value>
@@ -95,7 +91,7 @@ namespace System.Web.Mvc.IronRuby.Core
             if (controllerFilePath.IsNullOrBlank())
                 return null;
 
-            ScriptRunner.ExecuteFile(controllerFilePath);
+            Engine.CreateScriptSource(new VirtualPathStreamContentProvider(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
 
             var controllerClass = GetRubyClass(controllerClassName);
             var controller = ConfigureController(controllerClass, requestContext);
@@ -173,7 +169,7 @@ namespace System.Web.Mvc.IronRuby.Core
 
         public object ExecuteScript(string script)
         {
-            return ScriptRunner.ExecuteScript(script);
+            return Engine.Execute(script, CurrentScope);
         }
 
         /// <summary>
@@ -282,7 +278,6 @@ namespace System.Web.Mvc.IronRuby.Core
             Context = Ruby.GetExecutionContext(Engine);
             CurrentScope = Engine.CreateScope();
             Operations = Engine.CreateOperations();
-            ScriptRunner = new ScopedScriptRunner(Engine, CurrentScope, string.Empty, new FileReader(PathProvider));
             LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (RouteTable), typeof (Controller), typeof (RubyController));
             AddLoadPaths();
             DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
@@ -317,17 +312,6 @@ namespace System.Web.Mvc.IronRuby.Core
             return PathProvider.FileExists(fileName) ? fileName : string.Empty;
         }
 
-        internal string GetFilterFilePath(string filterName)
-        {
-            var fileName = Constants.FILTERS_PASCAL_PATH_FORMAT.FormattedWith(filterName.Pascalize());
-            if (PathProvider.FileExists(fileName))
-                return fileName;
-
-            fileName = Constants.FILTERS_UNDERSCORE_PATH_FORMAT.FormattedWith(filterName.Underscore());
-
-            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
-        }
-
         /// <summary>
         /// Requires the ruby file.
         /// </summary>
@@ -335,11 +319,10 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="readerType">Type of the reader.</param>
         internal void RequireRubyFile(string path, ReaderType readerType)
         {
-            new DefaultScriptRunner(
-                Engine,
-                path,
-                readerType == ReaderType.File ? new FileReader(PathProvider) : (IReader) new AssemblyResourceReader(typeof (IReader).Assembly)
-                ).Execute();
+            Engine.CreateScriptSource(readerType == ReaderType.File
+                                          ? (StreamContentProvider) new VirtualPathStreamContentProvider(path)
+                                          : new AssemblyStreamContentProvider(path, typeof (IRubyEngine).Assembly), null, Encoding.ASCII).Execute();
+            
         }
 
         /// <summary>

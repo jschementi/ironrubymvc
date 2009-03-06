@@ -1,4 +1,4 @@
-﻿#require 'helpers/BaseController'
+#require 'helpers/BaseController'
 #require 'ProductsRepository'
 
 require 'IronRubyMvcWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
