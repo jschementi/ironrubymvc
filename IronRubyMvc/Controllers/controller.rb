@@ -1,4 +1,4 @@
-﻿module IronRubyMvc
+module IronRubyMvc
   
   module Controllers
     
@@ -45,7 +45,7 @@
           @on_exception = on_exception
         end 
         
-        def on_action_executing(context)
+        def on_exception(context)
           on_exception.call(context)
         end
         
@@ -60,11 +60,11 @@
           @after_result = after_result
         end 
         
-        def on_action_executing(context)
+        def on_result_executing(context)
           before_result.call(context) unless before_result.nil?
         end
         
-        def on_action_executed(context)
+        def on_result_executed(context)
           after_result.call(context) unless after_result.nil?
         end
       end

@@ -82,23 +82,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ControllerConfiguration.cs" />
+    <Compile Include="Core\AssemblyStreamContentProvider.cs" />
+    <Compile Include="Core\IPathProvider.cs" />
     <Compile Include="Core\IRubyEngine.cs" />
     <Compile Include="Controllers\RubyActionFilter.cs" />
     <Compile Include="Controllers\RubyAuthorizationFilter.cs" />
     <Compile Include="Controllers\RubyExceptionFilter.cs" />
     <Compile Include="Controllers\RubyResultFilter.cs" />
-    <Compile Include="Core\DefaultScriptRunner.cs" />
-    <Compile Include="Core\AssemblyResourceReader.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enums.cs" />
-    <Compile Include="Core\FileReader.cs" />
-    <Compile Include="Core\IPathProvider.cs" />
-    <Compile Include="Core\IReader.cs" />
-    <Compile Include="Core\Reader.cs" />
     <Compile Include="Core\RubyMvcApplication.cs" />
     <Compile Include="Core\RubyRouteCollection.cs" />
-    <Compile Include="Core\ScopedScriptRunner.cs" />
-    <Compile Include="Core\IScriptRunner.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
     <Compile Include="Controllers\RubyController.cs" />
     <Compile Include="Controllers\RubyControllerActionInvoker.cs" />
@@ -131,12 +125,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controllers\controller.rb" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\IronRubyMvcKey.snk">
       <Link>IronRubyMvcKey.snk</Link>
     </None>
+    <EmbeddedResource Include="Controllers\controller.rb" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CustomDictionary.xml" />
