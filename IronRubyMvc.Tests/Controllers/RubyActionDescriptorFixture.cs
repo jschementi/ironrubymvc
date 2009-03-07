@@ -12,6 +12,9 @@ using System.Web.Routing;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Tests.Core;
+using IronRuby;
+using IronRuby.Runtime;
+using Microsoft.Scripting.Hosting;
 using Moq.Mvc;
 using Rhino.Mocks;
 using Xunit;
@@ -20,6 +23,31 @@ using Xunit;
 
 namespace System.Web.Mvc.IronRuby.Tests.Controllers
 {
+    public abstract class with_ironruby_initialized<SystemUnderTest> : InstanceContextSpecification<SystemUnderTest>
+        where SystemUnderTest : class
+    {
+        protected static ScriptRuntime _scriptRuntime;
+        protected RubyContext _context;
+        protected ScriptEngine _engine;
+
+        protected override void EstablishContext()
+        {
+            if (_scriptRuntime == null)
+            {
+                var rubySetup = Ruby.CreateRubySetup();
+                rubySetup.Options["InterpretedMode"] = true;
+
+                var runtimeSetup = new ScriptRuntimeSetup();
+                runtimeSetup.LanguageSetups.Add(rubySetup);
+                runtimeSetup.DebugMode = true;
+
+                _scriptRuntime = Ruby.CreateRuntime(runtimeSetup);
+            }
+            _engine = _scriptRuntime.GetRubyEngine();
+            _context = Ruby.GetExecutionContext(_engine);
+        }
+    }
+
     public abstract class with_ironruby_and_an_engine_initialized<SystemUnderTest> :
         with_ironruby_initialized<SystemUnderTest> where SystemUnderTest : class
     {

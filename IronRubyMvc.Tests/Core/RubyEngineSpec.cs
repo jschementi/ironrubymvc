@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Tests.Controllers;
 using System.Web.Mvc.IronRuby.ViewEngine;
 using System.Web.Routing;
 using IronRuby.Builtins;

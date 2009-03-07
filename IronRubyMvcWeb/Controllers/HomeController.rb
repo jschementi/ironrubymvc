@@ -24,6 +24,10 @@ class HomeController < Controller
     view(nil, 'layout', HomeModel.new)
   end
   
+  def raise_error
+    raise "This is supposed to happen"
+  end
+  
   def method_filter(context)
     context.request_context.http_context.response.write("From method filter<br />")
   end
