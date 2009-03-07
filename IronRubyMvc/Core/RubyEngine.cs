@@ -114,6 +114,16 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
+        public string GetMethodName(object receiver, string message)
+        {
+            var methodNames = Operations.GetMemberNames(receiver);
+            
+            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
+            if (methodNames.Contains(message.Underscore())) return message.Underscore();
+
+            return message;
+        }
+
         /// <summary>
         /// Calls the method.
         /// </summary>
@@ -123,11 +133,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <returns></returns>
         public object CallMethod(object receiver, string message, params object[] args)
         {
-            if (!Operations.ContainsMember(receiver, message) && Operations.ContainsMember(receiver, message.Pascalize()))
-                message = message.Pascalize();
-            if (!Operations.ContainsMember(receiver, message) && Operations.ContainsMember(receiver, message.Underscore()))
-                message = message.Underscore();
-            return Operations.InvokeMember(receiver, message, args);
+            return Operations.InvokeMember(receiver, GetMethodName(receiver, message), args);
         }
 
         
