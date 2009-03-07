@@ -107,8 +107,8 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var result = new List<TTarget>();
             collection.ForEach(item =>
                                    {
-                                       var filter = item as TTarget;
-                                       if (filter.IsNotNull()) result.Add(filter);
+                                       var casted = (typeof(TTarget) == typeof(string)) ? item.ToString() as TTarget : item as TTarget;
+                                       if (casted.IsNotNull()) result.Add(casted);
                                    });
             return result;
         }

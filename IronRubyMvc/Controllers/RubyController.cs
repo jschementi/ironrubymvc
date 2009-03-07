@@ -145,6 +145,8 @@ namespace System.Web.Mvc.IronRuby.Controllers
             var vdd = new ViewDataDictionary();
             vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
 
+            _engine.CallMethod(this, "fill_view_data");
+
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;
 

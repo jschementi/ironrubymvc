@@ -91,12 +91,13 @@ namespace System.Web.Mvc.IronRuby.Core
             if (controllerFilePath.IsNullOrBlank())
                 return null;
 
-            Engine.CreateScriptSource(new VirtualPathStreamContentProvider(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
+            
+           Engine.CreateScriptSource(new VirtualPathStreamContentProvider(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
 
-            var controllerClass = GetRubyClass(controllerClassName);
-            var controller = ConfigureController(controllerClass, requestContext);
+           var controllerClass = GetRubyClass(controllerClassName);
+           var controller = ConfigureController(controllerClass, requestContext);
 
-            return controller;
+           return controller;
         }
 
 
@@ -122,8 +123,14 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <returns></returns>
         public object CallMethod(object receiver, string message, params object[] args)
         {
+            if (!Operations.ContainsMember(receiver, message) && Operations.ContainsMember(receiver, message.Pascalize()))
+                message = message.Pascalize();
+            if (!Operations.ContainsMember(receiver, message) && Operations.ContainsMember(receiver, message.Underscore()))
+                message = message.Underscore();
             return Operations.InvokeMember(receiver, message, args);
         }
+
+        
 
         /// <summary>
         /// Determines whether the specified controller as the action.
@@ -226,7 +233,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="controllerName">Name of the controller.</param>
         /// <returns></returns>
-        private static string GetControllerClassName(string controllerName)
+        internal static string GetControllerClassName(string controllerName)
         {
             return (controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
                         ? controllerName

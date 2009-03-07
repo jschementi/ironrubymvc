@@ -16,12 +16,7 @@ class ProductsController < Controller
     @message = "Hi Mom"
     @categories = repository.get_categories
     
-    return_view nil, 'layout'
-  end
-  
-  def return_view(view, layout)
-    fill_view_data
-    view view, layout
+    view nil, 'layout'
   end
   
   def list
@@ -30,7 +25,7 @@ class ProductsController < Controller
     repository = ProductsRepository.new
     @products = repository.get_products_for_category @category
     
-    return_view nil, 'layout'
+    view nil, 'layout'
   end
   
   def edit
@@ -38,7 +33,7 @@ class ProductsController < Controller
     
     repository = ProductsRepository.new
     @product = repository.get_product @id
-    return_view nil, 'layout'
+    view nil, 'layout'
   end
   
   def update

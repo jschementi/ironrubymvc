@@ -130,7 +130,7 @@ module IronRubyMvc
         end
 
         def action_filters
-          @action_filters ||= []
+          @action_filters ||= {}
           @action_filters
         end
         
@@ -183,12 +183,7 @@ module IronRubyMvc
     def fill_view_data
       instance_variables.each { |varname| view_data.add(varname[1..-1], instance_variable_get(varname.to_sym)) }
     end
-    
-    def return_view(*args)
-      fill_view_data
-      view args
-    end
-            
+        
   end
   
   #end

@@ -6,6 +6,7 @@ using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
+using IronRuby.Builtins;
 using Xunit;
 
 #endregion
@@ -51,10 +52,13 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
 
         protected override void EstablishContext()
         {
-            var routes = new RouteCollection();
-            routes.Add("my_controller",
-                       new Route("my_controller", new MvcRouteHandler())
-                           {Constraints = new Hashtable().ToRouteDictionary()});
+            var routes = new RouteCollection
+                             {
+                                 {
+                                     "my_controller", new Route("my_controller", new MvcRouteHandler())
+                                                          {Constraints = new Hashtable().ToRouteDictionary()}
+                                     }
+                             };
             _routeCollection = routes;
         }
 
@@ -65,9 +69,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
 
         protected override void Because()
         {
-            Sut.MapRoute("my_controller", "my_controller", null);
-            Sut.MapRoute("my_controller2", "my_controller3", null);
-            Sut.MapRoute("my_controller3", "my_controller2", null);
+            Sut.MapRoute("my_controller", "my_controller");
+            Sut.MapRoute("my_controller2", "my_controller3");
+            Sut.MapRoute("my_controller3", "my_controller2");
         }
 
         [Observation]

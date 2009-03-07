@@ -32,6 +32,19 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug_Signed|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug_Signed\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release_Signed|AnyCPU' ">
+    <OutputPath>bin\Release_Signed\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronRuby, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,10 +88,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\dependencies\System.Web.Mvc.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dependencies\System.Web.Routing.dll</HintPath>
@@ -100,13 +110,8 @@
     <Compile Include="Controllers\RubyControllerDescriptorSpec.cs" />
     <Compile Include="Controllers\RubyControllerFactorySpec.cs" />
     <Compile Include="Controllers\RubyControllerSpec.cs" />
-    <Compile Include="Core\AssemblyResourceReaderSpec.cs" />
-    <Compile Include="Core\DefaultScriptRunnerSpec.cs" />
-    <EmbeddedResource Include="Core\EmbeddedTestScript.rb" />
-    <Compile Include="Core\FileReaderSpec.cs" />
     <Compile Include="Core\RouteCollectionSpec.cs" />
     <Compile Include="Core\RubyEngineSpec.cs" />
-    <Compile Include="Core\ScopedScriptRunnerSpec.cs" />
     <Compile Include="Extensions\DictionaryExtensionsFixture.cs" />
     <Compile Include="Extensions\IEnumerableExtensionsFixture.cs" />
     <Compile Include="Extensions\InflectorTest.cs" />
@@ -122,14 +127,6 @@
       <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
       <Name>System.Web.Mvc.IronRuby</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Core\EmbeddedTestResource.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Core\TestFile.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\IronRubyMvcKey.snk">

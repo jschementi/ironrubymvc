@@ -41,6 +41,13 @@
     <AssemblyName>IronRubyMvcLibrarySpecs</AssemblyName>
     <RootNamespace>IronRubyMvcLibrarySpecs</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug_Signed' ">
+    <Name>Debug</Name>
+    <OutputPath>bin\Debug_Signed\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release_Signed' ">
+    <OutputPath>bin\Release_Signed\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Ruby Include="bacon_helper.rb" />
     <Ruby Include="extensions\extensions.rb" />

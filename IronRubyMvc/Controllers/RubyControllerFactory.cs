@@ -30,6 +30,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             catch(InvalidOperationException)
             {
             }
+            catch(HttpException){}
 
             return _engine.LoadController(requestContext, controllerName);
 
