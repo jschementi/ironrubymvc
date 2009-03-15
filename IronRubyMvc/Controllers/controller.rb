@@ -75,12 +75,12 @@ module IronRubyMvc
           impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
           filter(name, RubyProcActionFilter.new(impl || b, nil)) 
         end
-        
+
         def after_action(name, method_name=nil, &b)
           impl = create_from_name(method_name) if method_name.is_a?(Symbol) or method_name.is_a?(String)
           filter(name, RubyProcActionFilter.new(nil, impl || b))
         end
-        
+
         def around_action(name, options={}, &b)
           options[:before] ||= b if block_given?
           options[:after] ||= b if block_given?
@@ -116,8 +116,8 @@ module IronRubyMvc
           options[:after] ||= create_from_name(options[:after]) if options[:after].is_a?(Symbol) or options[:after].is_a?(String)
           filter(name, RubyProcResultFilter.new(options[:before], options[:after])) 
         end
-        
-        def filter(name, options=nil)
+ 
+	 	def filter(name, options=nil)
           @action_filters ||= {}
           klass = nil
           klass = name.new if name.is_a? Class
@@ -128,16 +128,16 @@ module IronRubyMvc
           @action_filters[name.to_sym] ||= []
           @action_filters[name.to_sym] << klass          
         end
-        
+
         def action_filters
           @action_filters ||= {}
           @action_filters
         end
         
         private
-        def create_from_name(name)
-          lambda {|context| context.controller.send(name.to_sym, context) } 
-        end 
+          def create_from_name(name)
+            lambda {|context| context.controller.send(name.to_sym, context) } 
+          end 
         
       end
       
@@ -169,7 +169,7 @@ module IronRubyMvc
         base.extend(ClassMethods)
       end
     end
-    
+
     module Selectors
       
       module ClassMethods
@@ -178,12 +178,12 @@ module IronRubyMvc
           @action_methods ||= []
           options[:action] = b if block_given?
           options[:action] ||= name.to_sym #class.instance_method(name.to_sym)
-          @action_selectors << { :name => name.to_sym, :options => options }
+          @action_methods << { :name => name.to_sym, :options => options }
         end
         
-        def action_selectors
-          @action_selectors ||= []
-          @action_selectors
+        def action_methods
+          @action_methods ||= []
+          @action_methods
         end
         
       end

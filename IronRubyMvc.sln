@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Web.Mvc.IronRuby", "IronRubyMvc\System.Web.Mvc.IronRuby.csproj", "{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}"
@@ -51,3 +50,4 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
+

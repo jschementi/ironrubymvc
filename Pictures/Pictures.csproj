@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Pictures/Pictures.csproj
 ﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -194,6 +195,175 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
+=======
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}</ProjectGuid>
+    <ProjectTypeGuids>{603c0e0b-db56-11dc-be95-000d561079b0};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Pictures</RootNamespace>
+    <AssemblyName>Pictures</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug_Signed|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release_Signed|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Microsoft ASP.NET\ASP.NET MVC Beta\Assemblies\System.Web.Abstractions.dll</HintPath>
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\Microsoft ASP.NET\ASP.NET MVC Beta\Assemblies\System.Web.Routing.dll</HintPath>
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <Content Include="images\album.png" />
+    <Content Include="images\album_frame.jpg" />
+    <Content Include="images\banner.jpg" />
+    <Content Include="images\gradient.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\rails.png" />
+    <Content Include="images\tab_button_bg.png" />
+    <Content Include="images\thumbnail_frame.jpg" />
+    <Content Include="javascripts\application.js" />
+    <Content Include="javascripts\controls.js" />
+    <Content Include="javascripts\dragdrop.js" />
+    <Content Include="javascripts\effects.js" />
+    <Content Include="javascripts\prototype.js" />
+    <Content Include="robots.txt" />
+    <Content Include="stylesheets\dark.css" />
+    <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Web.config" />
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IronRubyMvc\System.Web.Mvc.IronRuby.csproj">
+      <Project>{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}</Project>
+      <Name>System.Web.Mvc.IronRuby</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Controllers\AlbumsController.rb" />
+    <None Include="Controllers\ApplicationController.rb" />
+    <None Include="Controllers\CommentsController.rb" />
+    <None Include="Controllers\FollowsController.rb" />
+    <None Include="Controllers\HomeController.rb" />
+    <None Include="Controllers\PeopleController.rb" />
+    <None Include="Controllers\PicturesController.rb" />
+    <None Include="Controllers\ProductsController.rb" />
+    <None Include="Controllers\SessionsController.rb" />
+    <None Include="Controllers\TaggingsController.rb" />
+    <None Include="Controllers\TagsController.rb" />
+    <None Include="Models\album.rb" />
+    <None Include="Models\base_model.rb" />
+    <None Include="Models\comment.rb" />
+    <None Include="Models\follow.rb" />
+    <None Include="Models\home_model.rb" />
+    <None Include="Models\in_memory_model.rb" />
+    <None Include="Models\person.rb" />
+    <None Include="Models\picture.rb" />
+    <None Include="Models\tag.rb" />
+    <None Include="Models\tagging.rb" />
+    <None Include="Routes.rb" />
+    <None Include="Views\albums\index.html.erb" />
+    <None Include="Views\albums\new.html.erb" />
+    <None Include="Views\albums\show.html.erb" />
+    <None Include="Views\albums\_thumbnail_picture.html.erb" />
+    <None Include="Views\comments\new.html.erb" />
+    <None Include="Views\comments\_comment.html.erb" />
+    <None Include="Views\events\index.html.erb" />
+    <None Include="Views\follows\index.html.erb" />
+    <None Include="Views\Helpers.rb" />
+    <None Include="Views\Login\login.html.erb" />
+    <None Include="Views\people\edit.html.erb" />
+    <None Include="Views\people\index.html.erb" />
+    <None Include="Views\people\new.html.erb" />
+    <None Include="Views\people\show.html.erb" />
+    <None Include="Views\people\_form.html.erb" />
+    <None Include="Views\people\_person.html.erb" />
+    <None Include="Views\pictures\new.html.erb" />
+    <None Include="Views\pictures\show.html.erb" />
+    <None Include="Views\pictures\tagged.html.erb" />
+    <None Include="Views\pictures\test.html.erb" />
+    <None Include="Views\pictures\index.html.erb" />
+    <None Include="Views\pictures\_picture.html.erb" />
+    <None Include="Views\pictures\_thumbnail_album.html.erb" />
+    <None Include="Views\pictures\_thumbnail_picture.html.erb" />
+    <None Include="Views\pictures\_cloud.html.erb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Home\" />
+    <Folder Include="Views\Shared\" />
+    <Folder Include="Views\tags\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
+>>>>>>> 14e19c41c4d24b893ec3b3c7a560aabfcff3ba01:Pictures/Pictures.csproj
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -125,6 +125,16 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
+        public string GetMethodName(object receiver, string message)
+        {
+            var methodNames = Operations.GetMemberNames(receiver);
+            
+            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
+            if (methodNames.Contains(message.Underscore())) return message.Underscore();
+
+            return message;
+        }
+
         /// <summary>
         /// Calls the method.
         /// </summary>
@@ -136,7 +146,6 @@ namespace System.Web.Mvc.IronRuby.Core
         {
             return Operations.InvokeMember(receiver, GetMethodName(receiver, message), args);
         }
-
 
         /// <summary>
         /// Determines whether the specified controller as the action.
@@ -217,16 +226,6 @@ namespace System.Web.Mvc.IronRuby.Core
 
         #endregion
 
-        private string GetMethodName(object receiver, string message)
-        {
-            var methodNames = Operations.GetMemberNames(receiver);
-
-            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
-            if (methodNames.Contains(message.Underscore())) return message.Underscore();
-
-            // really? we got here.. that must be some pretty funky naming.
-            return message;
-        }
 
         private void Initialize()
         {
@@ -320,7 +319,6 @@ namespace System.Web.Mvc.IronRuby.Core
         private static RubyEngine InitializeIronRuby(IPathProvider vpp, Func<string, StreamContentProvider> contentProviderFactory)
         {
             var rubySetup = Ruby.CreateRubySetup();
-
             var runtimeSetup = new ScriptRuntimeSetup();
             runtimeSetup.LanguageSetups.Add(rubySetup);
             runtimeSetup.DebugMode = true;
