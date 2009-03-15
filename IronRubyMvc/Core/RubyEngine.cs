@@ -24,6 +24,8 @@ namespace System.Web.Mvc.IronRuby.Core
     /// </summary>
     public class RubyEngine : IRubyEngine
     {
+        private readonly Func<string, StreamContentProvider> _contentProviderFactory;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RubyEngine"/> class.
         /// </summary>
@@ -33,6 +35,15 @@ namespace System.Web.Mvc.IronRuby.Core
         {
             Runtime = runtime;
             PathProvider = pathProvider;
+            _contentProviderFactory = path => new VirtualPathStreamContentProvider(path);
+            Initialize();
+        }
+
+        internal RubyEngine(ScriptRuntime runtime, IPathProvider pathProvider, Func<string, StreamContentProvider> contentProviderFactory)
+        {
+            Runtime = runtime;
+            PathProvider = pathProvider;
+            _contentProviderFactory = contentProviderFactory;
             Initialize();
         }
 
@@ -91,13 +102,13 @@ namespace System.Web.Mvc.IronRuby.Core
             if (controllerFilePath.IsNullOrBlank())
                 return null;
 
-            
-           Engine.CreateScriptSource(new VirtualPathStreamContentProvider(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
 
-           var controllerClass = GetRubyClass(controllerClassName);
-           var controller = ConfigureController(controllerClass, requestContext);
+            Engine.CreateScriptSource( _contentProviderFactory(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
 
-           return controller;
+            var controllerClass = GetRubyClass(controllerClassName);
+            var controller = ConfigureController(controllerClass, requestContext);
+
+            return controller;
         }
 
 
@@ -114,16 +125,6 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
-        public string GetMethodName(object receiver, string message)
-        {
-            var methodNames = Operations.GetMemberNames(receiver);
-            
-            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
-            if (methodNames.Contains(message.Underscore())) return message.Underscore();
-
-            return message;
-        }
-
         /// <summary>
         /// Calls the method.
         /// </summary>
@@ -136,7 +137,6 @@ namespace System.Web.Mvc.IronRuby.Core
             return Operations.InvokeMember(receiver, GetMethodName(receiver, message), args);
         }
 
-        
 
         /// <summary>
         /// Determines whether the specified controller as the action.
@@ -217,6 +217,17 @@ namespace System.Web.Mvc.IronRuby.Core
 
         #endregion
 
+        private string GetMethodName(object receiver, string message)
+        {
+            var methodNames = Operations.GetMemberNames(receiver);
+
+            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
+            if (methodNames.Contains(message.Underscore())) return message.Underscore();
+
+            // really? we got here.. that must be some pretty funky naming.
+            return message;
+        }
+
         private void Initialize()
         {
             Engine = Ruby.GetEngine(Runtime);
@@ -265,9 +276,8 @@ namespace System.Web.Mvc.IronRuby.Core
         internal void RequireRubyFile(string path, ReaderType readerType)
         {
             Engine.CreateScriptSource(readerType == ReaderType.File
-                                          ? (StreamContentProvider) new VirtualPathStreamContentProvider(path)
+                                          ? _contentProviderFactory(path)
                                           : new AssemblyStreamContentProvider(path, typeof (IRubyEngine).Assembly), null, Encoding.ASCII).Execute();
-            
         }
 
         /// <summary>
@@ -278,7 +288,6 @@ namespace System.Web.Mvc.IronRuby.Core
             var controllersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.CONTROLLERS);
             var modelsDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.MODELS);
             var filtersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.FILTERS);
-
             Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir, filtersDir});
         }
 
@@ -290,7 +299,12 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="routesPath">The routes path.</param>
         public static RubyEngine InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath)
         {
-            var engine = InitializeIronRuby(pathProvider);
+            return InitializeIronRubyMvc(pathProvider, routesPath, path => new VirtualPathStreamContentProvider(path));
+        }
+
+        public static RubyEngine InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath, Func<string, StreamContentProvider> contentProviderFactory)
+        {
+            var engine = InitializeIronRuby(pathProvider, contentProviderFactory);
             ProcessRubyRoutes(engine, pathProvider, routesPath);
             IntializeMvc(engine);
             return engine;
@@ -303,17 +317,16 @@ namespace System.Web.Mvc.IronRuby.Core
             ViewEngines.Engines.Add(new RubyViewEngine());
         }
 
-        private static RubyEngine InitializeIronRuby(IPathProvider vpp)
+        private static RubyEngine InitializeIronRuby(IPathProvider vpp, Func<string, StreamContentProvider> contentProviderFactory)
         {
             var rubySetup = Ruby.CreateRubySetup();
-//            rubySetup.Options["InterpretedMode"] = true;
 
             var runtimeSetup = new ScriptRuntimeSetup();
             runtimeSetup.LanguageSetups.Add(rubySetup);
             runtimeSetup.DebugMode = true;
 
             var runtime = Ruby.CreateRuntime(runtimeSetup);
-            return new RubyEngine(runtime, vpp);
+            return new RubyEngine(runtime, vpp, contentProviderFactory);
         }
 
         private static void ProcessRubyRoutes(RubyEngine engine, IPathProvider vpp, string routesPath)

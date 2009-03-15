@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Web.Hosting;
+using Microsoft.Scripting;
 
 #endregion
 
@@ -79,5 +80,24 @@ namespace System.Web.Mvc.IronRuby.Tests
         {
             return stream;
         }
+    }
+
+    internal class TestStreamContentProvider : StreamContentProvider
+    {
+        private readonly string _path;
+
+        public TestStreamContentProvider(string path)
+        {
+            _path = path;
+        }
+
+        #region Overrides of StreamContentProvider
+
+        public override Stream GetStream()
+        {
+            return new FileStream(_path, FileMode.Open);
+        }
+
+        #endregion
     }
 }

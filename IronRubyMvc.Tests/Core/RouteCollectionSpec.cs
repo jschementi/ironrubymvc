@@ -1,6 +1,7 @@
 #region Usings
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Routing;
@@ -69,7 +70,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
 
         protected override void Because()
         {
-            Sut.MapRoute("my_controller", "my_controller");
+            Sut.MapRoute("my_controller", "my_controller", new Hash(new Dictionary<object, object>()));
             Sut.MapRoute("my_controller2", "my_controller3");
             Sut.MapRoute("my_controller3", "my_controller2");
         }

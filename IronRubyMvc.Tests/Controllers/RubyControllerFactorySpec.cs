@@ -28,10 +28,10 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
             _controllerFactory
                 .WhenToldTo(factory => factory.CreateController(_requestContext, _controllerName))
-                .Throw(new ArgumentNullException());
+                .Throw(new InvalidOperationException());
             
 
-            _rubyEngine.WhenToldTo(eng => eng.LoadController(_requestContext, _controllerName)).Return(Dependency<RubyController>());
+            _rubyEngine.WhenToldTo(eng => eng.LoadController(_requestContext, _controllerName)).Return(new RubyController());
             
         }
 

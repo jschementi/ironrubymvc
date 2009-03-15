@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Web.Mvc.IronRuby", "IronRubyMvc\System.Web.Mvc.IronRuby.csproj", "{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictures", "Pictures\Pictures.csproj", "{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvcWeb", "IronRubyMvcWeb\IronRubyMvcWeb.csproj", "{2E516619-7937-42EC-9427-AA554B36B1B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronRubyMvcLibrary.Tests", "IronRubyMvc.Tests\IronRubyMvcLibrary.Tests.csproj", "{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}"
@@ -15,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		IronRubyMvcKey.snk = IronRubyMvcKey.snk
 		README = README
 	EndProjectSection
-EndProject
-Project("{325B8569-0C7C-4A6A-8AF8-89C3B6BC9E74}") = "IronRubyMvcLibrarySpecs", "IronRubyMvcLibrarySpecs\IronRubyMvcLibrarySpecs.stproj", "{70018A7B-9100-428A-AAFB-06E6B2C23710}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,14 +30,6 @@ Global
 		{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}.Release_Signed|Any CPU.Build.0 = Release_Signed|Any CPU
 		{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46333EBB-C1FF-4E28-B48E-CB3D5BB70CDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Debug_Signed|Any CPU.ActiveCfg = Debug_Signed|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Debug_Signed|Any CPU.Build.0 = Debug_Signed|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Release_Signed|Any CPU.ActiveCfg = Release_Signed|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Release_Signed|Any CPU.Build.0 = Release_Signed|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C0B630F-5168-41D4-91E6-C57BBC84B7C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E516619-7937-42EC-9427-AA554B36B1B7}.Debug_Signed|Any CPU.ActiveCfg = Debug_Signed|Any CPU
 		{2E516619-7937-42EC-9427-AA554B36B1B7}.Debug_Signed|Any CPU.Build.0 = Debug_Signed|Any CPU
 		{2E516619-7937-42EC-9427-AA554B36B1B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -58,14 +46,6 @@ Global
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release_Signed|Any CPU.Build.0 = Release_Signed|Any CPU
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Debug_Signed|Any CPU.ActiveCfg = Debug_Signed|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Debug_Signed|Any CPU.Build.0 = Debug_Signed|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Release_Signed|Any CPU.ActiveCfg = Release_Signed|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Release_Signed|Any CPU.Build.0 = Release_Signed|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70018A7B-9100-428A-AAFB-06E6B2C23710}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

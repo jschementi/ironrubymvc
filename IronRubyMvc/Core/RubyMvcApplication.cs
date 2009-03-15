@@ -8,8 +8,6 @@ namespace System.Web.Mvc.IronRuby.Core
 {
     public class RubyMvcApplication : HttpApplication
     {
-//        private bool _isFirstRequest;
-//        private bool _hasBeenReset;
 
         protected void Application_Start(object sender, EventArgs e)
         {
@@ -17,6 +15,9 @@ namespace System.Web.Mvc.IronRuby.Core
             OnStart();
         }
 
+        /// <summary>
+        /// Called when the application is starting and the engine has been initialized.
+        /// </summary>
         protected virtual void OnStart()
         {
             // override this to provide start behavior
