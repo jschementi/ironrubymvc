@@ -10,9 +10,11 @@ namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyControllerDescriptor : ControllerDescriptor
     {
+        private readonly IRubyEngine _engine;
         private readonly RubyActionMethodSelector _selector;
         public RubyControllerDescriptor(RubyClass rubyClass, IRubyEngine engine)
         {
+            _engine = engine;
             RubyControllerClass = rubyClass;
             _selector = new RubyActionMethodSelector(engine, rubyClass);
         }
@@ -36,12 +38,12 @@ namespace System.Web.Mvc.IronRuby.Controllers
             actionName.EnsureArgumentNotNull("actionName");
 
             var selectedName = _selector.FindActionMethod(controllerContext, actionName);
-            return selectedName.IsNotNullOrBlank() ?  new RubyActionDescriptor(actionName, this) : null;
+            return selectedName.IsNotNullOrBlank() ?  new RubyActionDescriptor(actionName, this, _engine ) : null;
         }
 
         public override ActionDescriptor[] GetCanonicalActions()
         {
-            return _selector.GetAllActionMethods().Map(method => new RubyActionDescriptor(method, this)).ToArray();
+            return _selector.GetAllActionMethods().Map(method => new RubyActionDescriptor(method, this, _engine)).ToArray();
         }
     }
 }

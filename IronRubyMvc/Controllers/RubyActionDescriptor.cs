@@ -1,6 +1,7 @@
 #region Usings
 
 using System.Collections.Generic;
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
 
@@ -10,11 +11,13 @@ namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyActionDescriptor : ActionDescriptor
     {
+        public IRubyEngine RubyEngine { get; set; }
         private readonly string _actionName;
         private readonly ControllerDescriptor _controllerDescriptor;
 
-        public RubyActionDescriptor(string actionName, ControllerDescriptor controllerDescriptor)
+        public RubyActionDescriptor(string actionName, ControllerDescriptor controllerDescriptor, IRubyEngine engine)
         {
+            RubyEngine = engine;
             _actionName = actionName;
             _controllerDescriptor = controllerDescriptor;
         }
@@ -42,8 +45,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public override object Execute(ControllerContext controllerContext, IDictionary<string, object> parameters)
         {
-            var engine = RubyControllerDescriptor.RubyEngine;
-            return engine.CallMethod(controllerContext.Controller, ActionName);
+            return RubyEngine.CallMethod(controllerContext.Controller, ActionName);
         }
 
         public override ICollection<ActionSelector> GetSelectors()
@@ -55,7 +57,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public override FilterInfo GetFilters()
         {
-            var filters = (Hash) RubyControllerDescriptor.RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass, "action_filters");
+            var filters = (Hash) RubyEngine.CallMethod(RubyControllerDescriptor.RubyControllerClass, "action_filters");
 
             var info = filters.ToFilterInfo(ActionName);
             return info;

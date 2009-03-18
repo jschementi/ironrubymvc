@@ -13,8 +13,6 @@ namespace System.Web.Mvc.IronRuby.Controllers
     /// </summary>
     public class RubyControllerActionInvoker : ControllerActionInvoker
     {
-        private RubyActionMethodSelector _selector;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RubyControllerActionInvoker"/> class.
         /// </summary>
@@ -41,7 +39,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
         protected override ControllerDescriptor GetControllerDescriptor(ControllerContext controllerContext)
         {
             var rubyController = (RubyController) controllerContext.Controller;
-            return new RubyControllerDescriptor(rubyController.RubyType) {RubyEngine = RubyEngine};
+            return new RubyControllerDescriptor(rubyController.RubyType, RubyEngine);
         }
 
         protected override ActionDescriptor FindAction(ControllerContext controllerContext,
