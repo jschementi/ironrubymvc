@@ -57,12 +57,38 @@ namespace System.Web.Mvc.IronRuby.Extensions
 
         public static bool DoesNotContain<T>(this IEnumerable<T> collection, T value)
         {
-            return !collection.Contains(value);
+            foreach (var t in collection)
+            {
+                if (t.Equals(value)) return false;
+            }
+            return true;
         }
 
         public static bool DoesNotContain(this IEnumerable collection, object value)
         {
-            return !collection.Contains(value);
+            foreach (var t in collection)
+            {
+                if (t.Equals(value)) return false;
+            }
+            return true;
+        }
+
+        public static bool DoesNotContain<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
+        {
+            foreach (var o in collection)
+            {
+                if (predicate(o)) return false;
+            }
+            return true;
+        }
+
+        public static bool Contains(this IEnumerable collection, Func<object, bool> predicate)
+        {
+            foreach (var o in collection)
+            {
+                if(predicate(o)) return true;
+            }
+            return false;
         }
 
         public static bool Contains(this IEnumerable collection, object value)
@@ -74,7 +100,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return false;
         }
 
-        public static IEnumerable<TSource> Select<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
         {
             foreach (var source in collection)
             {
@@ -82,7 +108,16 @@ namespace System.Web.Mvc.IronRuby.Extensions
             }
         }
 
-        public static IEnumerable Select(this IEnumerable collection, Func<object, bool> predicate)
+        public static bool All<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if(!predicate(source)) return false;
+            }
+            return true;
+        }
+
+        public static IEnumerable Where(this IEnumerable collection, Func<object, bool> predicate)
         {
             foreach (var source in collection)
             {
@@ -112,5 +147,42 @@ namespace System.Web.Mvc.IronRuby.Extensions
                                    });
             return result;
         }
+
+        internal static IEnumerable<TTarget> Map<TSource, TTarget>(this IEnumerable<TSource> collection, Func<TSource, TTarget> iterator)
+        {
+            foreach (var source in collection)
+            {
+                yield return iterator(source);
+            }
+        }
+
+        internal static IEnumerable Map(this IEnumerable collection, Func<object, object> iterator)
+        {
+            foreach (var source in collection)
+            {
+                yield return iterator(source);
+            }
+        }
+
+        internal static int Count(this IEnumerable collection)
+        {
+            var count = 0;
+            foreach (var o in collection)
+            {
+                count++;
+            }
+            return count;
+        }
+
+        internal static TSource[] ToArray<TSource>(this IEnumerable<TSource> collection)
+        {
+            var result = new TSource[collection.Count()];
+            var idx = 0;
+
+            collection.ForEach(item => result[idx++] = item);
+
+            return result;
+        }
+
     }
 }

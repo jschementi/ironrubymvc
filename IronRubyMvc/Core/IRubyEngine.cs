@@ -1,5 +1,6 @@
 #region Usings
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Web.Mvc.IronRuby.Controllers;
@@ -29,6 +30,14 @@ namespace System.Web.Mvc.IronRuby.Core
         RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
 
         /// <summary>
+        /// Converts a proc object to a .NET Func.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="proc">The proc.</param>
+        /// <returns></returns>
+        Func<string, TResult> ConvertProcToFunc<TResult>(Proc proc);
+
+        /// <summary>
         /// Calls the method.
         /// </summary>
         /// <param name="receiver">The receiver.</param>
@@ -46,6 +55,20 @@ namespace System.Web.Mvc.IronRuby.Core
         /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
         /// </returns>
         bool HasControllerAction(RubyController controller, string actionName);
+
+        /// <summary>
+        /// Gets the method names for the controller class.
+        /// </summary>
+        /// <param name="controller">The controller.</param>
+        /// <returns></returns>
+        IEnumerable<string> MethodNames(IController controller);
+
+        /// <summary>
+        /// Methods the names.
+        /// </summary>
+        /// <param name="controllerClass">The controller class.</param>
+        /// <returns></returns>
+        IEnumerable<string> MethodNames(RubyClass controllerClass);
 
         /// <summary>
         /// Loads the assembly.

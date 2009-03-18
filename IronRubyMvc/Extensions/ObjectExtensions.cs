@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Reflection;
+using IronRuby.Builtins;
+
 namespace System.Web.Mvc.IronRuby.Extensions
 {
     /// <summary>
@@ -27,6 +31,22 @@ namespace System.Web.Mvc.IronRuby.Extensions
         public static bool IsNull(this object value)
         {
             return value == null;
+        }
+
+        /// <summary>
+        /// Ensures the argument is not null.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="argumentName">Name of the argument.</param>
+        public static void EnsureArgumentNotNull(this object value, string argumentName)
+        {
+            if (value.IsNull()) throw new ArgumentNullException(argumentName, "Cannot be null");
+        }
+
+        internal static IEnumerable<string> ToStringCollection(this object value)
+        {
+            var array = (RubyArray) value;
+            return array.Cast<string>();
         }
     }
 }

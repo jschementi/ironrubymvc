@@ -1,5 +1,6 @@
 #region Usings
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
@@ -125,6 +126,17 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
+        /// <summary>
+        /// Converts a proc object to a .NET Func.
+        /// </summary>
+        /// <typeparam name="TResult">The type of the result.</typeparam>
+        /// <param name="proc">The proc.</param>
+        /// <returns></returns>
+        public Func<string, TResult> ConvertProcToFunc<TResult>(Proc proc)
+        {
+            return name => (TResult) proc.Call(name);
+        }
+
         public string GetMethodName(object receiver, string message)
         {
             var methodNames = Operations.GetMemberNames(receiver);
@@ -166,6 +178,32 @@ namespace System.Web.Mvc.IronRuby.Core
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Gets a list of method names that are defined on the controller.
+        /// </summary>
+        /// <param name="controller">The controller.</param>
+        /// <returns></returns>
+        public IEnumerable<string> MethodNames(IController controller)
+        {
+            return Operations.GetMemberNames(controller);
+        }
+
+        /// <summary>
+        /// Methods the names.
+        /// </summary>
+        /// <param name="controllerClass">The controller class.</param>
+        /// <returns></returns>
+        public IEnumerable<string> MethodNames(RubyClass controllerClass)
+        {
+            var names = new List<string>();
+            controllerClass.EnumerateMethods((_, methodName, __) =>
+                                                 {
+                                                     names.Add(methodName);
+                                                     return false;
+                                                 });
+            return names;
         }
 
         /// <summary>

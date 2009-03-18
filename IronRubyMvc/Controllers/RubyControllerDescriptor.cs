@@ -1,6 +1,7 @@
 #region Usings
 
 using System.Web.Mvc.IronRuby.Core;
+using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
 
 #endregion
@@ -9,9 +10,11 @@ namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyControllerDescriptor : ControllerDescriptor
     {
-        public RubyControllerDescriptor(RubyClass rubyClass)
+        private readonly RubyActionMethodSelector _selector;
+        public RubyControllerDescriptor(RubyClass rubyClass, IRubyEngine engine)
         {
             RubyControllerClass = rubyClass;
+            _selector = new RubyActionMethodSelector(engine, rubyClass);
         }
 
         public override string ControllerName
@@ -19,7 +22,6 @@ namespace System.Web.Mvc.IronRuby.Controllers
             get { return RubyControllerClass.Name; }
         }
 
-        internal IRubyEngine RubyEngine { get; set; }
 
         public override Type ControllerType
         {
@@ -30,15 +32,16 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public override ActionDescriptor FindAction(ControllerContext controllerContext, string actionName)
         {
-//            ((RubyEngine) RubyEngine).Operations.GetMemberNames(controllerContext.Controller);
-            var hasControllerAction = RubyEngine.HasControllerAction((RubyController) controllerContext.Controller, actionName);
+            controllerContext.EnsureArgumentNotNull("controllerContext");
+            actionName.EnsureArgumentNotNull("actionName");
 
-            return !hasControllerAction ? null : new RubyActionDescriptor(actionName, this);
+            var selectedName = _selector.FindActionMethod(controllerContext, actionName);
+            return selectedName.IsNotNullOrBlank() ?  new RubyActionDescriptor(actionName, this) : null;
         }
 
         public override ActionDescriptor[] GetCanonicalActions()
         {
-            return new RubyActionDescriptor[0];
+            return _selector.GetAllActionMethods().Map(method => new RubyActionDescriptor(method, this)).ToArray();
         }
     }
 }

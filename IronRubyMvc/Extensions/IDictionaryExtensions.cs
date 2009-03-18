@@ -71,13 +71,6 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return filterDescriptions.ToFilters<IResultFilter>(actionName);
         }
 
-        internal static IEnumerable<ActionSelector> ToActionSelectors(this IEnumerable selectorDescriptions)
-        {
-            var selectors = new List<ActionSelector>();
-
-            selectorDescriptions.ForEach(selector => selectors.Add(c => true));
-
-            return selectors;
-        }
+        
     }
 }

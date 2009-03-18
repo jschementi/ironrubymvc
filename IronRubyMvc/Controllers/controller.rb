@@ -117,7 +117,7 @@ module IronRubyMvc
           filter(name, RubyProcResultFilter.new(options[:before], options[:after])) 
         end
  
-	 	def filter(name, options=nil)
+	 	    def filter(name, options=nil)
           @action_filters ||= {}
           klass = nil
           klass = name.new if name.is_a? Class
@@ -147,43 +147,41 @@ module IronRubyMvc
       
     end
     
-    module ActionNaming
-      
-      module ClassMethods
-      
-        def action_name(name, act_name)
-          key = name.to_s.to_sym
-          action_names[key] ||= []
-          action_names[key] << act_name.to_s.to_clr_string
-          action_names[key].uniq!
-          action_names[key]
-        end
-        
-        def action_names
-          @action_names ||= {}          
-          @action_names
-        end
-      end
-      
-      def self.included(base)
-        base.extend(ClassMethods)
-      end
-    end
-
     module Selectors
       
       module ClassMethods
         
-        def action_method(name, options={}, &b)
-          @action_methods ||= []
-          options[:action] = b if block_given?
-          options[:action] ||= name.to_sym #class.instance_method(name.to_sym)
-          @action_methods << { :name => name.to_sym, :options => options }
+        def method_selector(name, selector)
+          key = name.to_s.to_sym
+          name_selectors[key] ||= []
+          name_selectors[key] << selector
+          name_selectors[key].uniq!
+          name_selectors[key]
         end
         
-        def action_methods
-          @action_methods ||= []
-          @action_methods
+        def alias_action(name, act_name)
+          fn = lambda do |controller_context, action_name|
+            !!/#{action_name.to_s}/i.match(act_name.to_s)
+          end
+          name_selector(name, fn)
+        end
+       
+        def name_selector(name, &selector)
+          key = name.to_s.to_sym
+          name_selectors[key] ||= []
+          name_selectors[key] << selector
+          name_selectors[key].uniq!
+          name_selectors[key]
+        end
+       
+        def name_selectors
+          @name_selectors ||= {}          
+          @name_selectors
+        end
+        
+        def method_selectors
+          @method_selectors ||= {}
+          @method_selectors
         end
         
       end

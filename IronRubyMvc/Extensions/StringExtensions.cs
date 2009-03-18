@@ -45,5 +45,10 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             return string.Format(CultureInfo.CurrentUICulture, value, parameters);
         }
+
+        public static void EnsureArgumentNotEmpty(this string value, string argumentName)
+        {
+            if (value.IsNullOrBlank()) throw new ArgumentNullException(argumentName, "Cannot be null");
+        }
     }
 }

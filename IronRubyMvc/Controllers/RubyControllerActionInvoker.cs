@@ -13,6 +13,8 @@ namespace System.Web.Mvc.IronRuby.Controllers
     /// </summary>
     public class RubyControllerActionInvoker : ControllerActionInvoker
     {
+        private RubyActionMethodSelector _selector;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RubyControllerActionInvoker"/> class.
         /// </summary>
