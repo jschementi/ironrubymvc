@@ -82,7 +82,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return true;
         }
 
-        public static bool Contains(this IEnumerable collection, Func<object, bool> predicate)
+        public static bool Contains(this IEnumerable collection, Predicate<object> predicate)
         {
             foreach (var o in collection)
             {
@@ -100,7 +100,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return false;
         }
 
-        public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
+        public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
         {
             foreach (var source in collection)
             {
@@ -108,7 +108,25 @@ namespace System.Web.Mvc.IronRuby.Extensions
             }
         }
 
-        public static bool All<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
+        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if(predicate(source)) return source;
+            }
+            return default(TSource);
+        }
+
+        public static TSource FirstOrDefault<TSource>(this IEnumerable<TSource> collection)
+        {
+            foreach (var source in collection)
+            {
+                return source;
+            }
+            return default(TSource);
+        }
+
+        public static bool All<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
         {
             foreach (var source in collection)
             {
@@ -117,7 +135,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return true;
         }
 
-        public static IEnumerable Where(this IEnumerable collection, Func<object, bool> predicate)
+        public static IEnumerable Where(this IEnumerable collection, Predicate<object> predicate)
         {
             foreach (var source in collection)
             {
@@ -125,17 +143,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             }
         }
 
-        internal static FilterInfo ToFilterInfo(this IDictionary<object, object> filterDescriptions, string actionName)
-        {
-            var filterInfo = new FilterInfo();
-
-            filterDescriptions.ToActionFilters(actionName).ForEach(filter => filterInfo.ActionFilters.Add(filter));
-            filterDescriptions.ToAuthorizationFilters(actionName).ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
-            filterDescriptions.ToExceptionFilters(actionName).ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
-            filterDescriptions.ToResultFilters(actionName).ForEach(filter => filterInfo.ResultFilters.Add(filter));
-
-            return filterInfo;
-        }
+        
 
         internal static IEnumerable<TTarget> Cast<TTarget>(this IEnumerable collection) where TTarget : class
         {
@@ -170,6 +178,16 @@ namespace System.Web.Mvc.IronRuby.Extensions
             foreach (var o in collection)
             {
                 count++;
+            }
+            return count;
+        }
+
+        internal static int Count<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            var count = 0;
+            foreach (var o in collection)
+            {
+                if(predicate(o)) count++;
             }
             return count;
         }

@@ -42,7 +42,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
         protected override RubyControllerDescriptor CreateSut()
         {
-            return new RubyControllerDescriptor(_rubyClass) { RubyEngine = _rubyEngine };
+            return new RubyControllerDescriptor(_rubyClass, _rubyEngine );
         }
 
         protected override void Because()
@@ -94,7 +94,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
         protected override RubyControllerDescriptor CreateSut()
         {
-            return new RubyControllerDescriptor(_rubyClass) { RubyEngine = _rubyEngine };
+            return new RubyControllerDescriptor(_rubyClass, _rubyEngine );
         }
 
         protected override void Because()
@@ -132,7 +132,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
         protected override RubyControllerDescriptor CreateSut()
         {
-            return new RubyControllerDescriptor(_rubyClass) {RubyEngine = _rubyEngine};
+            return new RubyControllerDescriptor(_rubyClass, _rubyEngine);
         }
 
         protected override void Because()
@@ -170,11 +170,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
             Sut.RubyControllerClass.ShouldNotBeNull();
         }
 
-        [Observation]
-        public void should_have_a_ruby_engine()
-        {
-            Sut.RubyEngine.ShouldNotBeNull();
-        }
+        
 
         [Observation]
         public void should_have_the_correct_ruby_controller_class()

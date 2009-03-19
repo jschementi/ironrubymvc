@@ -132,9 +132,9 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="proc">The proc.</param>
         /// <returns></returns>
-        public Func<string, TResult> ConvertProcToFunc<TResult>(Proc proc)
+        public Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc)
         {
-            return name => (TResult) proc.Call(name);
+            return (context, name) => (TResult) proc.Call(context, name);
         }
 
         public string GetMethodName(object receiver, string message)

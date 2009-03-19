@@ -35,7 +35,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="proc">The proc.</param>
         /// <returns></returns>
-        Func<string, TResult> ConvertProcToFunc<TResult>(Proc proc);
+        Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc);
 
         /// <summary>
         /// Calls the method.

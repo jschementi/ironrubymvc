@@ -91,12 +91,12 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
                                                              requestContext);
             _controllerContext = new ControllerContext(requestContext, controller);
 
-            _controllerDescriptor = new RubyControllerDescriptor(rubyClass) {RubyEngine = _rubyEngine};
+            _controllerDescriptor = new RubyControllerDescriptor(rubyClass, _rubyEngine);
         }
 
         protected override RubyActionDescriptor CreateSut()
         {
-            return new RubyActionDescriptor("my_action", _controllerDescriptor);
+            return new RubyActionDescriptor("my_action", _controllerDescriptor, _rubyEngine);
         }
 
         protected override void Because()
@@ -134,7 +134,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
         protected override RubyActionDescriptor CreateSut()
         {
-            return new RubyActionDescriptor("my_action", _controllerDescriptor);
+            return new RubyActionDescriptor("my_action", _controllerDescriptor, _rubyEngine);
         }
 
         protected override void Because()

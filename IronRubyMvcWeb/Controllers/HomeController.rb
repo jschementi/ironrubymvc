@@ -20,8 +20,14 @@ class HomeController < Controller
   
   filter :index, MyFilter
   
+  alias_action :my_method, :index_again
+  
   def index
     view(nil, 'layout', HomeModel.new)
+  end
+  
+  def my_method
+    view('index', 'layout', HomeModel.new)
   end
   
   def raise_error

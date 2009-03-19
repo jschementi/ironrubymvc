@@ -41,6 +41,18 @@ namespace System.Web.Mvc.IronRuby.Extensions
             }
         }
 
+        internal static FilterInfo ToFilterInfo(this IDictionary<object, object> filterDescriptions, string actionName)
+        {
+            var filterInfo = new FilterInfo();
+
+            filterDescriptions.ToActionFilters(actionName).ForEach(filter => filterInfo.ActionFilters.Add(filter));
+            filterDescriptions.ToAuthorizationFilters(actionName).ForEach(filter => filterInfo.AuthorizationFilters.Add(filter));
+            filterDescriptions.ToExceptionFilters(actionName).ForEach(filter => filterInfo.ExceptionFilters.Add(filter));
+            filterDescriptions.ToResultFilters(actionName).ForEach(filter => filterInfo.ResultFilters.Add(filter));
+
+            return filterInfo;
+        }
+        
         private static IEnumerable<TITarget> ToFilters<TITarget>(this IDictionary<object, object> filterDescriptions, string actionName)
             where TITarget : class
         {

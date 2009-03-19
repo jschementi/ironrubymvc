@@ -160,16 +160,16 @@ module IronRubyMvc
         end
         
         def alias_action(name, act_name)
-          fn = lambda do |controller_context, action_name|
+          fn = Proc.new do |controller_context, action_name|
             !!/#{action_name.to_s}/i.match(act_name.to_s)
           end
           name_selector(name, fn)
         end
        
-        def name_selector(name, &selector)
+        def name_selector(name, selector=nil, &b)
           key = name.to_s.to_sym
           name_selectors[key] ||= []
-          name_selectors[key] << selector
+          name_selectors[key] << (selector||b)
           name_selectors[key].uniq!
           name_selectors[key]
         end
