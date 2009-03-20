@@ -38,7 +38,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             actionName.EnsureArgumentNotNull("actionName");
 
             var selectedName = _selector.FindActionMethod(controllerContext, actionName);
-            return selectedName.IsNotNullOrBlank() ?  new RubyActionDescriptor(actionName, this, _engine ) : null;
+            return selectedName.IsNotNullOrBlank() ?  new RubyActionDescriptor(selectedName, this, _engine ) : null;
         }
 
         public override ActionDescriptor[] GetCanonicalActions()

@@ -98,7 +98,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         private List<string> GetMatchingAliasedMethods(ControllerContext controllerContext, string actionName)
         {
-            return new List<string>(AliasedMethods.Where(pair => pair.Key == actionName && pair.Value.IsValidForName(controllerContext, actionName)).Map(pair => pair.Key));
+            return new List<string>(AliasedMethods.Where(pair => pair.Value.IsValidForAction(controllerContext, actionName)).Map(pair => pair.Key));
         }
 
         private List<string> RunSelectionFilters(ControllerContext controllerContext, IEnumerable<string> matchingMethods)
@@ -110,12 +110,12 @@ namespace System.Web.Mvc.IronRuby.Controllers
                        ? new List<string>(matchingMethods)
                        : new List<string>(
                            matchingMethods.Where(
-                                methodName => filters.All(filter => filter.Value.IsValidForName(controllerContext, methodName))
+                                methodName => filters.All(filter => filter.Value.IsValid(controllerContext, methodName))
                            )
                         );
         }
     }
-
+    
     public class PredicateList : IEnumerable<Func<ControllerContext, string, bool>>
     {
         private readonly RubyArray _items;
@@ -139,9 +139,14 @@ namespace System.Web.Mvc.IronRuby.Controllers
             _predicates.Add(_rubyEngine.ConvertProcToFunc<bool>(proc));
         }
 
-        public bool IsValidForName(ControllerContext context, string name)
+        public bool IsValid(ControllerContext context, string name)
         {
             return _predicates.All(predicate => predicate(context, name));
+        }
+
+        public bool IsValidForAction(ControllerContext context, string name)
+        {
+            return _predicates.Any(predicate => predicate(context, name));
         }
 
         #region Implementation of IEnumerable

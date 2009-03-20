@@ -117,7 +117,7 @@ module IronRubyMvc
           filter(name, RubyProcResultFilter.new(options[:before], options[:after])) 
         end
  
-	 	    def filter(name, options=nil)
+	 	def filter(name, options=nil)
           @action_filters ||= {}
           klass = nil
           klass = name.new if name.is_a? Class
@@ -161,7 +161,7 @@ module IronRubyMvc
         
         def alias_action(name, act_name)
           fn = Proc.new do |controller_context, action_name|
-            !!/#{action_name.to_s}/i.match(act_name.to_s)
+            !!/^#{action_name.to_s}$/i.match(act_name.to_s)
           end
           name_selector(name, fn)
         end

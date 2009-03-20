@@ -135,6 +135,15 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return true;
         }
 
+        public static bool Any<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if(predicate(source)) return true;
+            }
+            return false;
+        }
+
         public static IEnumerable Where(this IEnumerable collection, Predicate<object> predicate)
         {
             foreach (var source in collection)
