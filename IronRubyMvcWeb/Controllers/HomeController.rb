@@ -21,12 +21,22 @@ class HomeController < Controller
   filter :index, MyFilter
   
   alias_action :my_method, :index_again
+  non_action :my_helper_method
+  accept_verbs :only_post, :post
   
   def index
     view(nil, 'layout', HomeModel.new)
   end
   
   def my_method
+    view('index', 'layout', HomeModel.new)
+  end
+  
+  def my_helper_method
+    view('index', 'layout', HomeModel.new)
+  end
+  
+  def only_post
     view('index', 'layout', HomeModel.new)
   end
   

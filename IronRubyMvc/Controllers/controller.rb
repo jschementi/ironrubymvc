@@ -154,7 +154,7 @@ module IronRubyMvc
         def method_selector(name, selector)
           key = name.to_s.to_sym
           name_selectors[key] ||= []
-          name_selectors[key] << selector
+          name_selectors[key] << selector unless selector.nil?
           name_selectors[key].uniq!
           name_selectors[key]
         end
@@ -166,12 +166,17 @@ module IronRubyMvc
           name_selector(name, fn)
         end
        
-        def name_selector(name, selector=nil, &b)
+        def name_selector(name, selector)
           key = name.to_s.to_sym
           name_selectors[key] ||= []
-          name_selectors[key] << (selector||b)
+          name_selectors[key] << selector if block_given?
           name_selectors[key].uniq!
           name_selectors[key]
+        end
+        
+        def non_action(name)
+          fn = lambda { |context, action_name| return false }
+          method_selector name, fn
         end
        
         def name_selectors
@@ -189,7 +194,27 @@ module IronRubyMvc
       def self.included(base)
         base.extend(ClassMethods)
       end
+      
+      module AcceptVerbs
+      
+        module ClassMethods
+        
+          def accept_verbs(name, *verbs)
+            fn = lambda { |context, name| 
+              return verbs.include?(context.http_context.request.http_method.to_s.downcase.to_sym)
+            }  
+            method_selector(name, fn)
+          end
+        
+        end
+      
+        def self.included(base)
+          base.extend(ClassMethods)
+        end
+      end
     end
+    
+    
     
   end
   
@@ -200,6 +225,7 @@ module IronRubyMvc
     
     include Controllers::Filters
     include Controllers::Selectors   
+    include Controllers::Selectors::AcceptVerbs
     
     def fill_view_data
       instance_variables.each { |varname| view_data.add(varname[1..-1], instance_variable_get(varname.to_sym)) }
