@@ -9,20 +9,20 @@ Getting started
 3. Add a reference to System.Web.Mvc.IronRuby.dll
 3. Open Global.asax.cs and ...
 
-  // add this to your usings
-  using System.Web.Mvc;
+    // add this to your usings
+    using System.Web.Mvc;
   
-  // make the subclass of "MvcApplication" be "RubyMvcApplication"
-  namespace MyIronRubyMvcApp {
-      public class MvcApplication : RubyMvcApplication {
+    // make the subclass of "MvcApplication" be "RubyMvcApplication"
+    namespace MyIronRubyMvcApp {
+        public class MvcApplication : RubyMvcApplication {
       
-      }
-  }
+        }
+    }
 
 4. Create Routes.rb and define a default route:
 
-  $routes.ignore_route "{resource}.axd/{*pathInfo}"
-  $routes.map_route "default", "{controller}/{action}/{id}", :controller => 'Home', :action => 'index', :id => ''
+    $routes.ignore_route "{resource}.axd/{*pathInfo}"
+    $routes.map_route "default", "{controller}/{action}/{id}", :controller => 'Home', :action => 'index', :id => ''
 
 Controllers
 -----------
