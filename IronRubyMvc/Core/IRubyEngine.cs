@@ -30,14 +30,6 @@ namespace System.Web.Mvc.IronRuby.Core
         RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
 
         /// <summary>
-        /// Converts a proc object to a .NET Func.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="proc">The proc.</param>
-        /// <returns></returns>
-        Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc);
-
-        /// <summary>
         /// Calls the method.
         /// </summary>
         /// <param name="receiver">The receiver.</param>

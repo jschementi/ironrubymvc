@@ -230,6 +230,10 @@ module IronRubyMvc
     def fill_view_data
       instance_variables.each { |varname| view_data.add(varname[1..-1], instance_variable_get(varname.to_sym)) }
     end
+    
+    def post?
+      controller_context.http_context.request.http_method.to_s.downcase.to_sym == :post
+    end
         
   end
   

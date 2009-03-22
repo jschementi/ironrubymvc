@@ -49,7 +49,6 @@ namespace System.Web.Mvc.IronRuby.Controllers
             _params =
                 new Dictionary<object, object>(ControllerContext.RouteData.Values.Count +
                                                request.QueryString.Count + request.Form.Count);
-
             PopulateParamsWithRouteData();
 
             PopulateParamsWithQueryStringData(request);
@@ -146,12 +145,12 @@ namespace System.Web.Mvc.IronRuby.Controllers
             vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
 
             _engine.CallMethod(this, "fill_view_data");
-
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;
-
+            
             var hash = model as Hash;
             vdd.Model = (hash != null) ? new HashWrapper(hash) : model;
+            ModelState.ForEach(pair => vdd.ModelState.Add(pair.Key.ToString(), pair.Value));
 
             return new ViewResult {ViewName = viewName, MasterName = masterName, ViewData = vdd, TempData = TempData};
         }

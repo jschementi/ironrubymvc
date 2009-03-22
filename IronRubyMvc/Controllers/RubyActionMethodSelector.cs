@@ -53,12 +53,12 @@ namespace System.Web.Mvc.IronRuby.Controllers
         {
             var methodAliases = (Hash)_rubyEngine.CallMethod(ControllerClass, "name_selectors");
             AliasedMethods = methodAliases.Map(pair => KeyValuePairFor(pair));
-            NonAliasedMethods = methodNames.Where(method => AliasedMethods.DoesNotContain(pair => String.Equals(pair.Key, method, StringComparison.OrdinalIgnoreCase)));
+            NonAliasedMethods = methodNames.Where(method => AliasedMethods.DoesNotContain(pair => String.Equals(pair.Key, method.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(pair.Key, method.Pascalize(), StringComparison.OrdinalIgnoreCase)));
         }
 
-        private KeyValuePair<string, PredicateList> KeyValuePairFor(KeyValuePair<object, object> pair)
+        private static KeyValuePair<string, PredicateList> KeyValuePairFor(KeyValuePair<object, object> pair)
         {
-            return new KeyValuePair<string, PredicateList>(pair.Key.ToString(), new PredicateList(_rubyEngine, (RubyArray) pair.Value));
+            return new KeyValuePair<string, PredicateList>(pair.Key.ToString(), new PredicateList((RubyArray) pair.Value));
         }
 
         private static AmbiguousMatchException CreateAmbiguousMatchException(string actionName)
@@ -70,7 +70,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
         {
             PopulateLookupTables(controllerContext); // dynamic languages can add methods at runtime
             var methodsMatchingName = GetMatchingAliasedMethods(controllerContext, actionName);
-            methodsMatchingName.AddRange(NonAliasedMethods.Where(name => String.Equals(name, actionName, StringComparison.OrdinalIgnoreCase)));
+            methodsMatchingName.AddRange(NonAliasedMethods.Where(name => String.Equals(name, actionName.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(name, actionName.Pascalize(), StringComparison.OrdinalIgnoreCase)));
             var finalMethods = RunSelectionFilters(controllerContext, methodsMatchingName);
 
             switch (finalMethods.Count)
@@ -104,7 +104,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
         private List<string> RunSelectionFilters(ControllerContext controllerContext, IEnumerable<string> matchingMethods)
         {
             var filtersDescriptions = (Hash) _rubyEngine.CallMethod(ControllerClass, "method_selectors");
-            var filters = filtersDescriptions.Where(pair => matchingMethods.Contains(pair.Key.ToString())).Map(pair => KeyValuePairFor(pair));
+            var filters = filtersDescriptions.Where(pair => matchingMethods.Contains(pair.Key.ToString().Underscore()) || matchingMethods.Contains(pair.Key.ToString().Pascalize())).Map(pair => KeyValuePairFor(pair));
 
             return filters.Count() == 0
                        ? new List<string>(matchingMethods)
@@ -120,11 +120,9 @@ namespace System.Web.Mvc.IronRuby.Controllers
     {
         private readonly RubyArray _items;
         private readonly List<Func<ControllerContext, string, bool>> _predicates = new List<Func<ControllerContext, string, bool>>();
-        private readonly IRubyEngine _rubyEngine;
 
-        public PredicateList(IRubyEngine rubyEngine, RubyArray items)
+        public PredicateList(RubyArray items)
         {
-            _rubyEngine = rubyEngine;
             _items = items;
             Populate();
         }
@@ -136,7 +134,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         private void Add(Proc proc)
         {
-            _predicates.Add(_rubyEngine.ConvertProcToFunc<bool>(proc));
+            _predicates.Add(ConvertProcToFunc<bool>(proc));
         }
 
         public bool IsValid(ControllerContext context, string name)
@@ -146,7 +144,12 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public bool IsValidForAction(ControllerContext context, string name)
         {
-            return _predicates.Any(predicate => predicate(context, name));
+            return _predicates.Any(predicate => predicate(context, name.Underscore())|| predicate(context, name.Pascalize()));
+        }
+
+        public Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc)
+        {
+            return (context, name) => (TResult)proc.Call(context, name);
         }
 
         #region Implementation of IEnumerable

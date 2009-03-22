@@ -9,6 +9,7 @@ using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.ViewEngine;
 using System.Web.Routing;
+using System.Web.Security;
 using IronRuby;
 using IronRuby.Builtins;
 using IronRuby.Runtime;
@@ -126,17 +127,6 @@ namespace System.Web.Mvc.IronRuby.Core
             return controller;
         }
 
-        /// <summary>
-        /// Converts a proc object to a .NET Func.
-        /// </summary>
-        /// <typeparam name="TResult">The type of the result.</typeparam>
-        /// <param name="proc">The proc.</param>
-        /// <returns></returns>
-        public Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc)
-        {
-            return (context, name) => (TResult) proc.Call(context, name);
-        }
-
         public string GetMethodName(object receiver, string message)
         {
             var methodNames = Operations.GetMemberNames(receiver);
@@ -156,7 +146,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <returns></returns>
         public object CallMethod(object receiver, string message, params object[] args)
         {
-            return Operations.InvokeMember(receiver, GetMethodName(receiver, message), args);
+            return Operations.InvokeMember(receiver, GetMethodName(receiver, message));
         }
 
         /// <summary>
@@ -271,7 +261,7 @@ namespace System.Web.Mvc.IronRuby.Core
             Context = Ruby.GetExecutionContext(Engine);
             CurrentScope = Engine.CreateScope();
             Operations = Engine.CreateOperations();
-            LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (RouteTable), typeof (Controller), typeof (RubyController));
+            LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof(MembershipCreateStatus), typeof (RouteTable), typeof (Controller), typeof (RubyController));
             AddLoadPaths();
             DefineReadOnlyGlobalVariable(Constants.SCRIPT_RUNTIME_VARIABLE, Engine);
             RequireControllerFile();
