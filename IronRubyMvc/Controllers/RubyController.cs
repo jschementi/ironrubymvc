@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.Helpers;
@@ -62,6 +63,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             {
                 var symbolKey = SymbolTable.StringToId(key);
                 _params[symbolKey] = request.Form[key];
+                ModelState.Add(key, new ModelState{Value = new ValueProviderResult(request.Form[key], request.Form[key], CultureInfo.CurrentCulture)});
             }
         }
 
@@ -93,6 +95,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         protected override void Execute(RequestContext requestContext)
         {
+            PopulateParams();
             ActionInvoker = new RubyControllerActionInvoker(ControllerClassName, _engine);
             base.Execute(requestContext);
         }

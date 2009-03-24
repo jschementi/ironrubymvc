@@ -10,8 +10,9 @@
 <body>
     <div>
         <% Html.BeginForm("validate", "home"); %>
-            <p>Username: <%= Html.TextBox("username", ViewData["username"]) %></p>
-            <p>Password: <%= Html.Password("password", ViewData["password"]) %></p>            
+            <%= Html.ValidationSummary() %>
+            <p>Username: <%= Html.TextBox("username", ViewData["username"]) %><%= Html.ValidationMessage("username") %></p>
+            <p>Password: <%= Html.Password("password", ViewData["password"]) %><%= Html.ValidationMessage("password") %></p>            
             <p><button type="submit" >validate</button></p>        
         <% Html.EndForm(); %>
     </div>

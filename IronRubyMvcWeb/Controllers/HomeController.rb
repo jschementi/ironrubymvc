@@ -49,6 +49,9 @@ class HomeController < Controller
   end
   
   def validate
+    model_state.add_model_error("username".to_clr_string, "You must specify a username.") 
+    model_state.add_model_error("password".to_clr_string, "You must specify a password.") 
+    model_state.add_model_error "_FORM", "The current password is incorrect or the new password is invalid."
     view 'validation'
   end
   
