@@ -64,8 +64,13 @@
       <HintPath>..\dependencies\System.Web.Abstractions.dll</HintPath>
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Routing">
+    <Reference Include="System.Web.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dependencies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dependencies\System.Web.Routing.dll</HintPath>
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml.Linq">
@@ -127,6 +132,7 @@
     <None Include="Views\Home\index.html.erb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controllers\controller.rb" />
     <None Include="Controllers\Helpers\BaseController.rb" />
     <None Include="Controllers\HomeController.rb" />
     <None Include="Controllers\ProductsController.rb" />
@@ -136,6 +142,7 @@
     <None Include="Filters\MyControllerFilter.rb" />
     <None Include="Filters\MyFilter.rb" />
     <Content Include="Filters\MyProductFilter.rb" />
+    <Content Include="Views\Home\Validation.aspx" />
     <None Include="Models\Helpers\model.rb" />
     <None Include="Models\HomeModel.rb" />
     <None Include="Models\Northwind\Northwind.dbml.layout">

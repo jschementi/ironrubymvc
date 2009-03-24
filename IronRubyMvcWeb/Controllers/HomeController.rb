@@ -44,6 +44,14 @@ class HomeController < Controller
     raise "This is supposed to happen"
   end
   
+  def validation
+    view
+  end
+  
+  def validate
+    view 'validation'
+  end
+  
   def method_filter(context)
     context.request_context.http_context.response.write("From method filter<br />")
   end

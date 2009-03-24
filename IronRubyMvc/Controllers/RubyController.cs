@@ -105,7 +105,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         [NonAction]
         public ActionResult RedirectToAction(string actionName, Hash values)
-        {
+        { 
             return RedirectToAction(actionName, values.ToRouteDictionary());
         }
 

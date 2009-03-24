@@ -1,6 +1,5 @@
 def debugger
-    require 'mscorlib'
-    System::Diagnostics::Debugger.break 
+  System::Diagnostics::Debugger.break if System::Diagnostics::Debugger.launch
 end
 
 module IronRubyMvc
@@ -20,7 +19,6 @@ module IronRubyMvc
         end 
         
         def on_action_executing(context)
-          debugger
           before_action.call(context) unless before_action.nil?
         end
         
@@ -159,10 +157,10 @@ module IronRubyMvc
         
         def method_selector(name, selector)
           key = name.to_s.to_sym
-          name_selectors[key] ||= []
-          name_selectors[key] << selector unless selector.nil?
-          name_selectors[key].uniq!
-          name_selectors[key]
+          method_selectors[key] ||= []
+          method_selectors[key] << selector unless selector.nil?
+          method_selectors[key].uniq!
+          method_selectors[key]
         end
         
         def alias_action(name, act_name)
@@ -206,7 +204,7 @@ module IronRubyMvc
         module ClassMethods
         
           def accept_verbs(name, *verbs)
-            fn = lambda { |context, name| 
+            fn = lambda { |context, action_name| 
               return verbs.include?(context.http_context.request.http_method.to_s.downcase.to_sym)
             }  
             method_selector(name, fn)

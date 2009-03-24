@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Web.Hosting;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.ViewEngine;
@@ -269,7 +270,10 @@ namespace System.Web.Mvc.IronRuby.Core
 
         private void RequireControllerFile()
         {
-            RequireRubyFile(Constants.RUBYCONTROLLER_FILE, ReaderType.AssemblyResource);
+//            Engine.RequireRubyFile(@"C:\tools\ironruby\ironrubymvc\IronRubyMvc\Controllers\controller.rb");
+//            RequireRubyFile("~/Controllers/controller.rb", ReaderType.File);
+            Engine.RequireRubyFile(HostingEnvironment.MapPath("~/Controllers/controller.rb"));
+//            RequireRubyFile(Constants.RUBYCONTROLLER_FILE, ReaderType.AssemblyResource);
         }
 
         /// <summary>

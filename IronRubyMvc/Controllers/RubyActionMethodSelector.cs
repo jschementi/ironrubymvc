@@ -144,7 +144,23 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public bool IsValidForAction(ControllerContext context, string name)
         {
-            return _predicates.Any(predicate => predicate(context, name.Underscore())|| predicate(context, name.Pascalize()));
+            var result = false;
+            foreach (var list in _predicates)
+            {
+                if(list(context, name))
+                {
+                    result = true;
+                    break;
+                }
+            }
+            return result;
+//            var result = _predicates.Any(predicate =>
+//                                             {
+//                                                 var result1 = predicate(context, name.Underscore());
+//                                                 var result2 = predicate(context, name.Pascalize());
+//                                                 return result1 || result2;
+//                                             });
+//            return result;
         }
 
         public Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc)
