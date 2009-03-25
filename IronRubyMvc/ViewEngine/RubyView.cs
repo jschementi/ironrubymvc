@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Text;
+using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Helpers;
 using IronRuby;
 using Microsoft.Scripting.Hosting;
@@ -13,16 +14,16 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
     public class RubyView : IView
     {
         private readonly string _contents;
-        private readonly string _helpers;
+        private readonly IRubyEngine _rubyEngine;
         private readonly RubyView _master;
         private RubyTemplate _template;
 
 
-        public RubyView(string viewContents, RubyView master, string helperContents)
+        public RubyView(IRubyEngine rubyEngine, string viewContents, RubyView master)
         {
+            _rubyEngine = rubyEngine;
             _master = master;
             _contents = viewContents;
-            _helpers = helperContents;
         }
 
         public RubyTemplate Template
@@ -39,27 +40,18 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
 
         public void Render(ViewContext context, TextWriter writer)
         {
-            var runtime = context.ViewData["__scriptRuntime"] as ScriptRuntime;
-            var rubyEngine = Ruby.GetEngine(runtime);
-            var rubyContext = Ruby.GetExecutionContext(runtime);
+            _rubyEngine.ExecuteInScope(scope => RenderView(scope, context, writer));
 
-            var scope = runtime.CreateScope();
+        }
+
+        private void RenderView(ScriptScope scope, ViewContext context, TextWriter writer)
+        {
             scope.SetVariable("view_data", context.ViewData);
             scope.SetVariable("model", context.ViewData.Model);
             scope.SetVariable("context", context);
             scope.SetVariable("response", context.HttpContext.Response);
             scope.SetVariable("url", new RubyUrlHelper(context.RequestContext));
             scope.SetVariable("html", new RubyHtmlHelper(context, new Container(context.ViewData)));
-//            scope.SetVariable("ajax", new AjaxHelper(context, context.View));
-
-            Template.AddRequire("System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-            Template.AddRequire(
-                "System.Web.Abstractions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
-            Template.AddRequire("System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
-            Template.AddRequire("System.Web.Mvc, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
-
-            // TODO: this should only be done once ... not on each view rendering.
-            LoadHelpers(rubyEngine, scope, writer);
 
             var script = new StringBuilder();
             Template.ToScript("render_page", script);
@@ -74,32 +66,16 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
 
             try
             {
-                var source = rubyEngine.CreateScriptSourceFromString(script.ToString());
-                source.Execute(scope);
+                _rubyEngine.ExecuteScript(script.ToString(), scope);
             }
             catch (Exception e)
             {
-                //writer.Write(script + "<br />");
                 writer.Write(e.ToString());
             }
         }
 
         #endregion
-
-        private void LoadHelpers(ScriptEngine engine, ScriptScope scope, TextWriter writer)
-        {
-            try
-            {
-                var source = engine.CreateScriptSourceFromString(_helpers);
-                source.Execute(scope);
-            }
-            catch (Exception e)
-            {
-                //writer.Write(_helpers + "<br />");
-                writer.Write(e.ToString());
-            }
-        }
-
+        
         #region Nested type: Container
 
         internal class Container : IViewDataContainer

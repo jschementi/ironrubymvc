@@ -23,6 +23,11 @@ namespace System.Web.Mvc.IronRuby.Core
             return file.Open();
         }
 
+        public string MapPath(string filePath)
+        {
+            return HostingEnvironment.MapPath(filePath);
+        }
+
         public string ApplicationPhysicalPath
         {
             get { return HostingEnvironment.ApplicationPhysicalPath; }

@@ -10,11 +10,11 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
 {
     internal class RubyScriptBlock
     {
-        [ThreadStatic] private static bool ignoreNextNewLine;
+        [ThreadStatic] private static bool IgnoreNextNewLine;
 
         private RubyScriptBlock(string block)
         {
-            var ignoreNewLine = ignoreNextNewLine;
+            var ignoreNewLine = IgnoreNextNewLine;
 
             if (String.IsNullOrEmpty(block))
             {
@@ -26,11 +26,11 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
             if (block.EndsWith("-%>", StringComparison.OrdinalIgnoreCase))
             {
                 endOffset = 5;
-                ignoreNextNewLine = true;
+                IgnoreNextNewLine = true;
             }
             else
             {
-                ignoreNextNewLine = false;
+                IgnoreNextNewLine = false;
             }
 
             if (block.StartsWith("<%=", StringComparison.OrdinalIgnoreCase))

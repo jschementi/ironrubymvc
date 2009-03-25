@@ -27,7 +27,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         public string ControllerClassName
         {
-            get { return Constants.CONTROLLERCLASS_FORMAT.FormattedWith(ControllerName); }
+            get { return Constants.ControllerclassFormat.FormattedWith(ControllerName); }
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
@@ -46,6 +46,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         private void PopulateParams()
         {
+            //TODO: Possibly replace this with a binder implementation
             var request = ControllerContext.HttpContext.Request;
             _params =
                 new Dictionary<object, object>(ControllerContext.RouteData.Values.Count +
@@ -63,7 +64,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             {
                 var symbolKey = SymbolTable.StringToId(key);
                 _params[symbolKey] = request.Form[key];
-                ModelState.Add(key, new ModelState{Value = new ValueProviderResult(request.Form[key], request.Form[key], CultureInfo.CurrentCulture)});
+                ModelState.Add(key, CreateModelState(request.Form[key]));
             }
         }
 
@@ -72,7 +73,9 @@ namespace System.Web.Mvc.IronRuby.Controllers
             foreach (string key in request.QueryString.Keys)
             {
                 var symbolKey = SymbolTable.StringToId(key);
-                _params[symbolKey] = request.QueryString[key];
+                var value = request.QueryString[key];
+                _params[symbolKey] = value;
+                ModelState.Add(key, CreateModelState(value) );
             }
         }
 
@@ -82,7 +85,18 @@ namespace System.Web.Mvc.IronRuby.Controllers
             {
                 var key = SymbolTable.StringToId(item.Key);
                 _params[key] = item.Value;
+//                ModelState.Add(item.Key, CreateModelState(item.Value.ToString()));
             }
+        }
+
+        private static ModelState CreateModelState(string value)
+        {
+            return new ModelState {Value = CreateValueProviderResult(value)};
+        }
+
+        private static ValueProviderResult CreateValueProviderResult(string value)
+        {
+            return new ValueProviderResult(value, value, CultureInfo.CurrentCulture);
         }
 
         internal void InternalInitialize(ControllerConfiguration config)
@@ -145,7 +159,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
         public new ViewResult View(string viewName, string masterName, object model)
         {
             var vdd = new ViewDataDictionary();
-            vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
+//            vdd["__scriptRuntime"] = ((RubyEngine) _engine).Runtime;
 
             _engine.CallMethod(this, "fill_view_data");
             foreach (var entry in _viewData)

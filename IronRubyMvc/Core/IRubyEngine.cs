@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Routing;
 using IronRuby.Builtins;
+using Microsoft.Scripting.Hosting;
 
 #endregion
 
@@ -76,6 +77,14 @@ namespace System.Web.Mvc.IronRuby.Core
         object ExecuteScript(string script);
 
         /// <summary>
+        /// Executes the script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <param name="scope">The scope.</param>
+        /// <returns></returns>
+        object ExecuteScript(string script, ScriptScope scope);
+
+        /// <summary>
         /// Defines the read only global variable.
         /// </summary>
         /// <param name="variableName">Name of the variable.</param>
@@ -103,5 +112,11 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         void LoadAssemblies(params Type[] assemblies);
+
+        /// <summary>
+        /// Executes the block in scope.
+        /// </summary>
+        /// <param name="block">The block.</param>
+        void ExecuteInScope(Action<ScriptScope> block);
     }
 }

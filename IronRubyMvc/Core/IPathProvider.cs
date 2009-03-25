@@ -11,5 +11,6 @@ namespace System.Web.Mvc.IronRuby.Core
         string ApplicationPhysicalPath { get; }
         bool FileExists(string filePath);
         Stream Open(string filePath);
+        string MapPath(string filePath);
     }
 }
