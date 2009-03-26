@@ -35,8 +35,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
             var httpContext = new HttpContextMock().Object;
             var requestContext = new RequestContext(httpContext, new RouteData());
-            var controller = _rubyEngine.ConfigureController(_rubyEngine.GetRubyClass(_controllerName),
-                                                             requestContext);
+            var controller = _rubyEngine.CreateInstance<RubyController>(_rubyClass);
+            controller.InternalInitialize(new ControllerConfiguration {Context = requestContext, Engine = _rubyEngine, RubyClass = _rubyClass});
+
             _controllerContext = new ControllerContext(requestContext, controller);
         }
 
@@ -87,8 +88,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
             var httpContext = new HttpContextMock().Object;
             var requestContext = new RequestContext(httpContext, new RouteData());
-            var controller = _rubyEngine.ConfigureController(_rubyEngine.GetRubyClass(_controllerName),
-                                                             requestContext);
+            var controller = _rubyEngine.CreateInstance<RubyController>(_rubyClass);
+            controller.InternalInitialize(new ControllerConfiguration { Context = requestContext, Engine = _rubyEngine, RubyClass = _rubyClass });
+
             _controllerContext = new ControllerContext(requestContext, controller);
         }
 

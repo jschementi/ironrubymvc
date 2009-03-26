@@ -1,8 +1,0 @@
-<div class="thumbnail_picture image_hover">
-  <a href="/people/<%= model.person.id %>/pictures/<%= model.id %>" style="height: <%= view_data.height %>px" onmouseover="onImageMouseOver(this)" onmouseout="onImageMouseOut(this)">
-    <img src="http://localhost:4567/pictures/<%= model.id %>/serve<%= view_data.thumbnail == :true ? "_thumbnail" : "" %>" alt="<%= model.title %>" width="<%= view_data.width %>" height="<%= view_data.height %>" />
-  </a>
-  <div class='comments popup' style="display: none" onmouseover="onPopupMouseOver(this)" onmouseout="onPopupMouseOut(this)">
-    <a href="/people/<%= model.person.id %>/pictures"><%= model.person.name %></a>
-  </div>
-</div>

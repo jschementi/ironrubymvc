@@ -1,7 +1,0 @@
-<h2><%= view_data.person.blank? ? "Recent" : view_data.person.name + "'s" %> Albums</h2>
-<ul>
-<% view_data.albums.each do |album| %>
-  <li><a href="/albums/show/<%= album.id %>"><%= album.name %></a></li>
-<% end %>
-</ul>
-

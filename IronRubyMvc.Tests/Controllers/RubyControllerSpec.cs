@@ -55,7 +55,9 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
 
         protected override RubyController CreateSut()
         {
-            var controller = _rubyEngine.ConfigureController(_rubyClass, _requestContext);
+            var controller = _rubyEngine.CreateInstance<RubyController>(_rubyClass);
+            controller.InternalInitialize(new ControllerConfiguration { Context = _requestContext, Engine = _rubyEngine, RubyClass = _rubyClass });
+
             controller.ViewData().Add("test","testing");
 //                .ViewData.Add("test", "my value");
             return controller;

@@ -87,8 +87,10 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
             var rubyClass = _rubyEngine.GetRubyClass("SamuraisController");
             var httpContext = new HttpContextMock().Object;
             var requestContext = new RequestContext(httpContext, new RouteData());
-            var controller = _rubyEngine.ConfigureController(_rubyEngine.GetRubyClass("SamuraisController"),
-                                                             requestContext);
+
+            var controller = _rubyEngine.CreateInstance<RubyController>(rubyClass);
+            controller.InternalInitialize(new ControllerConfiguration { Context = requestContext, Engine = _rubyEngine, RubyClass = rubyClass });
+
             _controllerContext = new ControllerContext(requestContext, controller);
 
             _controllerDescriptor = new RubyControllerDescriptor(rubyClass, _rubyEngine);

@@ -1,2 +1,0 @@
-class FollowsController < ApplicationController
-end

@@ -1,6 +1,0 @@
-$: << File.dirname(__FILE__) + "/../Models"
-$: << File.dirname(__FILE__) + "/../lib/activesupport/lib"
-$: << File.dirname(__FILE__) + "/../lib/activerecord/lib"
-$: << File.dirname(__FILE__) + "/../lib/activemodel/lib"
-$: << File.dirname(__FILE__) + "/sinatra/lib"
-$: << File.dirname(__FILE__) + "/rack/lib"
