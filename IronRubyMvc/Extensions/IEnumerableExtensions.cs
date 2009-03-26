@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using IronRuby.Builtins;
 
 #endregion
 
@@ -208,6 +209,28 @@ namespace System.Web.Mvc.IronRuby.Extensions
 
             collection.ForEach(item => result[idx++] = item);
 
+            return result;
+        }
+
+        internal static IEnumerable<SelectListItem> ToSelectListItemList(this IEnumerable collection)
+        {
+            var result = new List<SelectListItem>();
+
+            collection.ForEach(item =>
+                                   {
+                                       var hash = (Hash) item;
+                                       var li = new SelectListItem();
+                                       hash.ForEach((key, value) =>
+                                                        {
+                                                            if (key.ToString() == "text")
+                                                                li.Text = value.ToString();
+                                                            if (key.ToString() == "value")
+                                                                li.Value = value.ToString();
+                                                            if (key.ToString() == "selected")
+                                                                li.Selected = (bool) value;
+                                                        });
+                                       result.Add(li);
+                                   });
             return result;
         }
 
