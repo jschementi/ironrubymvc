@@ -1,6 +1,10 @@
+#region Usings
+
 using System.Web.Mvc.Html;
 using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
+
+#endregion
 
 namespace System.Web.Mvc.IronRuby.Helpers
 {
@@ -8,12 +12,12 @@ namespace System.Web.Mvc.IronRuby.Helpers
     {
         public string CheckBox(string name)
         {
-            return _helper.CheckBox(name, (object)null /* htmlAttributes */);
+            return _helper.CheckBox(name, (object) null /* htmlAttributes */);
         }
 
         public string CheckBox(string name, bool isChecked)
         {
-            return _helper.CheckBox(name, isChecked, (object)null /* htmlAttributes */);
+            return _helper.CheckBox(name, isChecked, (object) null /* htmlAttributes */);
         }
 
         public string CheckBox(string name, bool isChecked, Hash htmlAttributes)
@@ -26,14 +30,14 @@ namespace System.Web.Mvc.IronRuby.Helpers
             return _helper.CheckBox(name, htmlAttributes.ToDictionary());
         }
 
-       public string Hidden(string name)
+        public string Hidden(string name)
         {
             return _helper.Hidden(name, null /* value */);
         }
 
         public string Hidden(string name, object value)
         {
-            return _helper.Hidden(name, value, (object)null /* hmtlAttributes */);
+            return _helper.Hidden(name, value, (object) null /* hmtlAttributes */);
         }
 
         public string Hidden(string name, object value, Hash htmlAttributes)
@@ -48,7 +52,7 @@ namespace System.Web.Mvc.IronRuby.Helpers
 
         public string Password(string name, object value)
         {
-            return _helper.Password(name, value, (object)null /* htmlAttributes */);
+            return _helper.Password(name, value, (object) null /* htmlAttributes */);
         }
 
         public string Password(string name, object value, Hash htmlAttributes)
@@ -58,7 +62,7 @@ namespace System.Web.Mvc.IronRuby.Helpers
 
         public string RadioButton(string name, object value)
         {
-            return _helper.RadioButton(name, value, (object)null /* htmlAttributes */);
+            return _helper.RadioButton(name, value, (object) null /* htmlAttributes */);
         }
 
         public string RadioButton(string name, object value, Hash htmlAttributes)
@@ -68,7 +72,7 @@ namespace System.Web.Mvc.IronRuby.Helpers
 
         public string RadioButton(string name, object value, bool isChecked)
         {
-            return _helper.RadioButton(name, value, isChecked, (object)null /* htmlAttributes */);
+            return _helper.RadioButton(name, value, isChecked, (object) null /* htmlAttributes */);
         }
 
         public string RadioButton(string name, object value, bool isChecked, Hash htmlAttributes)
@@ -95,7 +99,5 @@ namespace System.Web.Mvc.IronRuby.Helpers
             name = name.Replace("_", "");
             return _helper.TextBox(name, value.ToString());
         }
-
-
     }
 }

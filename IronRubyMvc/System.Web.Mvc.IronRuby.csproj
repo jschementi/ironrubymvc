@@ -119,8 +119,14 @@
     <Compile Include="Helpers\DescriptorUtil.cs" />
     <Compile Include="Helpers\HashWrapper.cs" />
     <Compile Include="Extensions\Inflector.cs" />
+    <Compile Include="Helpers\RubyFormHelper.cs" />
     <Compile Include="Helpers\RubyHtmlHelper.cs" />
+    <Compile Include="Helpers\RubyInputHelper.cs" />
+    <Compile Include="Helpers\RubyLinkHelper.cs" />
+    <Compile Include="Helpers\RubySelectHelper.cs" />
+    <Compile Include="Helpers\RubyTextAreaHelper.cs" />
     <Compile Include="Helpers\RubyUrlHelper.cs" />
+    <Compile Include="Helpers\RubyValidationHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\IDictionaryExtensions.cs" />
     <Compile Include="ViewEngine\RubyScriptBlock.cs">
