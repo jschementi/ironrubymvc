@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Helpers;
-using IronRuby;
 using Microsoft.Scripting.Hosting;
 
 #endregion
@@ -14,8 +13,8 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
     public class RubyView : IView
     {
         private readonly string _contents;
-        private readonly IRubyEngine _rubyEngine;
         private readonly RubyView _master;
+        private readonly IRubyEngine _rubyEngine;
         private RubyTemplate _template;
 
 
@@ -41,8 +40,9 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
         public void Render(ViewContext context, TextWriter writer)
         {
             _rubyEngine.ExecuteInScope(scope => RenderView(scope, context, writer));
-
         }
+
+        #endregion
 
         private void RenderView(ScriptScope scope, ViewContext context, TextWriter writer)
         {
@@ -52,6 +52,7 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
             scope.SetVariable("response", context.HttpContext.Response);
             scope.SetVariable("url", new RubyUrlHelper(context.RequestContext));
             scope.SetVariable("html", new RubyHtmlHelper(context, new Container(context.ViewData)));
+            scope.SetVariable("ajax", new RubyAjaxHelper(context, new Container(context.ViewData)));
 
             var script = new StringBuilder();
             Template.ToScript("render_page", script);
@@ -74,8 +75,6 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
             }
         }
 
-        #endregion
-        
         #region Nested type: Container
 
         internal class Container : IViewDataContainer

@@ -1,7 +1,5 @@
 #region Usings
 
-
-
 #endregion
 
 namespace System.Web.Mvc.IronRuby.Controllers

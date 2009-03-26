@@ -87,7 +87,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             foreach (var o in collection)
             {
-                if(predicate(o)) return true;
+                if (predicate(o)) return true;
             }
             return false;
         }
@@ -113,7 +113,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             foreach (var source in collection)
             {
-                if(predicate(source)) return source;
+                if (predicate(source)) return source;
             }
             return default(TSource);
         }
@@ -131,7 +131,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             foreach (var source in collection)
             {
-                if(!predicate(source)) return false;
+                if (!predicate(source)) return false;
             }
             return true;
         }
@@ -140,7 +140,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             foreach (var source in collection)
             {
-                if(predicate(source)) return true;
+                if (predicate(source)) return true;
             }
             return false;
         }
@@ -153,14 +153,13 @@ namespace System.Web.Mvc.IronRuby.Extensions
             }
         }
 
-        
 
         internal static IEnumerable<TTarget> Cast<TTarget>(this IEnumerable collection) where TTarget : class
         {
             var result = new List<TTarget>();
             collection.ForEach(item =>
                                    {
-                                       var casted = (typeof(TTarget) == typeof(string)) ? item.ToString() as TTarget : item as TTarget;
+                                       var casted = (typeof (TTarget) == typeof (string)) ? item.ToString() as TTarget : item as TTarget;
                                        if (casted.IsNotNull()) result.Add(casted);
                                    });
             return result;
@@ -197,7 +196,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var count = 0;
             foreach (var o in collection)
             {
-                if(predicate(o)) count++;
+                if (predicate(o)) count++;
             }
             return count;
         }
@@ -233,6 +232,5 @@ namespace System.Web.Mvc.IronRuby.Extensions
                                    });
             return result;
         }
-
     }
 }

@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Threading;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.Helpers;
@@ -75,7 +74,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
                 var symbolKey = SymbolTable.StringToId(key);
                 var value = request.QueryString[key];
                 _params[symbolKey] = value;
-                ModelState.Add(key, CreateModelState(value) );
+                ModelState.Add(key, CreateModelState(value));
             }
         }
 
@@ -122,7 +121,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         [NonAction]
         public ActionResult RedirectToAction(string actionName, Hash values)
-        { 
+        {
             return RedirectToAction(actionName, values.ToRouteDictionary());
         }
 
@@ -164,7 +163,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             _engine.CallMethod(this, "fill_view_data");
             foreach (var entry in _viewData)
                 vdd[Convert.ToString(entry.Key, CultureInfo.InvariantCulture)] = entry.Value;
-            
+
             var hash = model as Hash;
             vdd.Model = (hash != null) ? new HashWrapper(hash) : model;
             ModelState.ForEach(pair => vdd.ModelState.Add(pair.Key.ToString(), pair.Value));

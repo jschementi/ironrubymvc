@@ -18,7 +18,6 @@ namespace System.Web.Mvc.IronRuby.Helpers
             _helper = new HtmlHelper(context, viewDataContainer);
         }
 
-        
 
         public void RenderPartial(string partialViewName)
         {
@@ -39,7 +38,5 @@ namespace System.Web.Mvc.IronRuby.Helpers
         {
             _helper.RenderPartial(partialViewName, model, viewData.ToViewDataDictionary());
         }
-
-        
     }
 }

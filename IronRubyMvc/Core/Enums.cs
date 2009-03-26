@@ -5,5 +5,4 @@
         File,
         AssemblyResource
     }
-
 }

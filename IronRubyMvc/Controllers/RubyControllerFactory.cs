@@ -1,6 +1,5 @@
 ﻿#region Usings
 
-using System.Text;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Routing;
@@ -13,8 +12,8 @@ namespace System.Web.Mvc.IronRuby.Controllers
     public class RubyControllerFactory : IControllerFactory
     {
         private readonly IRubyEngine _engine;
-        private readonly IPathProvider _pathProvider;
         private readonly IControllerFactory _innerFactory;
+        private readonly IPathProvider _pathProvider;
 
         internal RubyControllerFactory(IPathProvider pathProvider, IControllerFactory innerFactory, IRubyEngine engine)
         {
@@ -86,7 +85,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
         private RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext)
         {
             var controller = _engine.CreateInstance<RubyController>(rubyClass);
-            controller.InternalInitialize(new ControllerConfiguration { Context = requestContext, Engine = _engine, RubyClass = rubyClass });
+            controller.InternalInitialize(new ControllerConfiguration {Context = requestContext, Engine = _engine, RubyClass = rubyClass});
             return controller;
         }
 

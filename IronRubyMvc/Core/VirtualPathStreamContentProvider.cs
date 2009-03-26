@@ -1,6 +1,10 @@
+#region Usings
+
 using System.IO;
 using System.Web.Hosting;
 using Microsoft.Scripting;
+
+#endregion
 
 namespace System.Web.Mvc.IronRuby.Core
 {

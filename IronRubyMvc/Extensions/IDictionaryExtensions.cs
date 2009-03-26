@@ -60,14 +60,14 @@ namespace System.Web.Mvc.IronRuby.Extensions
 
             return filterInfo;
         }
-        
+
         private static IEnumerable<TITarget> ToFilters<TITarget>(this IDictionary<object, object> filterDescriptions, string actionName)
             where TITarget : class
         {
             var filters = new List<TITarget>();
             var key = SymbolTable.StringToId(actionName);
             var hasKey = filterDescriptions.ContainsKey(key);
-            if(hasKey) filters.AddRange((filterDescriptions[key] as RubyArray).Cast<TITarget>());
+            if (hasKey) filters.AddRange((filterDescriptions[key] as RubyArray).Cast<TITarget>());
             return filters;
         }
 
@@ -90,7 +90,5 @@ namespace System.Web.Mvc.IronRuby.Extensions
         {
             return filterDescriptions.ToFilters<IResultFilter>(actionName);
         }
-
-        
     }
 }

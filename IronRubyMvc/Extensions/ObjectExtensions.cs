@@ -1,6 +1,9 @@
+#region Usings
+
 using System.Collections.Generic;
-using System.Reflection;
 using IronRuby.Builtins;
+
+#endregion
 
 namespace System.Web.Mvc.IronRuby.Extensions
 {

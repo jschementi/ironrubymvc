@@ -3,8 +3,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Web.Mvc.IronRuby.Controllers;
-using System.Web.Routing;
 using IronRuby.Builtins;
 using Microsoft.Scripting.Hosting;
 
@@ -142,7 +140,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="path">The path.</param>
         void RequireRubyFile(string path);
-        
+
         /// <summary>
         /// Requires the ruby file.
         /// </summary>

@@ -3,7 +3,6 @@
 using System.Collections;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Routing;
-using IronRuby.Builtins;
 
 #endregion
 
@@ -61,7 +60,7 @@ namespace System.Web.Mvc.IronRuby.Core
                                 DataTokens = new RouteValueDictionary()
                             };
             route.DataTokens["Namespaces"] = namespaces;
-            _routes.Add(name, route );
+            _routes.Add(name, route);
         }
 
 //        public void MapRoute(string name, string url, MutableString[] namespaces)
@@ -94,12 +93,14 @@ namespace System.Web.Mvc.IronRuby.Core
         public void IgnoreRoute(string url, IDictionary constraints)
         {
             var route = new IgnoreRouteInternal(url)
-            {
-                Constraints = constraints.ToRouteDictionary()
-            };
+                            {
+                                Constraints = constraints.ToRouteDictionary()
+                            };
 
             _routes.Add(route);
         }
+
+        #region Nested type: IgnoreRouteInternal
 
         private sealed class IgnoreRouteInternal : Route
         {
@@ -115,5 +116,7 @@ namespace System.Web.Mvc.IronRuby.Core
                 return null;
             }
         }
+
+        #endregion
     }
 }

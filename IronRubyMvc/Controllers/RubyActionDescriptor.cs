@@ -11,7 +11,6 @@ namespace System.Web.Mvc.IronRuby.Controllers
 {
     public class RubyActionDescriptor : ActionDescriptor
     {
-        public IRubyEngine RubyEngine { get; set; }
         private readonly string _actionName;
         private readonly ControllerDescriptor _controllerDescriptor;
 
@@ -21,6 +20,8 @@ namespace System.Web.Mvc.IronRuby.Controllers
             _actionName = actionName;
             _controllerDescriptor = controllerDescriptor;
         }
+
+        public IRubyEngine RubyEngine { get; set; }
 
         public override string ActionName
         {
