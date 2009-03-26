@@ -68,7 +68,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             if (controllerFilePath.IsNullOrBlank())
                 return null;
 
-            _engine.RequireRubyFile(_pathProvider.MapPath(controllerFilePath));
+            _engine.RequireRubyFile(controllerFilePath, ReaderType.File);
 
             var controllerClass = _engine.GetRubyClass(controllerClassName);
             var controller = ConfigureController(controllerClass, requestContext);

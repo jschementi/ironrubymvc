@@ -261,7 +261,8 @@ namespace System.Web.Mvc.IronRuby.Core
 
         private void RequireControllerFile()
         {
-            RequireRubyFile(PathProvider.MapPath("~/Controllers/controller.rb"));
+//            RequireRubyFile(PathProvider.MapPath("~/Controllers/controller.rb"));
+            RequireRubyFile("System.Web.Mvc.IronRuby.Controllers.controller.rb", ReaderType.AssemblyResource);
         }
 
         /// <summary>

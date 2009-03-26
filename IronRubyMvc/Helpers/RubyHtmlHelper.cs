@@ -8,7 +8,7 @@ using IronRuby.Builtins;
 
 namespace System.Web.Mvc.IronRuby.Helpers
 {
-    public class RubyHtmlHelper : HtmlHelper
+    public partial class RubyHtmlHelper : HtmlHelper
     {
         private readonly HtmlHelper _helper;
 
@@ -76,5 +76,12 @@ namespace System.Web.Mvc.IronRuby.Helpers
         {
             return _helper.Hidden(name, value.ToString());
         }
+
+        public string ValidationSummary()
+        {
+            return _helper.ValidationSummary();
+        }
+
+        public string Validation
     }
 }

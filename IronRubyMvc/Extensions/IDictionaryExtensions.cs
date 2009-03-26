@@ -17,7 +17,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var rvd = new RouteValueDictionary();
 
             if (dictionary.IsNotNull())
-                dictionary.Keys.ForEach(key => rvd.Add(key.ToString(), (dictionary[key] ?? string.Empty).ToString()));
+                dictionary.ForEach((key, value) => rvd.Add(key.ToString(), (value ?? string.Empty).ToString()));
 
             return rvd;
         }
@@ -27,10 +27,18 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var vdd = new ViewDataDictionary();
 
             if (dictionary != null)
-                foreach (var key in dictionary.Keys)
-                    vdd.Add(key.ToString(), dictionary[key]);
+                dictionary.ForEach((key, value) => vdd.Add(key.ToString(), value));
 
             return vdd;
+        }
+
+        public static IDictionary<string, object> ToDictionary(this IDictionary dictionary)
+        {
+            var dict = new Dictionary<string, object>();
+
+            dictionary.ForEach((key, value) => dict.Add(key.ToString(), value));
+
+            return dict;
         }
 
         public static void ForEach(this IDictionary dictionary, Action<object, object> iterator)
