@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Web.Hosting;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Mvc.IronRuby.ViewEngine;
@@ -54,88 +53,49 @@ namespace System.Web.Mvc.IronRuby.Core
         /// Gets the runtime.
         /// </summary>
         /// <value>The runtime.</value>
-        internal ScriptRuntime Runtime { get; set; }
+        private ScriptRuntime Runtime { get; set; }
 
         /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
-        internal RubyContext Context { get; private set; }
+        private RubyContext Context { get; set; }
 
         /// <summary>
         /// Gets the engine.
         /// </summary>
         /// <value>The engine.</value>
-        internal ScriptEngine Engine { get; private set; }
+        private ScriptEngine Engine { get; set; }
 
         /// <summary>
         /// Gets the current scope.
         /// </summary>
         /// <value>The current scope.</value>
-        internal ScriptScope CurrentScope { get; private set; }
+        private ScriptScope CurrentScope { get; set; }
 
         /// <summary>
         /// Gets the operations.
         /// </summary>
         /// <value>The operations.</value>
-        internal ObjectOperations Operations { get; private set; }
+        private ObjectOperations Operations { get; set; }
 
         /// <summary>
         /// Gets the path provider.
         /// </summary>
         /// <value>The path provider.</value>
-        internal IPathProvider PathProvider { get; private set; }
+        private IPathProvider PathProvider { get; set; }
 
         #region IRubyEngine Members
 
-        /// <summary>
-        /// Loads the controller.
-        /// </summary>
-        /// <param name="requestContext">The request context.</param>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <returns></returns>
-        public RubyController LoadController(RequestContext requestContext, string controllerName)
+        public void RemoveClassFromGlobals(string className)
         {
-            var controllerFilePath = GetControllerFilePath(controllerName);
-            var controllerClassName = GetControllerClassName(controllerName);
-
             // Remove the current controller from the classes cache so it's completely renewed.
-            if (Runtime.Globals.ContainsVariable(controllerClassName)) Runtime.Globals.RemoveVariable(controllerClassName);
-
-            if (controllerFilePath.IsNullOrBlank())
-                return null;
-
-
-            Engine.CreateScriptSource( _contentProviderFactory(controllerFilePath), null, Encoding.UTF8).Execute(CurrentScope);
-
-            var controllerClass = GetRubyClass(controllerClassName);
-            var controller = ConfigureController(controllerClass, requestContext);
-
-            return controller;
+            if (Runtime.Globals.ContainsVariable(className)) Runtime.Globals.RemoveVariable(className);
         }
 
-
-        /// <summary>
-        /// Configures the controller.
-        /// </summary>
-        /// <param name="rubyClass">The ruby class.</param>
-        /// <param name="requestContext">The request context.</param>
-        /// <returns></returns>
-        public RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext)
+        public T CreateInstance<T>(RubyClass rubyClass)
         {
-            var controller = (RubyController) Operations.CreateInstance(rubyClass);
-            controller.InternalInitialize(new ControllerConfiguration {Context = requestContext, Engine = this, RubyClass = rubyClass});
-            return controller;
-        }
-
-        public string GetMethodName(object receiver, string message)
-        {
-            var methodNames = Operations.GetMemberNames(receiver);
-            
-            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
-            if (methodNames.Contains(message.Underscore())) return message.Underscore();
-
-            return message;
+            return (T) Operations.CreateInstance(rubyClass);
         }
 
         public void ExecuteInScope(Action<ScriptScope> block)
@@ -154,27 +114,6 @@ namespace System.Web.Mvc.IronRuby.Core
         public object CallMethod(object receiver, string message, params object[] args)
         {
             return Operations.InvokeMember(receiver, GetMethodName(receiver, message));
-        }
-
-        /// <summary>
-        /// Determines whether the specified controller as the action.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        /// <param name="actionName">Name of the action.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
-        /// </returns>
-        public bool HasControllerAction(RubyController controller, string actionName)
-        {
-            try
-            {
-                Operations.ContainsMember(controller, actionName.Underscore());
-                return true;
-            }
-            catch (NullReferenceException)
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -275,47 +214,13 @@ namespace System.Web.Mvc.IronRuby.Core
             assemblies.ForEach(type => LoadAssembly(type.Assembly));
         }
 
-        #endregion
-
-
-        private void Initialize()
-        {
-            Engine = Ruby.GetEngine(Runtime);
-            Context = Ruby.GetExecutionContext(Engine);
-            CurrentScope = Engine.CreateScope();
-            Operations = Engine.CreateOperations();
-            LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof(MembershipCreateStatus), typeof (RouteTable), typeof (Controller), typeof (RubyController));
-            AddLoadPaths();
-            DefineReadOnlyGlobalVariable(Constants.ScriptRuntimeVariable, Engine);
-            RequireControllerFile();
-        }
-
-        private void RequireControllerFile()
-        {
-            Engine.RequireRubyFile(PathProvider.MapPath("~/Controllers/controller.rb"));
-        }
-
         /// <summary>
-        /// Gets the name of the controller class.
+        /// Requires the ruby file.
         /// </summary>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <returns></returns>
-        internal static string GetControllerClassName(string controllerName)
+        /// <param name="path">The path.</param>
+        public void RequireRubyFile(string path)
         {
-            return (controllerName.EndsWith("Controller", StringComparison.OrdinalIgnoreCase)
-                        ? controllerName
-                        : Constants.ControllerclassFormat.FormattedWith(controllerName)).Pascalize();
-        }
-
-        internal string GetControllerFilePath(string controllerName)
-        {
-            var fileName = Constants.ControllerPascalPathFormat.FormattedWith(controllerName.Pascalize());
-            if (PathProvider.FileExists(fileName))
-                return fileName;
-
-            fileName = Constants.ControllerUnderscorePathFormat.FormattedWith(controllerName.Underscore());
-
-            return PathProvider.FileExists(fileName) ? fileName : string.Empty;
+            Engine.RequireRubyFile(path);
         }
 
         /// <summary>
@@ -323,17 +228,46 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="readerType">Type of the reader.</param>
-        internal void RequireRubyFile(string path, ReaderType readerType)
+        public void RequireRubyFile(string path, ReaderType readerType)
         {
             Engine.CreateScriptSource(readerType == ReaderType.File
                                           ? _contentProviderFactory(path)
                                           : new AssemblyStreamContentProvider(path, typeof (IRubyEngine).Assembly), null, Encoding.ASCII).Execute();
         }
 
+        #endregion
+
+        public string GetMethodName(object receiver, string message)
+        {
+            var methodNames = Operations.GetMemberNames(receiver);
+
+            if (methodNames.Contains(message.Pascalize())) return message.Pascalize();
+            if (methodNames.Contains(message.Underscore())) return message.Underscore();
+
+            return message;
+        }
+
+        private void Initialize()
+        {
+            Engine = Ruby.GetEngine(Runtime);
+            Context = Ruby.GetExecutionContext(Engine);
+            CurrentScope = Engine.CreateScope();
+            Operations = Engine.CreateOperations();
+            LoadAssemblies(typeof (object), typeof (Uri), typeof (HttpResponseBase), typeof (MembershipCreateStatus), typeof (RouteTable), typeof (Controller), typeof (RubyController));
+            AddLoadPaths();
+            DefineReadOnlyGlobalVariable(Constants.ScriptRuntimeVariable, Engine);
+            RequireControllerFile();
+        }
+
+        private void RequireControllerFile()
+        {
+            RequireRubyFile(PathProvider.MapPath("~/Controllers/controller.rb"));
+        }
+
         /// <summary>
         /// Sets the model and controllers path.
         /// </summary>
-        public void AddLoadPaths()
+        private void AddLoadPaths()
         {
             var controllersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.Controllers);
             var modelsDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.Models);
@@ -365,13 +299,13 @@ namespace System.Web.Mvc.IronRuby.Core
         {
             var engine = InitializeIronRuby(pathProvider, contentProviderFactory);
             ProcessRubyRoutes(engine, pathProvider, routesPath);
-            IntializeMvc(engine);
+            IntializeMvc(pathProvider, engine);
             return engine;
         }
 
-        private static void IntializeMvc(IRubyEngine engine)
+        private static void IntializeMvc(IPathProvider pathProvider, IRubyEngine engine)
         {
-            var factory = new RubyControllerFactory(ControllerBuilder.Current.GetControllerFactory(), engine);
+            var factory = new RubyControllerFactory(pathProvider, ControllerBuilder.Current.GetControllerFactory(), engine);
             ControllerBuilder.Current.SetControllerFactory(factory);
             ViewEngines.Engines.Add(new RubyViewEngine(engine));
         }
@@ -387,7 +321,7 @@ namespace System.Web.Mvc.IronRuby.Core
             return new RubyEngine(runtime, vpp, contentProviderFactory);
         }
 
-        private static void ProcessRubyRoutes(RubyEngine engine, IPathProvider vpp, string routesPath)
+        private static void ProcessRubyRoutes(IRubyEngine engine, IPathProvider vpp, string routesPath)
         {
             if (!vpp.FileExists(routesPath)) return;
             var routeCollection = new RubyRoutes(RouteTable.Routes);

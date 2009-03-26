@@ -12,23 +12,26 @@ using Microsoft.Scripting.Hosting;
 
 namespace System.Web.Mvc.IronRuby.Core
 {
+    /// <summary>
+    /// A facade over the classes for interacting with the IronRuby runtime
+    /// </summary>
     public interface IRubyEngine
     {
-        /// <summary>
-        /// Loads the controller.
-        /// </summary>
-        /// <param name="requestContext">The request context.</param>
-        /// <param name="controllerName">Name of the controller.</param>
-        /// <returns></returns>
-        RubyController LoadController(RequestContext requestContext, string controllerName);
-
-        /// <summary>
-        /// Configures the controller.
-        /// </summary>
-        /// <param name="rubyClass">The ruby class.</param>
-        /// <param name="requestContext">The request context.</param>
-        /// <returns></returns>
-        RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
+//        /// <summary>
+//        /// Loads the controller.
+//        /// </summary>
+//        /// <param name="requestContext">The request context.</param>
+//        /// <param name="controllerName">Name of the controller.</param>
+//        /// <returns></returns>
+//        RubyController LoadController(RequestContext requestContext, string controllerName);
+//
+//        /// <summary>
+//        /// Configures the controller.
+//        /// </summary>
+//        /// <param name="rubyClass">The ruby class.</param>
+//        /// <param name="requestContext">The request context.</param>
+//        /// <returns></returns>
+//        RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
 
         /// <summary>
         /// Calls the method.
@@ -39,15 +42,15 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <returns></returns>
         object CallMethod(object receiver, string message, params object[] args);
 
-        /// <summary>
-        /// Determines whether the specified controller as the action.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        /// <param name="actionName">Name of the action.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
-        /// </returns>
-        bool HasControllerAction(RubyController controller, string actionName);
+//        /// <summary>
+//        /// Determines whether the specified controller as the action.
+//        /// </summary>
+//        /// <param name="controller">The controller.</param>
+//        /// <param name="actionName">Name of the action.</param>
+//        /// <returns>
+//        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
+//        /// </returns>
+//        bool HasControllerAction(RubyController controller, string actionName);
 
         /// <summary>
         /// Gets the method names for the controller class.
@@ -91,6 +94,21 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="value">The value.</param>
         void DefineReadOnlyGlobalVariable(string variableName, object value);
 
+
+        /// <summary>
+        /// Removes the class from globals.
+        /// </summary>
+        /// <param name="className">Name of the class.</param>
+        void RemoveClassFromGlobals(string className);
+
+        /// <summary>
+        /// Creates an instance of a ruby object.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="rubyClass">The ruby class.</param>
+        /// <returns></returns>
+        T CreateInstance<T>(RubyClass rubyClass);
+
         /// <summary>
         /// Gets the ruby class.
         /// </summary>
@@ -118,5 +136,18 @@ namespace System.Web.Mvc.IronRuby.Core
         /// </summary>
         /// <param name="block">The block.</param>
         void ExecuteInScope(Action<ScriptScope> block);
+
+        /// <summary>
+        /// Requires the ruby file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        void RequireRubyFile(string path);
+        
+        /// <summary>
+        /// Requires the ruby file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="readerType">Type of the reader.</param>
+        void RequireRubyFile(string path, ReaderType readerType);
     }
 }
