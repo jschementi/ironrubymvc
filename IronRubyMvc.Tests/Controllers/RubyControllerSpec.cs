@@ -83,7 +83,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
     [Concern(typeof (RubyController))]
     public class when_being_asked_for_the_params : when_a_controller_is_initialized
     {
-        private IDictionary<object, object> _params;
+        private IDictionary<SymbolId, object> _params;
 
         protected override void EstablishContext()
         {

@@ -67,7 +67,6 @@ namespace System.Web.Mvc.IronRuby.Controllers
             ControllerName = config.RubyClass.Name.Replace("Controller", string.Empty);
             RubyType = config.RubyClass;
             Binders = RubyModelBinders.Binders;
-//            ValueProvider = new RubyValueProviderDictionary(ControllerContext);
         }
 
         protected override void Execute(RequestContext requestContext)
