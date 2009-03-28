@@ -19,7 +19,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
     {
         private readonly Dictionary<object, object> _viewData = new Dictionary<object, object>();
         private IRubyEngine _engine;
-        private IDictionary<object, object> _params;
+        private IDictionary<SymbolId, object> _params;
 
         public string ControllerName { get; internal set; }
         public RubyClass RubyType { get; private set; }
@@ -30,13 +30,13 @@ namespace System.Web.Mvc.IronRuby.Controllers
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params")]
-        public IDictionary<object, object> Params
+        public IDictionary<SymbolId, object> Params
         {
             get
             {
                 if (_params == null)
                 {
-                    PopulateParams();
+                    
                 }
 
                 return _params;
@@ -45,57 +45,19 @@ namespace System.Web.Mvc.IronRuby.Controllers
 
         private void PopulateParams()
         {
-            //TODO: Possibly replace this with a binder implementation
+            var modelType = typeof (IDictionary<SymbolId, object>);
             var request = ControllerContext.HttpContext.Request;
-            _params =
-                new Dictionary<object, object>(ControllerContext.RouteData.Values.Count +
-                                               request.QueryString.Count + request.Form.Count);
-            PopulateParamsWithRouteData();
-
-            PopulateParamsWithQueryStringData(request);
-
-            PopulateParamsWithFormData(request);
-        }
-
-        private void PopulateParamsWithFormData(HttpRequestBase request)
-        {
-            foreach (string key in request.Form.Keys)
-            {
-                var symbolKey = SymbolTable.StringToId(key);
-                _params[symbolKey] = request.Form[key];
-                ModelState.Add(key, CreateModelState(request.Form[key]));
-            }
-        }
-
-        private void PopulateParamsWithQueryStringData(HttpRequestBase request)
-        {
-            foreach (string key in request.QueryString.Keys)
-            {
-                var symbolKey = SymbolTable.StringToId(key);
-                var value = request.QueryString[key];
-                _params[symbolKey] = value;
-                ModelState.Add(key, CreateModelState(value));
-            }
-        }
-
-        private void PopulateParamsWithRouteData()
-        {
-            foreach (var item in ControllerContext.RouteData.Values)
-            {
-                var key = SymbolTable.StringToId(item.Key);
-                _params[key] = item.Value;
-//                ModelState.Add(item.Key, CreateModelState(item.Value.ToString()));
-            }
-        }
-
-        private static ModelState CreateModelState(string value)
-        {
-            return new ModelState {Value = CreateValueProviderResult(value)};
-        }
-
-        private static ValueProviderResult CreateValueProviderResult(string value)
-        {
-            return new ValueProviderResult(value, value, CultureInfo.CurrentCulture);
+            var binder = Binders.GetBinder(modelType);
+            var modelBindingContext = new ModelBindingContext
+                                          {
+                                              Model = new Dictionary<SymbolId, object>(ControllerContext.RouteData.Values.Count + request.QueryString.Count + request.Form.Count),
+                                              ModelName = "params",
+                                              ModelState = ModelState,
+                                              ModelType = modelType,
+                                              ValueProvider = ValueProvider
+                                          };
+            _params = binder.BindModel(ControllerContext, modelBindingContext) as IDictionary<SymbolId, object>;
+            
         }
 
         internal void InternalInitialize(ControllerConfiguration config)
@@ -104,6 +66,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             _engine = config.Engine;
             ControllerName = config.RubyClass.Name.Replace("Controller", string.Empty);
             RubyType = config.RubyClass;
+            Binders = RubyModelBinders.Binders;
         }
 
         protected override void Execute(RequestContext requestContext)

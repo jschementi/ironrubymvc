@@ -90,8 +90,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ControllerConfiguration.cs" />
+    <Compile Include="Controllers\ParamsBinder.cs" />
     <Compile Include="Controllers\RubyActionMethodSelector.cs" />
     <Compile Include="Controllers\RubyActionSelector.cs" />
+    <Compile Include="Controllers\RubyModelBinders.cs" />
     <Compile Include="Core\AssemblyStreamContentProvider.cs" />
     <Compile Include="Core\IPathProvider.cs" />
     <Compile Include="Core\IRubyEngine.cs" />

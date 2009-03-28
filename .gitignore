@@ -21,4 +21,3 @@ IronRubyMvc/Core/._RubyEngine.cs
 dependencies/IronRuby.Tests.exe
 dependencies/IronRuby.Tests.pdb
 IronRubyMvcLibrarySpecs/bin/*.*
-ParamsBinder.cs
