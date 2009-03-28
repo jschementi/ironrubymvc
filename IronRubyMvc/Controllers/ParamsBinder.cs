@@ -20,11 +20,11 @@ namespace System.Web.Mvc.IronRuby.Controllers
             controllerContext.EnsureArgumentNotNull("controllerContext");
             bindingContext.EnsureArgumentNotNull("bindingContext");
 
-            _params = (bindingContext.Model as Dictionary<SymbolId, object>) ?? new Dictionary<SymbolId, object>();
+            _params = (bindingContext.Model as IDictionary<SymbolId, object>) ?? new Dictionary<SymbolId, object>();
             bindingContext.ValueProvider.ForEach(pair =>
                                                      {
                                                          bindingContext.ModelState.SetModelValue(pair.Key, pair.Value);
-                                                         _params.Add(pair.Key.ToSymbolId(), pair.Value.RawValue);
+                                                         _params.Add(pair.Key.ToSymbolId(), pair.Value.AttemptedValue);
                                                      });
 //            var request = controllerContext.HttpContext.Request;
 //            var modelState = controllerContext.Controller.ViewData.ModelState;

@@ -57,7 +57,9 @@ namespace System.Web.Mvc.IronRuby.Controllers
                 methodNames.Where(
                     method =>
                     AliasedMethods.DoesNotContain(
-                        pair => String.Equals(pair.Key, method.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(pair.Key, method.Pascalize(), StringComparison.OrdinalIgnoreCase)));
+                        pair => String.Equals(pair.Key, method.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(pair.Key, method.Pascalize(), StringComparison.OrdinalIgnoreCase)
+                    )
+                );
         }
 
         private static KeyValuePair<string, PredicateList> KeyValuePairFor(KeyValuePair<object, object> pair)
@@ -155,20 +157,11 @@ namespace System.Web.Mvc.IronRuby.Controllers
             var result = false;
             foreach (var list in _predicates)
             {
-                if (list(context, name))
-                {
-                    result = true;
-                    break;
-                }
+                if (!list(context, name)) continue;
+                result = true;
+                break;
             }
             return result;
-//            var result = _predicates.Any(predicate =>
-//                                             {
-//                                                 var result1 = predicate(context, name.Underscore());
-//                                                 var result2 = predicate(context, name.Pascalize());
-//                                                 return result1 || result2;
-//                                             });
-//            return result;
         }
 
         public Func<ControllerContext, string, TResult> ConvertProcToFunc<TResult>(Proc proc)
