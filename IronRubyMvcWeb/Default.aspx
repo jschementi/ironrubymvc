@@ -1,3 +1,3 @@
 ﻿<%@ Page Language="C#" %>
 <%
-    Response.Redirect("~/Home");%>
+Response.Redirect("~/Home");%>

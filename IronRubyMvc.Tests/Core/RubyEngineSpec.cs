@@ -41,7 +41,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Core
 
         protected override void Because()
         {
-            _engine = RubyEngine.InitializeIronRubyMvc(_pathProvider, "~/routes.rb", path => new TestStreamContentProvider(path));
+            _engine = RubyEngine.InitializeIronRubyMvc(_pathProvider, "~/routes.rb");
         }
         
 

@@ -1,0 +1,87 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Name>Debug</Name>
+    <OutputPath>Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Name>Release</Name>
+    <OutputPath>Release\</OutputPath>
+  </PropertyGroup>
+  <UsingTask TaskName="Sapphire.Steel.SteelRubyBuild" AssemblyName="SteelBuild, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a42f26dbbcba2be, processorArchitecture=x86" />
+  <UsingTask TaskName="Sapphire.Steel.SteelRailsBuild" AssemblyName="SteelBuild, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8a42f26dbbcba2be, processorArchitecture=x86" />
+  <Target Name="BuildRails" Inputs="@(EmbeddedRuby)" Outputs="$(MSBuildProjectDirectory)\SyntaxCheck\%(Identity)">
+    <MakeDir Directories="SyntaxCheck" />
+    <SteelRailsBuild ERBFile="@(EmbeddedRuby)" ProjectDirectory="$(MSBuildProjectDirectory)" ERBProcessor="$(ERBProcessor)" ERBFlags="$(ERBFlags)" ERBLibraryFiles="$(ERBLibraryFiles)" ERBTimeout="$(ERBTimeout)" />
+  </Target>
+  <Target Name="BuildRuby" Inputs="@(Ruby)" Outputs="$(MSBuildProjectDirectory)\SyntaxCheck\%(Identity)">
+    <MakeDir Directories="SyntaxCheck" />
+    <SteelRubyBuild RubyFile="@(Ruby)" ProjectDirectory="$(MSBuildProjectDirectory)" RubyInterpreter="$(RubyInterpreter)" RubyInterpreterFlags="$(RubyInterpreterFlags)" RubyLibraryFiles="$(RubyLibraryFiles)" RubyLibraryPaths="$(LibraryPath)" RubyTimeout="$(RubyTimeout)" />
+  </Target>
+  <Target Name="Clean">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\SyntaxCheck" />
+  </Target>
+  <Target Name="Build" DependsOnTargets="$(BuildDependsOn)" Inputs="@(Ruby); @(EmbeddedRuby)" Outputs="$(MSBuildProjectDirectory)\SyntaxCheck\%(Identity)">
+  </Target>
+  <Target Name="Clean">
+    <RemoveDir Directories="$(MSBuildProjectDirectory)\SyntaxCheck" />
+  </Target>
+  <PropertyGroup>
+    <RebuildDependsOn>
+      Clean;
+      Build;
+    </RebuildDependsOn>
+    <BuildDependsOn>
+      BeforeBuild;
+      BuildRuby; 
+      BuildRails;
+      AfterBuild;
+    </BuildDependsOn>
+    <SteelVersion>1.2</SteelVersion>
+    <ProjectGuid>{4b1e7b70-f827-46a0-9d8d-68498b5ef73d}</ProjectGuid>
+    <AssemblyName>IronMvcSpecs</AssemblyName>
+    <RootNamespace>IronMvcSpecs</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Ruby Include="bacon_helper.rb" />
+    <Ruby Include="extensions\extensions.rb" />
+    <Ruby Include="extensions\ienumerable_extensions_spec.rb" />
+    <Ruby Include="extensions\object_extensions_spec.rb" />
+    <Ruby Include="extensions\string_extensions_spec.rb" />
+    <Ruby Include="lib\amok.rb" />
+    <Ruby Include="Rakefile.rb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Debug" />
+    <Folder Include="lib" />
+    <Folder Include="extensions" />
+    <Folder Include="bin" />
+    <Folder Include="workarounds" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\BugWorkarounds.dll" />
+    <Content Include="bin\BugWorkarounds.pdb" />
+    <Content Include="bin\IronRuby.dll" />
+    <Content Include="bin\IronRuby.Libraries.dll" />
+    <Content Include="bin\IronRuby.Libraries.pdb" />
+    <Content Include="bin\IronRuby.pdb" />
+    <Content Include="bin\Microsoft.Scripting.Core.dll" />
+    <Content Include="bin\Microsoft.Scripting.Core.pdb" />
+    <Content Include="bin\Microsoft.Scripting.dll" />
+    <Content Include="bin\Microsoft.Scripting.ExtensionAttribute.dll" />
+    <Content Include="bin\Microsoft.Scripting.ExtensionAttribute.pdb" />
+    <Content Include="bin\Microsoft.Scripting.pdb" />
+    <Content Include="bin\System.Web.Mvc.IronRuby.dll" />
+    <Content Include="bin\System.Web.Mvc.IronRuby.pdb" />
+    <Content Include="workarounds\Workarounds.cs" />
+  </ItemGroup>
+  <Target Name="Rebuild" DependsOnTargets="$(RebuildDependsOn)" Inputs="@(Ruby)" Outputs="$(MSBuildProjectDirectory)\SyntaxCheck\%(Identity)">
+  </Target>
+  <Target Name="BeforeBuild" Condition="'$(PreBuildEvent)'!='' ">
+    <Exec Command="$(PreBuildEvent)" />
+  </Target>
+  <Target Name="AfterBuild" Condition="'$(PostBuildEvent)'!='' ">
+    <Exec Command="$(PostBuildEvent)" />
+  </Target>
+  <!--<Import Project="$(MSBuildBinPath)\Microsoft.Common.targets" />-->
+  <Target Name="ResolveAssemblyReferences" />
+</Project>

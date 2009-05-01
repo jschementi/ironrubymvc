@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.markdown = README.markdown
 	EndProjectSection
 EndProject
+Project("{325B8569-0C7C-4A6A-8AF8-89C3B6BC9E74}") = "IronMvcSpecs", "IronMvcSpecs\IronMvcSpecs.stproj", "{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_Signed|Any CPU = Debug_Signed|Any CPU
@@ -45,6 +47,14 @@ Global
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release_Signed|Any CPU.Build.0 = Release_Signed|Any CPU
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13CD326E-5C1A-4404-A1AB-8D0BA6D9FDF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Debug_Signed|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Debug_Signed|Any CPU.Build.0 = Debug|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Release_Signed|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Release_Signed|Any CPU.Build.0 = Release|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1E7B70-F827-46A0-9D8D-68498B5EF73D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,13 @@
-﻿#region Usings
+﻿extern alias clr3;
+
+#region Usings
 
 using System.Collections;
 using System.Collections.Generic;
 using System.Web.Routing;
 using IronRuby.Builtins;
 using Microsoft.Scripting;
-
+using clr3::System.Linq;
 #endregion
 
 namespace System.Web.Mvc.IronRuby.Extensions
@@ -67,7 +69,10 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var filters = new List<TITarget>();
             var key = SymbolTable.StringToId(actionName);
             var hasKey = filterDescriptions.ContainsKey(key);
-            if (hasKey) filters.AddRange((filterDescriptions[key] as RubyArray).Cast<TITarget>());
+            if (hasKey)
+            {
+                filters.AddRange((filterDescriptions[key] as RubyArray).Cast<TITarget>());
+            }
             return filters;
         }
 

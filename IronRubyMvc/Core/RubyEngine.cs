@@ -26,8 +26,6 @@ namespace System.Web.Mvc.IronRuby.Core
     /// </summary>
     public class RubyEngine : IRubyEngine
     {
-        private readonly Func<string, StreamContentProvider> _contentProviderFactory;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="RubyEngine"/> class.
         /// </summary>
@@ -37,15 +35,6 @@ namespace System.Web.Mvc.IronRuby.Core
         {
             Runtime = runtime;
             PathProvider = pathProvider;
-            _contentProviderFactory = path => new VirtualPathStreamContentProvider(path);
-            Initialize();
-        }
-
-        internal RubyEngine(ScriptRuntime runtime, IPathProvider pathProvider, Func<string, StreamContentProvider> contentProviderFactory)
-        {
-            Runtime = runtime;
-            PathProvider = pathProvider;
-            _contentProviderFactory = contentProviderFactory;
             Initialize();
         }
 
@@ -172,6 +161,51 @@ namespace System.Web.Mvc.IronRuby.Core
             return Engine.Execute(script, scope ?? CurrentScope);
         }
 
+        public object ExecuteFile(string path, ScriptScope scope, bool throwIfNotExist)
+        {
+            path.EnsureArgumentNotNull("path");
+            scope.EnsureArgumentNotNull("scope");
+
+            if (throwIfNotExist && !PathProvider.FileExists(path)) throw new FileNotFoundException("Can't find the file", path);
+            
+            if(!PathProvider.FileExists(path)) return null;
+
+            var source = Engine.CreateScriptSourceFromFile(path); 
+
+            return source.Execute(scope);
+        }
+
+        public T ExecuteFile<T>(string path)
+        {
+            return (T) ExecuteFile(path);
+        }
+
+        public T ExecuteFile<T>(string path, bool throwIfNotExist)
+        {
+            return (T)ExecuteFile(path, CurrentScope, throwIfNotExist);
+        }
+
+
+        public T ExecuteScript<T>(string script)
+        {
+            return (T) ExecuteScript(script);
+        }
+
+        public T ExecuteScript<T>(string script, ScriptScope scope)
+        {
+            return (T) ExecuteScript(script, scope);
+        }
+
+        public T ExecuteFile<T>(string path, ScriptScope scope, bool throwIfNotExist)
+        {
+            return (T) ExecuteFile(path, scope, throwIfNotExist);
+        }
+
+        public object ExecuteFile(string path)
+        {
+            return Engine.ExecuteFile(path, CurrentScope);
+        }
+
         /// <summary>
         /// Defines the read only global variable.
         /// </summary>
@@ -231,7 +265,7 @@ namespace System.Web.Mvc.IronRuby.Core
         public void RequireRubyFile(string path, ReaderType readerType)
         {
             Engine.CreateScriptSource(readerType == ReaderType.File
-                                          ? _contentProviderFactory(path)
+                                          ? (StreamContentProvider)new VirtualPathStreamContentProvider(path)
                                           : new AssemblyStreamContentProvider(path, typeof (IRubyEngine).Assembly), null, Encoding.ASCII).Execute();
         }
 
@@ -262,7 +296,7 @@ namespace System.Web.Mvc.IronRuby.Core
         private void RequireControllerFile()
         {
 //            RequireRubyFile(PathProvider.MapPath("~/Controllers/controller.rb"));
-            RequireRubyFile("System.Web.Mvc.IronRuby.Controllers.controller.rb", ReaderType.AssemblyResource);
+            Engine.CreateScriptSource(new AssemblyStreamContentProvider("System.Web.Mvc.IronRuby.Controllers.controller.rb", typeof(IRubyEngine).Assembly), null, Encoding.ASCII).Execute(CurrentScope);
         }
 
         /// <summary>
@@ -275,7 +309,7 @@ namespace System.Web.Mvc.IronRuby.Core
             var filtersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.Filters);
             var helpersDir = Path.Combine(PathProvider.ApplicationPhysicalPath, Constants.Helpers);
 
-            Context.Loader.SetLoadPaths(new[] {controllersDir, modelsDir, filtersDir, helpersDir});
+            Context.Loader.SetLoadPaths(new[] {PathProvider.ApplicationPhysicalPath, controllersDir, modelsDir, filtersDir, helpersDir});
         }
 
 
@@ -286,40 +320,29 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="routesPath">The routes path.</param>
         public static RubyEngine InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath)
         {
-            return InitializeIronRubyMvc(pathProvider, routesPath, path => new VirtualPathStreamContentProvider(path));
-        }
-
-        /// <summary>
-        /// Initializes the ironruby MVC.
-        /// </summary>
-        /// <param name="pathProvider">The path provider.</param>
-        /// <param name="routesPath">The routes path.</param>
-        /// <param name="contentProviderFactory">The content provider factory.</param>
-        /// <returns></returns>
-        public static RubyEngine InitializeIronRubyMvc(IPathProvider pathProvider, string routesPath, Func<string, StreamContentProvider> contentProviderFactory)
-        {
-            var engine = InitializeIronRuby(pathProvider, contentProviderFactory);
+            var engine = InitializeIronRuby(pathProvider);
             ProcessRubyRoutes(engine, pathProvider, routesPath);
             IntializeMvc(pathProvider, engine);
             return engine;
         }
 
-        private static void IntializeMvc(IPathProvider pathProvider, IRubyEngine engine)
+         private static void IntializeMvc(IPathProvider pathProvider, IRubyEngine engine)
         {
             var factory = new RubyControllerFactory(pathProvider, ControllerBuilder.Current.GetControllerFactory(), engine);
             ControllerBuilder.Current.SetControllerFactory(factory);
             ViewEngines.Engines.Add(new RubyViewEngine(engine));
         }
 
-        private static RubyEngine InitializeIronRuby(IPathProvider vpp, Func<string, StreamContentProvider> contentProviderFactory)
+        private static RubyEngine InitializeIronRuby(IPathProvider vpp)
         {
             var rubySetup = Ruby.CreateRubySetup();
             var runtimeSetup = new ScriptRuntimeSetup();
             runtimeSetup.LanguageSetups.Add(rubySetup);
             runtimeSetup.DebugMode = true;
+//            runtimeSetup.HostType = typeof (MvcScriptHost);
 
             var runtime = Ruby.CreateRuntime(runtimeSetup);
-            return new RubyEngine(runtime, vpp, contentProviderFactory);
+            return new RubyEngine(runtime, vpp);
         }
 
         private static void ProcessRubyRoutes(IRubyEngine engine, IPathProvider vpp, string routesPath)

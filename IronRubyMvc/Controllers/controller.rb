@@ -2,6 +2,55 @@ def debugger
     System::Diagnostics::Debugger.break if System::Diagnostics::Debugger.launch
 end
 
+module System
+
+  module Web 
+    class HttpRequestBase
+
+      def post?
+        self.http_method.to_s.downcase.to_sym == :post
+      end
+      
+      def put?
+        self.http_method.to_s.downcase.to_sym == :put
+      end
+      
+      def get?
+        self.http_method.to_s.downcase.to_sym == :get
+      end
+      
+      def delete?
+        self.http_method.to_s.downcase.to_sym == :delete
+      end
+      
+      def head?
+        self.http_method.to_s.downcase.to_sym == :head
+      end
+    end
+  end
+  
+  class Object
+
+    class << self
+        
+      def create_from_hash(options)
+        result = self.new
+        result.populate_from_hash options
+        result
+      end
+      
+    end
+    
+    def populate_from_hash(options)
+      options.each do |k, v|
+        mn = "#{k}=".to_sym
+        self.send(mn, v) if self.respond_to?(mn)
+      end
+    end
+  end
+
+end
+
 module IronRubyMvc
     
     module Controllers
@@ -222,6 +271,35 @@ module IronRubyMvc
         
     end
     
+    class PropertyDescriptor
+      
+      attr_accessor :name
+      
+    end
+    
+    class DefaultModelBinder
+      def initialize(target, values)
+        @target = target
+        @values = values
+      end
+      
+      def bind
+        @target
+      end
+      
+      def self.bind(target, values)
+        binder = DefaultModelBinder.new target, values
+        
+        binder.bind
+      end
+      
+      private
+      
+      def has_property?
+        target.get_type
+      end
+    end
+    
     #module Controllers
     
     class Controller < System::Web::Mvc::IronRuby::Controllers::RubyController
@@ -235,9 +313,7 @@ module IronRubyMvc
             instance_variables.each { |varname| view_data.add(varname[1..-1], instance_variable_get(varname.to_sym)) }
         end
         
-        def post?
-            controller_context.http_context.request.http_method.to_s.downcase.to_sym == :post
-        end
+        
         
     end
     

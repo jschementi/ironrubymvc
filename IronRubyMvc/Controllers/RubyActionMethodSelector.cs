@@ -1,3 +1,4 @@
+extern alias clr3;
 #region Usings
 
 using System.Collections;
@@ -6,6 +7,8 @@ using System.Reflection;
 using System.Web.Mvc.IronRuby.Core;
 using System.Web.Mvc.IronRuby.Extensions;
 using IronRuby.Builtins;
+
+using clr3::System.Linq;
 
 #endregion
 
@@ -54,7 +57,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             var methodAliases = (Hash) _rubyEngine.CallMethod(ControllerClass, "name_selectors");
             AliasedMethods = methodAliases.Map(pair => KeyValuePairFor(pair));
             NonAliasedMethods =
-                methodNames.Where(
+                clr3::System.Linq.Enumerable.Where(methodNames,
                     method =>
                     AliasedMethods.DoesNotContain(
                         pair => String.Equals(pair.Key, method.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(pair.Key, method.Pascalize(), StringComparison.OrdinalIgnoreCase)
@@ -77,7 +80,7 @@ namespace System.Web.Mvc.IronRuby.Controllers
             PopulateLookupTables(controllerContext); // dynamic languages can add methods at runtime
             var methodsMatchingName = GetMatchingAliasedMethods(controllerContext, actionName);
             methodsMatchingName.AddRange(
-                NonAliasedMethods.Where(
+                clr3::System.Linq.Enumerable.Where(NonAliasedMethods,
                     name => String.Equals(name, actionName.Underscore(), StringComparison.OrdinalIgnoreCase) || String.Equals(name, actionName.Pascalize(), StringComparison.OrdinalIgnoreCase)));
             var finalMethods = RunSelectionFilters(controllerContext, methodsMatchingName);
 

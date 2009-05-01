@@ -77,6 +77,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <Aliases>clr3</Aliases>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web.Abstractions">
@@ -103,7 +107,15 @@
     <Compile Include="Controllers\RubyResultFilter.cs" />
     <Compile Include="Core\Constants.cs" />
     <Compile Include="Core\Enums.cs" />
-    <Compile Include="Core\RubyMvcApplication.cs" />
+    <Compile Include="Core\MvcApplication.cs" />
+    <Compile Include="Core\MvcScriptHost.cs" />
+    <Compile Include="Core\PathProviderPAL.cs" />
+    <Compile Include="Core\RubyMvcApplication.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\RubyMvcModule.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Core\RubyRoutes.cs" />
     <Compile Include="Controllers\RubyActionDescriptor.cs" />
     <Compile Include="Controllers\RubyController.cs" />
@@ -111,6 +123,7 @@
     <Compile Include="Controllers\RubyControllerDescriptor.cs" />
     <Compile Include="Controllers\RubyControllerFactory.cs" />
     <Compile Include="Core\RubyEngine.cs" />
+    <Compile Include="Core\TypeConverter.cs" />
     <Compile Include="Core\VirtualPathProvider.cs" />
     <Compile Include="Core\VirtualPathStreamContentProvider.cs" />
     <Compile Include="Extensions\FilterInfoExtensions.cs" />

@@ -1,9 +1,12 @@
-using System.Collections.Generic;
+#region Usings
+
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
 using System.Web.Mvc.IronRuby.Extensions;
 using System.Web.Routing;
 using IronRuby.Builtins;
+
+#endregion
 
 namespace System.Web.Mvc.IronRuby.Helpers
 {
@@ -51,7 +54,8 @@ namespace System.Web.Mvc.IronRuby.Helpers
             return _helper.ActionLink(linkText, actionName, controllerName, routeValues.ToRouteDictionary(), ajaxOptions, htmlAttributes.ToDictionary());
         }
 
-        public string ActionLink(string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, Hash routeValues, AjaxOptions ajaxOptions, Hash htmlAttributes)
+        public string ActionLink(string linkText, string actionName, string controllerName, string protocol, string hostName, string fragment, Hash routeValues, AjaxOptions ajaxOptions,
+                                 Hash htmlAttributes)
         {
             return _helper.ActionLink(linkText, actionName, controllerName, protocol, hostName, fragment, routeValues.ToRouteDictionary(), ajaxOptions, htmlAttributes.ToDictionary());
         }
@@ -136,7 +140,5 @@ namespace System.Web.Mvc.IronRuby.Helpers
         {
             return _helper.RouteLink(linkText, routeName, routeValues.ToRouteDictionary(), ajaxOptions, htmlAttributes.ToDictionary());
         }
-
- 
     }
 }

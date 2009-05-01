@@ -52,7 +52,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns></returns>
-        public static SymbolId ToSymbolId(this string value)
+        internal static SymbolId ToSymbolId(this string value)
         {
             return ToSymbolId(value, true);
         }
@@ -63,7 +63,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         /// <param name="value">The value.</param>
         /// <param name="caseSensitive">if set to <c>true</c> the <see cref="SymbolId"/> will be case-sensitive.</param>
         /// <returns></returns>
-        public static SymbolId ToSymbolId(this string value, bool caseSensitive)
+        internal static SymbolId ToSymbolId(this string value, bool caseSensitive)
         {
             return caseSensitive ? SymbolTable.StringToId(value) : SymbolTable.StringToCaseInsensitiveId(value);
         }
@@ -73,7 +73,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="argumentName">Name of the argument.</param>
-        public static void EnsureArgumentNotEmpty(this string value, string argumentName)
+        internal static void EnsureArgumentNotEmpty(this string value, string argumentName)
         {
             if (value.IsNullOrBlank()) throw new ArgumentNullException(argumentName, "Cannot be null");
         }

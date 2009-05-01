@@ -15,22 +15,6 @@ namespace System.Web.Mvc.IronRuby.Core
     /// </summary>
     public interface IRubyEngine
     {
-//        /// <summary>
-//        /// Loads the controller.
-//        /// </summary>
-//        /// <param name="requestContext">The request context.</param>
-//        /// <param name="controllerName">Name of the controller.</param>
-//        /// <returns></returns>
-//        RubyController LoadController(RequestContext requestContext, string controllerName);
-//
-//        /// <summary>
-//        /// Configures the controller.
-//        /// </summary>
-//        /// <param name="rubyClass">The ruby class.</param>
-//        /// <param name="requestContext">The request context.</param>
-//        /// <returns></returns>
-//        RubyController ConfigureController(RubyClass rubyClass, RequestContext requestContext);
-
         /// <summary>
         /// Calls the method.
         /// </summary>
@@ -39,16 +23,6 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="args">The args.</param>
         /// <returns></returns>
         object CallMethod(object receiver, string message, params object[] args);
-
-//        /// <summary>
-//        /// Determines whether the specified controller as the action.
-//        /// </summary>
-//        /// <param name="controller">The controller.</param>
-//        /// <param name="actionName">Name of the action.</param>
-//        /// <returns>
-//        /// 	<c>true</c> if the specified controller has the action; otherwise, <c>false</c>.
-//        /// </returns>
-//        bool HasControllerAction(RubyController controller, string actionName);
 
         /// <summary>
         /// Gets the method names for the controller class.
@@ -84,6 +58,68 @@ namespace System.Web.Mvc.IronRuby.Core
         /// <param name="scope">The scope.</param>
         /// <returns></returns>
         object ExecuteScript(string script, ScriptScope scope);
+
+        /// <summary>
+        /// Executes the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="throwIfNotExist">if set to <c>true</c> [throw if not exist].</param>
+        /// <returns></returns>
+        object ExecuteFile(string path, ScriptScope scope, bool throwIfNotExist);
+
+        /// <summary>
+        /// Executes the file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path">The path.</param>
+        /// <param name="throwIfNotExist">if set to <c>true</c> [throw if not exist].</param>
+        /// <returns></returns>
+        T ExecuteFile<T>(string path, bool throwIfNotExist);
+
+
+        /// <summary>
+        /// Executes the file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        T ExecuteFile<T>(string path);
+
+        /// <summary>
+        /// Executes the script.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="script">The script.</param>
+        /// <returns></returns>
+        T ExecuteScript<T>(string script);
+
+        /// <summary>
+        /// Executes the script.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="script">The script.</param>
+        /// <param name="scope">The scope.</param>
+        /// <returns></returns>
+        T ExecuteScript<T>(string script, ScriptScope scope);
+
+        /// <summary>
+        /// Executes the file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path">The path.</param>
+        /// <param name="scope">The scope.</param>
+        /// <param name="throwIfNotExist">if set to <c>true</c> [throw if not exist].</param>
+        /// <returns></returns>
+        T ExecuteFile<T>(string path, ScriptScope scope, bool throwIfNotExist);
+
+
+        /// <summary>
+        /// Executes the file.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        object ExecuteFile(string path);
 
         /// <summary>
         /// Defines the read only global variable.

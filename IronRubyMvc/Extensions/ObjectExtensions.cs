@@ -1,8 +1,10 @@
+extern alias clr3;
 #region Usings
 
 using System.Collections.Generic;
 using IronRuby.Builtins;
-
+using Microsoft.Scripting.Runtime;
+using clr3::System.Linq;
 #endregion
 
 namespace System.Web.Mvc.IronRuby.Extensions
@@ -41,11 +43,16 @@ namespace System.Web.Mvc.IronRuby.Extensions
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="argumentName">Name of the argument.</param>
-        public static void EnsureArgumentNotNull(this object value, string argumentName)
+        internal static void EnsureArgumentNotNull(this object value, string argumentName)
         {
             if (value.IsNull()) throw new ArgumentNullException(argumentName, "Cannot be null");
         }
 
+        /// <summary>
+        /// Converts the object to a string collection.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         internal static IEnumerable<string> ToStringCollection(this object value)
         {
             var array = (RubyArray) value;
