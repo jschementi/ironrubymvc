@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dependencies\IronRuby.dll</HintPath>
     </Reference>
+    <Reference Include="IronRuby.Libraries, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dependencies\IronRuby.Libraries.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Scripting, Version=0.9.5.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\dependencies\Microsoft.Scripting.dll</HintPath>

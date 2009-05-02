@@ -253,9 +253,21 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
     {
         private Action _action;
 
+        protected override void EstablishContext()
+        {
+            base.EstablishContext();
+
+            var form = new NameValueCollection();
+            var queryString = new NameValueCollection();
+            _httpContextMock.HttpRequest.Expect(r => r.Form).Returns(form);
+            _httpContextMock.HttpRequest.Expect(r => r.QueryString).Returns(queryString);
+        }
+
         protected override void Because()
         {
-            _action = () => ((IController)Sut).Execute(new RequestContext(_httpContextMock.Object, new RouteData{Values = {{"action", "my_action"}}}));
+            var context = new RequestContext(_httpContextMock.Object, new RouteData {Values = {{"action", "my_action"}}});
+            
+            _action = () => ((IController)Sut).Execute(context);
         }
 
         [Observation]

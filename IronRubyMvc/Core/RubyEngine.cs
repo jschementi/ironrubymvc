@@ -48,7 +48,7 @@ namespace System.Web.Mvc.IronRuby.Core
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
-        private RubyContext Context { get; set; }
+        internal RubyContext Context { get; set; }
 
         /// <summary>
         /// Gets the engine.
@@ -123,11 +123,14 @@ namespace System.Web.Mvc.IronRuby.Core
         public IEnumerable<string> MethodNames(RubyClass controllerClass)
         {
             var names = new List<string>();
-            controllerClass.EnumerateMethods((_, methodName, __) =>
-                                                 {
-                                                     names.Add(methodName);
-                                                     return false;
-                                                 });
+            using (Context.ClassHierarchyLocker())
+            {
+                controllerClass.EnumerateMethods((_, methodName, __) =>
+                                                     {
+                                                         names.Add(methodName);
+                                                         return false;
+                                                     });
+            }
             return names;
         }
 
@@ -265,7 +268,7 @@ namespace System.Web.Mvc.IronRuby.Core
         public void RequireRubyFile(string path, ReaderType readerType)
         {
             Engine.CreateScriptSource(readerType == ReaderType.File
-                                          ? (StreamContentProvider)new VirtualPathStreamContentProvider(path)
+                                          ? (StreamContentProvider)new VirtualPathStreamContentProvider(path, PathProvider)
                                           : new AssemblyStreamContentProvider(path, typeof (IRubyEngine).Assembly), null, Encoding.ASCII).Execute();
         }
 

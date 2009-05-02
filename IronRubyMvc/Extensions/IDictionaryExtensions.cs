@@ -71,7 +71,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             var hasKey = filterDescriptions.ContainsKey(key);
             if (hasKey)
             {
-                filters.AddRange((filterDescriptions[key] as RubyArray).Cast<TITarget>());
+                filters.AddRange((filterDescriptions[key] as RubyArray).CastTo<TITarget>());
             }
             return filters;
         }

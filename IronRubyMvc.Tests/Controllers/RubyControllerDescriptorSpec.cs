@@ -181,9 +181,11 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
         }
 
         [Observation]
-        public void should_have_an_empty_actions_list()
+        public void should_have_at_least_one_action_in_the_canonical_actions_list()
         {
-            Sut.GetCanonicalActions().ShouldBeEmpty();
+            var actions = Sut.GetCanonicalActions();
+            actions.ShouldNotBeEmpty();
+            
         }
 
     }

@@ -95,5 +95,16 @@ namespace System.Web.Mvc.IronRuby.Extensions
                                    });
             return result;
         }
+
+        internal static IEnumerable<TTarget> CastTo<TTarget>(this IEnumerable collection) where TTarget : class
+        {
+            var result = new List<TTarget>();
+            collection.ForEach(item =>
+            {
+                var casted = (typeof(TTarget) == typeof(string)) ? item.ToString() as TTarget : item as TTarget;
+                if (casted.IsNotNull()) result.Add(casted);
+            });
+            return result;
+        }
     }
 }

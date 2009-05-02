@@ -131,7 +131,7 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
             _rubyEngine.ExecuteScript(script.ToString());
 
             _controllerDescriptor =
-                MockRepository.GenerateStub<RubyControllerDescriptor>(_rubyEngine.GetRubyClass("SamuraisController"));
+                MockRepository.GenerateStub<RubyControllerDescriptor>(_rubyEngine.GetRubyClass("SamuraisController"), _rubyEngine);
         }
 
         protected override RubyActionDescriptor CreateSut()
